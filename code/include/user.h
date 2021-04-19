@@ -22,10 +22,29 @@
 #ifndef USER_H_
 #define USER_H_
 
+#include <time.h>
+
+#define CLASS_A
+#include "dev_classes.h"
+
+
 #define UINT32_T unsigned int
 
-#define MEASURE_START() do { } while(0);
 
-#define MEASURE_STOP() do { } while(0);
+#define MEASURE_START()  do { \
+                              result=0; \
+                              clock_gettime(CLOCK_MONOTONIC, &start); \
+                           } while(0);
+
+#define MEASURE_STOP() do { \
+                              clock_gettime(CLOCK_MONOTONIC, &stop); \
+                              result=(stop.tv_sec - start.tv_sec)*BILLION + (stop.tv_nsec - start.tv_nsec); \
+                           } while(0);
+
+#define BILLION 1000000000L
+
+//User defined variables
+struct timespec start,stop;
+double result;
 
 #endif

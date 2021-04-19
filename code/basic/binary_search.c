@@ -1,0 +1,60 @@
+/******************************************************************************
+*   Copyright 2021 Politecnico di Milano
+*
+*   Licensed under the Apache License, Version 2.0 (the "License");
+*   you may not use this file except in compliance with the License.
+*   You may obtain a copy of the License at
+*
+*      http://www.apache.org/licenses/LICENSE-2.0
+*
+*   Unless required by applicable law or agreed to in writing, software
+*   distributed under the License is distributed on an "AS IS" BASIS,
+*   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+*   See the License for the specific language governing permissions and
+*   limitations under the License.
+*******************************************************************************/
+#include "user.h"
+#include "simple_random.h"
+#include <stdio.h>
+static double array[ARRAY_LENGHT];
+
+/**
+ * @brief 
+ * 
+ * @param n 
+ * @return int 
+ */
+static int binary_search_routine(double n){
+
+    int l_pos=0,r_pos=ARRAY_LENGHT-1;
+
+    while(l_pos<= r_pos){
+        
+        int pos=(l_pos+r_pos)/2;
+        if(array[pos] < n) l_pos=pos+1;
+        else if (array[pos] > n) r_pos=pos-1;
+        else return pos;
+    }
+
+    return -1;
+}
+
+/**
+ * @brief 
+ * 
+ * @param seed 
+ */
+void binary_search(int seed){
+
+    random_set_seed(seed);
+    random_get_sarray(array,ARRAY_LENGHT);
+
+    double n=random_get();
+    
+    MEASURE_START();
+    for(int i=0; i<1;i++){
+        binary_search_routine(n);
+    }
+    MEASURE_STOP();
+
+}

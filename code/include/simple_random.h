@@ -23,7 +23,6 @@
 #define SIMPLE_RANDOM_H_
 
 #include "user.h"
-
 /**** VERY IMPORTANT **** :
   The initial seeds z1, z2, z3, z4  MUST be larger than
   1, 7, 15, and 127 respectively.
@@ -53,4 +52,29 @@ inline static double random_get(void)
     return (z1 ^ z2 ^ z3 ^ z4) * 2.3283064365386963e-10;
 }
 
+inline static void random_get_array(double a[], int len){
+    for(int i = 0;i < len; i++){
+        a[i] = random_get();  
+    }
+}
+
+inline static void random_get_sarray(double a[], int len){
+    for(int i = 0;i < len; i++){
+        a[i] = random_get();
+    }
+    
+    int min;
+    for (int i=0; i<len-1; i++) {
+      min=i;
+      for (int j=i+1; j<len; j++){
+            if (a[j] < a[min]){
+                min = j;
+            }
+      }
+      double temp=a[i];
+                a[i]=a[min];
+                a[min]=temp;
+    }
+    
+}
 #endif
