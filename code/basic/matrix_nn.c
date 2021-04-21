@@ -16,8 +16,9 @@
 #include "user.h"
 #include "simple_random.h"
 
+MEASURE_GLOBAL_VARIABLES();
 
-static double matrix[ARRAY_LENGHT][ARRAY_LENGHT];
+static double matrix[ARRAY_LENGTH][ARRAY_LENGTH];
 
 /**
  * @brief 
@@ -27,8 +28,8 @@ static double matrix[ARRAY_LENGHT][ARRAY_LENGHT];
 static int matrix_nn_routine(){
     int cnt=0;
 
-    for(int i=0; i<ARRAY_LENGHT;i++){
-        for(int j=0; j<ARRAY_LENGHT;j++){
+    for(int i=0; i<ARRAY_LENGTH;i++){
+        for(int j=0; j<ARRAY_LENGTH;j++){
             if(matrix[i][j] > 0) cnt++;
         }
     }
@@ -45,8 +46,8 @@ void matrix_nn(int seed){
     
     //Matrix initialization
     random_set_seed(seed);
-    for(int i=0; i<ARRAY_LENGHT;i++){
-        random_get_array(matrix[i],ARRAY_LENGHT);
+    for(int i=0; i<ARRAY_LENGTH;i++){
+        random_get_array(matrix[i],ARRAY_LENGTH);
     }
 
     MEASURE_START();

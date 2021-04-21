@@ -14,10 +14,12 @@ extern void matrix_nn(int seed);
 extern void multi_search(int seed);
 extern void select_nmax(int seed);
 
+extern double result;
+
 int main(){
 
     printf("***************** HEAP WCET Benchmarks *****************\n");
-    printf("Running with:\nITERATIONS:\t%d\nARRAY_LENGHT:\t%d\nSEED:\t%d\n",ITERATIONS,ARRAY_LENGHT,SEED);
+    printf("Running with:\nITERATIONS:\t%d\nARRAY_LENGTH:\t%d\nSEED:\t%d\n",ITERATIONS,ARRAY_LENGTH,SEED);
     printf("********************************************************\n");
 
     binary_search(SEED);

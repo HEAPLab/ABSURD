@@ -15,8 +15,10 @@
 *******************************************************************************/
 #include "user.h"
 #include "simple_random.h"
-#include <stdio.h>
-static double array[ARRAY_LENGHT];
+
+MEASURE_GLOBAL_VARIABLES();
+
+static double array[ARRAY_LENGTH];
 
 /**
  * @brief 
@@ -26,7 +28,7 @@ static double array[ARRAY_LENGHT];
  */
 static int binary_search_routine(double n){
 
-    int l_pos=0,r_pos=ARRAY_LENGHT-1;
+    int l_pos=0,r_pos=ARRAY_LENGTH-1;
 
     while(l_pos<= r_pos){
         
@@ -47,7 +49,7 @@ static int binary_search_routine(double n){
 void binary_search(int seed){
 
     random_set_seed(seed);
-    random_get_sarray(array,ARRAY_LENGHT);
+    random_get_sarray(array,ARRAY_LENGTH);
 
     double n=random_get();
     

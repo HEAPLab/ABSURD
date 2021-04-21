@@ -14,15 +14,8 @@
 *   limitations under the License.
 *******************************************************************************/
 
-/*
-   32-bits Uniform random number generator U[0,1) lfsr113, based on the
-   work of Pierre L'Ecuyer (http://www.iro.umontreal.ca/~lecuyer/myftp/papers/tausme2.ps)
-*/
-
 #ifndef USER_H_
 #define USER_H_
-
-#include <time.h>
 
 #define CLASS_A
 #include "dev_classes.h"
@@ -30,21 +23,28 @@
 
 #define UINT32_T unsigned int
 
+/** User-needed libraries (e.g., for measurements) **/
+#include <time.h>
+#include <stdio.h>
 
+/** User-needed constants (e.g., for measurements) **/
+#define BILLION 1000000000L
+
+/** Variables declared in the global scope to support measurements **/
+#define MEASURE_GLOBAL_VARIABLES()  static struct timespec start,stop; \
+                                    double result;
+
+/** The code to be executed when the time measurement starts **/
 #define MEASURE_START()  do { \
                               result=0; \
                               clock_gettime(CLOCK_MONOTONIC, &start); \
                            } while(0);
 
+/** The code to be executed when the time measurement stops **/
 #define MEASURE_STOP() do { \
                               clock_gettime(CLOCK_MONOTONIC, &stop); \
                               result=(stop.tv_sec - start.tv_sec)*BILLION + (stop.tv_nsec - start.tv_nsec); \
                            } while(0);
 
-#define BILLION 1000000000L
-
-//User defined variables
-struct timespec start,stop;
-double result;
 
 #endif

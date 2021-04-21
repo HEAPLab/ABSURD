@@ -15,7 +15,9 @@
 *******************************************************************************/
 #include "simple_random.h"
 #include "user.h"
-#include <stdio.h>
+
+MEASURE_GLOBAL_VARIABLES();
+
 /**
  * Compute recursively the nth term of Fibonacci sequence.
  * 
@@ -36,7 +38,7 @@ static int fibonacci_routine(int n){
 void fibonacci(int seed){
     
     random_set_seed(seed);
-    int n=ARRAY_LENGHT*random_get();
+    int n=ARRAY_LENGTH*random_get();
     
     MEASURE_START();
     for(int i=0; i<ITERATIONS;i++){
