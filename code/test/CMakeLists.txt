@@ -1,5 +1,13 @@
+project(HEAP-WCET-Benchmarks)
 cmake_minimum_required(VERSION 3.00)
 
 file(GLOB BASIC_SRC ../basic/*.c)
-add_executable(prova main.c ${BASIC_SRC})
-target_include_directories(prova PRIVATE ../include)
+foreach(PATH ${BASIC_SRC})
+    get_filename_component(BENCH_NAME ${PATH} NAME_WE)
+    message("Configuring ${BENCH_NAME}...")
+    configure_file( main.c.in mains/main_${BENCH_NAME}.c )
+    add_executable(${BENCH_NAME} mains/main_${BENCH_NAME}.c ${PATH})
+    target_include_directories(${BENCH_NAME} PRIVATE ../include)
+endforeach()
+
+
