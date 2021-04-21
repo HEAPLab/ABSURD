@@ -24,7 +24,7 @@ MEASURE_GLOBAL_VARIABLES();
  * @param n term to be computed
  * @return nth term of Fibonacci sequence
  */
-static int fibonacci_routine(int n){
+static long int fibonacci_routine(long int n){
     if(n == 0) return 0;
     else if(n == 1) return 1;
     else return (fibonacci_routine(n-1) + fibonacci_routine(n-2));
@@ -40,6 +40,7 @@ void fibonacci(int seed){
     random_set_seed(seed);
     int n=ARRAY_LENGTH*random_get();
     
+
     MEASURE_START();
     for(int i=0; i<ITERATIONS;i++){
         fibonacci_routine(n);

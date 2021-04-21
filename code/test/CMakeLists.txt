@@ -11,3 +11,11 @@ foreach(PATH ${BASIC_SRC})
 endforeach()
 
 
+file(GLOB KERNELS_SRC ../kernels/*.c)
+foreach(PATH ${KERNELS_SRC})
+    get_filename_component(BENCH_NAME ${PATH} NAME_WE)
+    message("Configuring ${BENCH_NAME}...")
+    configure_file( main.c.in mains/main_${BENCH_NAME}.c )
+    add_executable(${BENCH_NAME} mains/main_${BENCH_NAME}.c ${PATH})
+    target_include_directories(${BENCH_NAME} PRIVATE ../include)
+endforeach()

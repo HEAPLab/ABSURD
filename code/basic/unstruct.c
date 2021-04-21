@@ -16,9 +16,7 @@
 #include "user.h"
 #include "simple_random.h"
 
-MEASURE_GLOBAL_VARIABLES();
-
-static double array[ARRAY_LENGTH];
+MEASURE_GLOBAL_VARIABLES()
 
 /**
  * @brief 
@@ -26,19 +24,26 @@ static double array[ARRAY_LENGTH];
  * @param n 
  * @return int 
  */
-static int binary_search_routine(double n){
+static int unstruct_routine(int n){
 
-    int l_pos=0,r_pos=ARRAY_LENGTH-1;
+    int i=0;
 
-    while(l_pos<= r_pos){
-        
-        int pos=(l_pos+r_pos)/2;
-        if(array[pos] < n) l_pos=pos+1;
-        else if (array[pos] > n) r_pos=pos-1;
-        else return pos;
-    }
+    switch (n%10)
+    {
+    case 0: do{     i++;
+    case 9:         i++;
+    case 8:         i++;
+    case 7:         i++;
+    case 6:         i++;
+    case 5:         i++;
+    case 4:         i++;
+    case 3:         i++;
+    case 2:         i++;
+    case 1:         i++;
+    }while (i<n);}
+    
+    return i;
 
-    return -1;
 }
 
 /**
@@ -46,16 +51,15 @@ static int binary_search_routine(double n){
  * 
  * @param seed 
  */
-void binary_search(int seed){
+void unstruct(int seed){
 
     random_set_seed(seed);
-    random_get_sarray(array,ARRAY_LENGTH);
 
-    double n=random_get();
+    int n=random_get()*ARRAY_LENGTH;
     
     MEASURE_START();
     for(int i=0; i<ITERATIONS;i++){
-        binary_search_routine(n);
+        unstruct_routine(n);
     }
     MEASURE_STOP();
 

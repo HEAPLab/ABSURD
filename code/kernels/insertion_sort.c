@@ -16,29 +16,23 @@
 #include "user.h"
 #include "simple_random.h"
 
-MEASURE_GLOBAL_VARIABLES();
+MEASURE_GLOBAL_VARIABLES()
 
 static double array[ARRAY_LENGTH];
 
-/**
- * @brief 
- * 
- * @param n 
- * @return int 
- */
-static int binary_search_routine(double n){
+static void insertion_sort_routine(){
 
-    int l_pos=0,r_pos=ARRAY_LENGTH-1;
+    for(int i=1; i<ARRAY_LENGTH; i++){
+        int j=i-1;
+        double temp=array[i];
 
-    while(l_pos<= r_pos){
-        
-        int pos=(l_pos+r_pos)/2;
-        if(array[pos] < n) l_pos=pos+1;
-        else if (array[pos] > n) r_pos=pos-1;
-        else return pos;
+        while(j>=0 && array[j]>temp){
+            array[j+1]=array[j];
+            j--;
+        }
+        array[j+1]=temp;
     }
-
-    return -1;
+    
 }
 
 /**
@@ -46,17 +40,15 @@ static int binary_search_routine(double n){
  * 
  * @param seed 
  */
-void binary_search(int seed){
+void insertion_sort(int seed){
 
     random_set_seed(seed);
-    random_get_sarray(array,ARRAY_LENGTH);
+    random_get_array(array,ARRAY_LENGTH);
 
-    double n=random_get();
-    
     MEASURE_START();
     for(int i=0; i<ITERATIONS;i++){
-        binary_search_routine(n);
+        insertion_sort_routine();
     }
     MEASURE_STOP();
-
+    
 }

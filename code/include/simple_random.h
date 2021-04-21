@@ -65,16 +65,22 @@ inline static void random_get_sarray(double a[], int len){
     
     int min;
     for (int i=0; i<len-1; i++) {
-      min=i;
-      for (int j=i+1; j<len; j++){
+        min=i;
+        for (int j=i+1; j<len; j++){
             if (a[j] < a[min]){
                 min = j;
             }
-      }
-      double temp=a[i];
-                a[i]=a[min];
-                a[min]=temp;
+        }
+        double temp=a[i];
+        a[i]=a[min];
+        a[min]=temp;
     }
     
+}
+
+inline static void random_get_barray(double a[], int len){
+    for(int i = 0;i < len; i++){
+        a[i] = random_get() > 0.5 ? 1 : 0;  
+    }
 }
 #endif
