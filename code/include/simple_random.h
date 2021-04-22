@@ -78,7 +78,7 @@ inline static void random_get_sarray(double a[], int len){
     
 }
 
-inline static void random_get_barray(double a[], int len){
+inline static void random_get_barray(int a[], int len){
     for(int i = 0;i < len; i++){
         a[i] = random_get() > 0.5 ? 1 : 0;  
     }

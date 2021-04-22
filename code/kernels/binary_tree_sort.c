@@ -1,0 +1,107 @@
+/******************************************************************************
+*   Copyright 2021 Politecnico di Milano
+*
+*   Licensed under the Apache License, Version 2.0 (the "License");
+*   you may not use this file except in compliance with the License.
+*   You may obtain a copy of the License at
+*
+*      http://www.apache.org/licenses/LICENSE-2.0
+*
+*   Unless required by applicable law or agreed to in writing, software
+*   distributed under the License is distributed on an "AS IS" BASIS,
+*   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+*   See the License for the specific language governing permissions and
+*   limitations under the License.
+*******************************************************************************/
+#include "user.h"
+#include "simple_random.h"
+
+MEASURE_GLOBAL_VARIABLES()
+
+typedef struct{
+    double data;
+    int left;
+    int right;
+} node;
+
+static double array[ARRAY_LENGTH];
+static double ordered[ARRAY_LENGTH];
+
+static node btree[ARRAY_LENGTH];
+static int last_used;
+
+static void insert_node(double elem,int curr){
+    if(elem < btree[curr].data){
+        if(btree[curr].left == -1){
+            last_used++;
+            btree[curr].left=last_used;
+            btree[last_used].data=elem;
+            btree[last_used].left=-1;
+            btree[last_used].right=-1;
+            
+        }
+        else{
+            insert_node(elem, btree[curr].left);
+        }
+    }
+    else{
+        if(btree[curr].right==-1){
+            last_used++;
+            btree[curr].right=last_used;
+            btree[last_used].data=elem;
+            btree[last_used].left=-1;
+            btree[last_used].right=-1;
+        }
+        else{
+            insert_node(elem, btree[curr].right);
+        }
+
+    }
+    
+}
+
+static void order_sweep(int node_idx){
+    if(node_idx != -1){
+        order_sweep(btree[node_idx].left);
+        ordered[last_used++]=btree[node_idx].data;
+        order_sweep(btree[node_idx].right);
+    }
+    
+}
+static void binary_tree_sort_routine(){
+
+    //insert first node
+    btree[0].data=array[0];
+    btree[0].left=-1;
+    btree[0].right=-1;
+    
+    for(int i=1;i<ARRAY_LENGTH;i++){
+        insert_node(array[i],0);
+    }
+
+    last_used=0;
+
+    order_sweep(0);
+     
+    //reset for other iterations
+    last_used=0;
+}
+
+/**
+ * @brief 
+ * 
+ * @param seed 
+ */
+void binary_tree_sort(int seed){
+
+    random_set_seed(seed);
+    random_get_array(array,ARRAY_LENGTH);
+
+    MEASURE_START();
+    for(int i=0; i<ITERATIONS;i++){
+        binary_tree_sort_routine();
+    }
+    MEASURE_STOP();
+
+    
+}

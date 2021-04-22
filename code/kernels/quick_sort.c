@@ -20,12 +20,31 @@ MEASURE_GLOBAL_VARIABLES()
 
 static double array[ARRAY_LENGTH];
 
-static void quick_sort_routine(int x,int y){
+static int partition(int low,int high){
 
-    if(x<y){
+    double pivot = array[high];
+    int i=low;
+    for(int j=low;j<=high;j++){
+        if(array[j]<pivot){
+            double temp=array[j];
+            array[j]=array[i];
+            array[i]=temp;
+            i++;
+        }
+    }
+    double temp=array[i];
+    array[i]=array[high];
+    array[high]=temp;
+            
+    return i;
+}
 
-        
+static void quick_sort_routine(int low,int high){
 
+    if(low<high){
+        int pivot=partition(low,high);
+        quick_sort_routine(low, pivot-1);
+        quick_sort_routine(pivot+1,high);
     }
     
 }
@@ -42,7 +61,7 @@ void quick_sort(int seed){
 
     MEASURE_START();
     for(int i=0; i<ITERATIONS;i++){
-        quick_sort_routine();
+        quick_sort_routine(0,ARRAY_LENGTH-1);
     }
     MEASURE_STOP();
     
