@@ -10,6 +10,8 @@ foreach(PATH ${BASIC_SRC})
     target_include_directories(${BENCH_NAME} PRIVATE ../include)
 endforeach()
 
+target_link_libraries(array_stats m)
+target_link_libraries(exp_int m)
 
 file(GLOB KERNELS_SRC ../kernels/*.c)
 foreach(PATH ${KERNELS_SRC})
@@ -19,3 +21,5 @@ foreach(PATH ${KERNELS_SRC})
     add_executable(${BENCH_NAME} mains/main_${BENCH_NAME}.c ${PATH})
     target_include_directories(${BENCH_NAME} PRIVATE ../include)
 endforeach()
+
+target_link_libraries(eq_root m)
