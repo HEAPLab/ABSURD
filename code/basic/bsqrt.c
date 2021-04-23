@@ -1,0 +1,65 @@
+/******************************************************************************
+*   Copyright 2021 Politecnico di Milano
+*
+*   Licensed under the Apache License, Version 2.0 (the "License");
+*   you may not use this file except in compliance with the License.
+*   You may obtain a copy of the License at
+*
+*      http://www.apache.org/licenses/LICENSE-2.0
+*
+*   Unless required by applicable law or agreed to in writing, software
+*   distributed under the License is distributed on an "AS IS" BASIS,
+*   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+*   See the License for the specific language governing permissions and
+*   limitations under the License.
+*******************************************************************************/
+#include "user.h"
+#include "simple_random.h"
+
+
+#define ACCURACY 0.00000001
+
+MEASURE_GLOBAL_VARIABLES()
+
+/**
+ * @brief Actual square root implementation 
+ * 
+ * @param s 
+ * @return double square root of s
+ */
+static double bsqrt_routine(int s){
+   double x=s;
+   double y=(x+s/x)/2;
+
+   while(x-y>ACCURACY){
+       x=y;
+       y=(x+s/x)/2;
+   }
+   return x;
+}
+
+/**
+ * @brief It computes square root of a random double using Babylonian algorithm for ITERATIONS times and measures the execution time
+ * 
+ * @param seed seed used to initialize random number generator  
+ */
+void bsqrt(int seed){
+
+    random_set_seed(seed);
+    
+
+    int s = random_get()*ARRAY_LENGTH;
+
+    printf("s=%d\n",s);
+    double res;
+    MEASURE_START();
+    for(int i=0; i<1;i++){
+        res=bsqrt_routine(s);
+    }
+    MEASURE_STOP();
+   
+    printf("res=%.15f\n",res);
+
+
+    
+}
