@@ -18,7 +18,7 @@
 
 MEASURE_GLOBAL_VARIABLES();
 
-static double matrix[ARRAY_LENGTH][ARRAY_LENGTH];
+static double mat[ARRAY_LENGTH][ARRAY_LENGTH];
 
 /**
  * @brief 
@@ -30,7 +30,7 @@ static int matrix_nn_routine(){
 
     for(int i=0; i<ARRAY_LENGTH;i++){
         for(int j=0; j<ARRAY_LENGTH;j++){
-            if(matrix[i][j] > 0) cnt++;
+            if(mat[i][j] > 0) cnt++;
         }
     }
 
@@ -47,7 +47,7 @@ void matrix_nn(int seed){
     //Matrix initialization
     random_set_seed(seed);
     for(int i=0; i<ARRAY_LENGTH;i++){
-        random_get_array(matrix[i],ARRAY_LENGTH);
+        random_get_array(mat[i],ARRAY_LENGTH);
     }
 
     MEASURE_START();

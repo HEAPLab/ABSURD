@@ -18,8 +18,8 @@
 
 MEASURE_GLOBAL_VARIABLES()
 
-static double matrix_1[ARRAY_LENGTH][ARRAY_LENGTH];
-static double matrix_2[ARRAY_LENGTH][ARRAY_LENGTH];
+static double mat_1[ARRAY_LENGTH][ARRAY_LENGTH];
+static double mat_2[ARRAY_LENGTH][ARRAY_LENGTH];
 static double res[ARRAY_LENGTH][ARRAY_LENGTH];
 /**
  * @brief 
@@ -31,7 +31,7 @@ static void matrix_mult_routine(){
         for(int j=0;j<ARRAY_LENGTH;j++){
             double sum=0;
             for(int k=0;k<ARRAY_LENGTH;k++){
-                sum += matrix_1[i][k]*matrix_2[k][j];    
+                sum += mat_1[i][k]*mat_2[k][j];    
             }
             res[i][j]=sum;
         }
@@ -39,17 +39,17 @@ static void matrix_mult_routine(){
 }
 
 /**
- * @brief 
+ * @brief It performs matrices multiplication between two random matrix for ITERATIONS times and measures the execution time
  * 
- * @param seed 
+ * @param seed seed used to initialize random number generator  
  */
 void matrix_mult(int seed){
     
     //Matrix initialization
     random_set_seed(seed);
     for(int i=0; i<ARRAY_LENGTH;i++){
-        random_get_array(matrix_1[i],ARRAY_LENGTH);
-        random_get_array(matrix_2[i],ARRAY_LENGTH);
+        random_get_array(mat_1[i],ARRAY_LENGTH);
+        random_get_array(mat_2[i],ARRAY_LENGTH);
     }
 
     MEASURE_START();

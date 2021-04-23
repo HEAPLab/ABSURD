@@ -20,10 +20,10 @@
 
 MEASURE_GLOBAL_VARIABLES()
 
-static int array_in[ARRAY_LENGTH][ARRAY_LENGTH];
-static int array_out[ARRAY_LENGTH][ARRAY_LENGTH];
+static int mat_in[ARRAY_LENGTH][ARRAY_LENGTH];
+static int mat_out[ARRAY_LENGTH][ARRAY_LENGTH];
 /*#define ARRAY_LENGTH 13
-static int array_in[ARRAY_LENGTH][ARRAY_LENGTH]={{1,1,1,1,1,1,1,1,1,1,1,1,1},
+static int mat_in[ARRAY_LENGTH][ARRAY_LENGTH]={{1,1,1,1,1,1,1,1,1,1,1,1,1},
                                                  {1,1,1,1,1,1,0,1,1,1,1,1,1},
                                                  {1,1,1,1,1,1,1,1,1,1,1,1,1},
                                                  {1,1,1,1,1,1,1,1,1,1,1,1,1},
@@ -46,8 +46,14 @@ static int kernel[KERNEL_SIZE][KERNEL_SIZE]={
     {1,1,1}
 };
 
-
-static int superimpose(int p_x, int p_y){
+/**
+ * @brief Performs 2D convolution of KERNEL_SIZExKERNEL_SIZE kernel with mat_in
+ * 
+ * @param p_x  center point x coordinate
+ * @param p_y center point y coordinate
+ * @return int result of 2d convolution of kernel centred in mat_in[p_x][p_y]
+ */
+static int convolution2D(int p_x, int p_y){
     //Kernel radius 
     int k_r=KERNEL_SIZE/2;
 
@@ -61,7 +67,7 @@ static int superimpose(int p_x, int p_y){
 
     for(int i=p_x-k_r;i<=p_x+k_r;i++){
         for(int j=p_y-k_r;j<=p_y+k_r;j++){
-            if(!(kernel[i-offset_x][j-offset_y] && array_in[i][j])){
+            if(!(kernel[i-offset_x][j-offset_y] && mat_in[i][j])){
                 return 0;
             }
         }
@@ -69,25 +75,29 @@ static int superimpose(int p_x, int p_y){
     return 1;
 }
 
+/**
+ * @brief Acutal morphological erosion implementation
+ * 
+ */
 static void erode_routine(){
    for(int i=0;i<ARRAY_LENGTH;i++){
        for(int j=0;j<ARRAY_LENGTH;j++){
-           array_out[i][j]=superimpose(i,j);
+           mat_out[i][j]=convolution2D(i,j);
        }
     }
     
 }
 
 /**
- * @brief 
+ * @brief It performs Morphological erosion on a random binary matrix for ITERATIONS times and measures the execution time
  * 
- * @param seed 
+ * @param seed seed used to initialize random number generator  
  */
 void erode(int seed){
 
     random_set_seed(seed);
     for (int i = 0; i < ARRAY_LENGTH; i++){
-        random_get_barray(array_in[i],ARRAY_LENGTH);
+        random_get_barray(mat_in[i],ARRAY_LENGTH);
     }
     
     MEASURE_START();
@@ -98,7 +108,7 @@ void erode(int seed){
 
     /*for (int i = 0; i < ARRAY_LENGTH; i++){
         for (int j = 0; j < ARRAY_LENGTH; j++){
-            printf("%d\t",array_out[i][j]);
+            printf("%d\t",mat_out[i][j]);
         }
         printf("\n");
     }*/
