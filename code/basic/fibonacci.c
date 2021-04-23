@@ -19,7 +19,7 @@
 MEASURE_GLOBAL_VARIABLES();
 
 /**
- * Compute recursively the nth term of Fibonacci sequence.
+ * Actual recursive implementation of Fibonacci's sequence.
  * 
  * @param n term to be computed
  * @return nth term of Fibonacci sequence
@@ -31,9 +31,9 @@ static long int fibonacci_routine(long int n){
 }
 
 /**
- * @brief 
+ * @brief It computes a random term of the Fibonacci's sequence for ITERATIONS times and measures the execution time
  * 
- * @param seed 
+ * @param seed seed used to initialize random number generator  
  */
 void fibonacci(int seed){
     

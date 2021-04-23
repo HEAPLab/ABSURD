@@ -28,15 +28,27 @@ static double fact(int n){
     }
     return n*fact(n-1);
 }
-
+/**
+ * @brief It computes abs for double type
+ * 
+ * @param n 
+ * @return double 
+ */
 static double dabs(double n){
     if(n<0){
         return -n;
     }
     return n;
 }
+/**
+ * @brief Actual implementation of exponential integral function using Taylor series expansion
+ * 
+ * @param x 
+ * @param n series index up to which expand Taylor series 
+ * @return double value of Ei(x)
+ */
 static double exp_int_routine(double x, int n){
-    //computed using Taylor series expansion
+    
     double term_1=0;
 
     for(int i=1;i<=n;i++){
@@ -47,9 +59,9 @@ static double exp_int_routine(double x, int n){
 }
 
 /**
- * @brief 
+ * @brief It computes the value of the exponential integral function for a random number for ITERATIONS times and measures the execution time
  * 
- * @param seed 
+ * @param seed seed used to initialize random number generator  
  */
 void exp_int(int seed){
 

@@ -20,6 +20,10 @@ MEASURE_GLOBAL_VARIABLES()
 
 static double array[ARRAY_LENGTH];
 
+/**
+ * @brief Actual bubble sort implementation
+ * 
+ */
 static void bubble_sort_routine(){
 
     for(int i=0;i<ARRAY_LENGTH-1;i++){
@@ -35,9 +39,9 @@ static void bubble_sort_routine(){
 }
 
 /**
- * @brief 
+ * @brief It performs bubble sort on a random array for ITERATIONS times and measures the execution time
  * 
- * @param seed 
+ * @param seed seed used to initialize random number generator  
  */
 void bubble_sort(int seed){
 

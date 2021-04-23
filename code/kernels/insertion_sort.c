@@ -19,7 +19,10 @@
 MEASURE_GLOBAL_VARIABLES()
 
 static double array[ARRAY_LENGTH];
-
+/**
+ * @brief Actual insertion sort implementation
+ * 
+ */
 static void insertion_sort_routine(){
 
     for(int i=1; i<ARRAY_LENGTH; i++){
@@ -36,9 +39,9 @@ static void insertion_sort_routine(){
 }
 
 /**
- * @brief 
+ * @brief It performs insertion sort on a random array for ITERATIONS times and measures the execution time
  * 
- * @param seed 
+ * @param seed seed used to initialize random number generator  
  */
 void insertion_sort(int seed){
 

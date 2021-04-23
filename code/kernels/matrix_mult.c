@@ -21,10 +21,10 @@ MEASURE_GLOBAL_VARIABLES()
 static double mat_1[ARRAY_LENGTH][ARRAY_LENGTH];
 static double mat_2[ARRAY_LENGTH][ARRAY_LENGTH];
 static double res[ARRAY_LENGTH][ARRAY_LENGTH];
+
 /**
- * @brief 
+ * @brief Actual matrices multiplication implementation
  * 
- * @return int 
  */
 static void matrix_mult_routine(){
     for(int i=0;i<ARRAY_LENGTH;i++){
@@ -39,7 +39,7 @@ static void matrix_mult_routine(){
 }
 
 /**
- * @brief It performs matrices multiplication between two random matrix for ITERATIONS times and measures the execution time
+ * @brief It performs matrices multiplication between two random matrices for ITERATIONS times and measures the execution time
  * 
  * @param seed seed used to initialize random number generator  
  */

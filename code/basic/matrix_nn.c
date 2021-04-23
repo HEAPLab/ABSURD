@@ -21,9 +21,9 @@ MEASURE_GLOBAL_VARIABLES();
 static double mat[ARRAY_LENGTH][ARRAY_LENGTH];
 
 /**
- * @brief 
+ * @brief Actual implementation
  * 
- * @return int 
+ * @return int number of non negative numbers
  */
 static int matrix_nn_routine(){
     int cnt=0;
@@ -38,9 +38,9 @@ static int matrix_nn_routine(){
 }
 
 /**
- * @brief 
+ * @brief It counts the non negative numbers in a random square matrix for ITERATIONS times and measures the execution time
  * 
- * @param seed 
+ * @param seed seed used to initialize random number generator  
  */
 void matrix_nn(int seed){
     

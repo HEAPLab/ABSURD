@@ -21,10 +21,10 @@ MEASURE_GLOBAL_VARIABLES();
 static double matrix[ARRAY_LENGTH][ARRAY_LENGTH];
 
 /**
- * @brief 
+ * @brief It scans the matrix for the desired element
  * 
- * @param n 
- * @return int 
+ * @param n number to be searched
+ * @return int 1 if found, 0 otherwise
  */
 static int multi_search_routine(double n){
     for(int i=0; i<ARRAY_LENGTH;i++){
@@ -33,13 +33,13 @@ static int multi_search_routine(double n){
         }
     }
 
-    return -1;
+    return 0;
 }
 
 /**
- * @brief 
+ * @brief It searches a random number in a random  matrix for ITERATIONS times and measures the execution time
  * 
- * @param seed 
+ * @param seed seed used to initialize random number generator  
  */
 void multi_search(int seed){
     

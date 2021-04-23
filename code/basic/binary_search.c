@@ -21,10 +21,10 @@ MEASURE_GLOBAL_VARIABLES();
 static double array[ARRAY_LENGTH];
 
 /**
- * @brief 
+ * @brief Actual binary search implementation
  * 
- * @param n 
- * @return int 
+ * @param n number to be searched
+ * @return int position of the number
  */
 static int binary_search_routine(double n){
 
@@ -42,9 +42,9 @@ static int binary_search_routine(double n){
 }
 
 /**
- * @brief 
+ * @brief It performs binary search of a random number on a random array for ITERATIONS times and measures the execution time
  * 
- * @param seed 
+ * @param seed seed used to initialize random number generator  
  */
 void binary_search(int seed){
 

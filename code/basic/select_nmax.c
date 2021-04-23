@@ -50,9 +50,9 @@ static double select_nmax_routine(double a[], int pos){
 }
 
 /**
- * @brief 
+ * @brief It searches for the random n-th greater element in a random array for ITERATIONS times and measures the execution time
  * 
- * @param seed 
+ * @param seed seed used to initialize random number generator  
  */
 void select_nmax(int seed){
     

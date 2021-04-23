@@ -27,6 +27,13 @@ typedef struct{
 
 static complex roots[2];
 
+/**
+ * @brief Actual quadratic equation solver implementation
+ * 
+ * @param a 
+ * @param b 
+ * @param c 
+ */
 static void eq_root_routine(double a, double b, double c){
 
     double delta=b*b-4*a*c;
@@ -51,9 +58,9 @@ static void eq_root_routine(double a, double b, double c){
 }
 
 /**
- * @brief 
+ * @brief It computes complex roots of a random quadratic equation for ITERATIONS times and measures the execution time
  * 
- * @param seed 
+ * @param seed seed used to initialize random number generator  
  */
 void eq_root(int seed){
 

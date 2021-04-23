@@ -38,7 +38,12 @@ static int partition(int low,int high){
             
     return i;
 }
-
+/**
+ * @brief Actual quick sort recursive implementation
+ * 
+ * @param low start index for partitions creation
+ * @param high end index for partitions creation
+ */
 static void quick_sort_routine(int low,int high){
 
     if(low<high){
@@ -50,9 +55,9 @@ static void quick_sort_routine(int low,int high){
 }
 
 /**
- * @brief 
+ * @brief It performs quick sort on a random array for ITERATIONS times and measures the execution time
  * 
- * @param seed 
+ * @param seed seed used to initialize random number generator  
  */
 void quick_sort(int seed){
 

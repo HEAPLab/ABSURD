@@ -30,6 +30,12 @@ static double ordered[ARRAY_LENGTH];
 static node btree[ARRAY_LENGTH];
 static int last_used;
 
+/**
+ * @brief It adds elements to the binary tree
+ * 
+ * @param elem element to be inserted in the binary tree
+ * @param curr index of the current node
+ */
 static void insert_node(double elem,int curr){
     if(elem < btree[curr].data){
         if(btree[curr].left == -1){
@@ -59,7 +65,11 @@ static void insert_node(double elem,int curr){
     }
     
 }
-
+/**
+ * @brief It recursively scan the binary tree to build the ordered array
+ * 
+ * @param node_idx index of the next node
+ */
 static void order_sweep(int node_idx){
     if(node_idx != -1){
         order_sweep(btree[node_idx].left);
@@ -68,6 +78,11 @@ static void order_sweep(int node_idx){
     }
     
 }
+
+/**
+ * @brief Actual binary tree sort implementation
+ * 
+ */
 static void binary_tree_sort_routine(){
 
     //insert first node
@@ -88,9 +103,9 @@ static void binary_tree_sort_routine(){
 }
 
 /**
- * @brief 
+ * @brief It performs binary tree sort on a random array for ITERATIONS times and measures the execution time
  * 
- * @param seed 
+ * @param seed seed used to initialize random number generator  
  */
 void binary_tree_sort(int seed){
 

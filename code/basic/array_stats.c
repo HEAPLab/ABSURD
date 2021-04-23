@@ -58,8 +58,9 @@ static double corr(double a[],double b[]){
     return temp/(std(a)*std(b));
 
 }
+
 /**
- * @brief 
+ * @brief Actual array stats implementation
  * 
  */
 static void array_stats_routine(){
@@ -81,9 +82,9 @@ static void array_stats_routine(){
 }
 
 /**
- * @brief 
+ * @brief It computes some basic statistics on two random arrays for ITERATIONS times and measures the execution time
  * 
- * @param seed 
+ * @param seed seed used to initialize random number generator  
  */
 void array_stats(int seed){
 

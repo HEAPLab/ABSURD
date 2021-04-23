@@ -20,6 +20,10 @@ MEASURE_GLOBAL_VARIABLES()
 
 static double array[ARRAY_LENGTH];
 
+/**
+ * @brief It randomly shuffle the array
+ * 
+ */
 static void knuth_shuffle(){
 
     for(int i=ARRAY_LENGTH-1;i>=0;i--){
@@ -32,7 +36,11 @@ static void knuth_shuffle(){
     }
 
 }
-
+/**
+ * @brief It checks if the array is ordered
+ * 
+ * @return int 1 if the array is ordered, 0 otherwise
+ */
 static int is_ordered(){
     for(int i=0;i<ARRAY_LENGTH-1;i++){
         if(array[i]>array[i+1]){
@@ -41,7 +49,10 @@ static int is_ordered(){
     }
     return 1;
 }
-
+/**
+ * @brief Actual bogo sort implementation
+ * 
+ */
 static void bogo_sort_routine(){
     while (!is_ordered()){
         knuth_shuffle();
@@ -49,9 +60,9 @@ static void bogo_sort_routine(){
 }
 
 /**
- * @brief 
+ * @brief It performs bogo sort on a random array for ITERATIONS times and measures the execution time
  * 
- * @param seed 
+ * @param seed seed used to initialize random number generator  
  */
 void bogo_sort(int seed){
 
