@@ -37,7 +37,8 @@ static int multi_search_routine(double n){
 }
 
 /**
- * @brief It searches a random number in a random  matrix for ITERATIONS times and measures the execution time
+ * @brief It searches a random number in a random  matrix . The execution is repeated as many times
+ * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  * 
  * @param seed seed used to initialize random number generator  
  */

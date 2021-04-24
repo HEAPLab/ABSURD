@@ -38,7 +38,8 @@ static int matrix_nn_routine(){
 }
 
 /**
- * @brief It counts the non negative numbers in a random square matrix for ITERATIONS times and measures the execution time
+ * @brief It counts the non negative numbers in a random square matrix . The execution is repeated as many times
+ * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  * 
  * @param seed seed used to initialize random number generator  
  */

@@ -100,7 +100,8 @@ static void gauss_filter_RGB_routine(int channel){
 }
 
 /**
- * @brief It performs gaussian filtering on a random grayscale image for ITERATIONS times and measures the execution time
+ * @brief It performs gaussian filtering on a random grayscale image . The execution is repeated as many times
+ * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  * 
  * @param seed seed used to initialize random number generator  
  */
