@@ -18,6 +18,11 @@
 #define USER_H_
 
 #define CLASS_A
+
+/** Set this to 0 to disable the outer loop on benchmarks (it will considerably reduce the execution time) **/
+#define USE_ITERATIONS_LOOP 1
+
+
 #include "dev_classes.h"
 
 
@@ -26,6 +31,7 @@
 /** User-needed libraries (e.g., for measurements) **/
 #include <time.h>
 #include <stdio.h>
+
 
 /** User-needed constants (e.g., for measurements) **/
 #define BILLION 1000000000L
