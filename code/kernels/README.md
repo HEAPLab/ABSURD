@@ -22,3 +22,9 @@ This folder contains common algorithms of various complexity. In particular:
     - `insertion_sort`: it sorts a random array using insertion sort algorithm;
     - `quick_sort`: it sorts a random array using quick sort algorithm;
 
+- Digital signal processing:
+    - `fft`: it computes FFT of a random array exploiting Cooley–Tukey algorithm;
+    - `dct`: it computes DCT of a random array;
+
+- `crc_32`: it computes CRC32 of a random byte array;
+

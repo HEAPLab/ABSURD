@@ -25,6 +25,8 @@ foreach(PATH ${KERNELS_SRC})
 endforeach()
 
 target_link_libraries(eq_root m)
+target_link_libraries(fft m)
+target_link_libraries(dct m)
 target_link_libraries(gauss_filter m)
 
 if(MULTI_THREAD)

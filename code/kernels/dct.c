@@ -1,0 +1,64 @@
+/******************************************************************************
+*   Copyright 2021 Politecnico di Milano
+*
+*   Licensed under the Apache License, Version 2.0 (the "License");
+*   you may not use this file except in compliance with the License.
+*   You may obtain a copy of the License at
+*
+*      http://www.apache.org/licenses/LICENSE-2.0
+*
+*   Unless required by applicable law or agreed to in writing, software
+*   distributed under the License is distributed on an "AS IS" BASIS,
+*   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+*   See the License for the specific language governing permissions and
+*   limitations under the License.
+*******************************************************************************/
+#include "user.h"
+#include "simple_random.h"
+
+#include <math.h>
+
+#define PI 3.14159265358979323846
+
+MEASURE_GLOBAL_VARIABLES()
+
+
+static double array_in[ARRAY_LENGTH];
+static double array_out[ARRAY_LENGTH];
+
+
+/**
+ * @brief Actual DCT-II implementation
+ * 
+ * @return Discrete cosine transformation of input array
+ */
+static void dct_routine(){
+   for(int k=0;k<ARRAY_LENGTH;k++){
+       double sum=0;
+       for(int n=0;n<ARRAY_LENGTH;n++){
+           sum += (array_in[n] * cos((PI*(n+0.5)*k)/ARRAY_LENGTH));
+       }
+       array_out[k]=sum;
+   }
+}
+
+/**
+ * @brief It computes DCT of a random array. The execution is repeated as many times
+ * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
+ * 
+ * @param seed seed used to initialize random number generator  
+ */
+void dct(int seed){
+    
+    //Matrix initialization
+    random_set_seed(seed);
+    random_get_array(array_in,ARRAY_LENGTH);
+
+    MEASURE_START();
+    for(int i=0; i<ITERATIONS;i++){
+        dct_routine();
+    }
+    MEASURE_STOP();
+
+
+}
