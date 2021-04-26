@@ -46,4 +46,14 @@ if(MULTI_THREAD)
     target_link_libraries(gauss_filter_RGB m)
 endif()
 
+file(GLOB KERNELS_SRC ../apps/*.c)
+foreach(PATH ${KERNELS_SRC})
+    get_filename_component(BENCH_NAME ${PATH} NAME_WE)
+    message("Configuring ${BENCH_NAME}...")
+    configure_file( main.c.in mains/main_${BENCH_NAME}.c )
+    add_executable(${BENCH_NAME} mains/main_${BENCH_NAME}.c ${PATH})
+    target_include_directories(${BENCH_NAME} PRIVATE ../include)
+endforeach()
+
+target_link_libraries(tcas m)
 
