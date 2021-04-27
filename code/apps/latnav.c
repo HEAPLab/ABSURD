@@ -14,17 +14,6 @@
 *   limitations under the License.
 *******************************************************************************/
 
-/*
-    OUTPUT INTERPRETATION:
-
-    0: CLEAR
-    1: CLIMB LOW SPEED
-    2: DESCEND LOW SPEED
-    3: CLIMB HIGH SPEED
-    4: DESCEND HIGH SPEED
-    5: TRAFFIC TRAFFIC
-*/
-
 #include "user.h"
 #include "simple_random.h"
 
