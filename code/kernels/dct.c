@@ -18,7 +18,9 @@
 
 #include <math.h>
 
-#define PI 3.14159265358979323846
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 
 MEASURE_GLOBAL_VARIABLES()
 
@@ -36,7 +38,7 @@ static void dct_routine(){
    for(int k=0;k<ARRAY_LENGTH;k++){
        double sum=0;
        for(int n=0;n<ARRAY_LENGTH;n++){
-           sum += (array_in[n] * cos((PI*(n+0.5)*k)/ARRAY_LENGTH));
+           sum += (array_in[n] * cos((M_PI*(n+0.5)*k)/ARRAY_LENGTH));
        }
        array_out[k]=sum;
    }

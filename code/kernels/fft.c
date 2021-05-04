@@ -18,7 +18,9 @@
 
 #include <math.h>
 
-#define PI 3.14159265358979323846
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 
 MEASURE_GLOBAL_VARIABLES()
 
@@ -81,7 +83,7 @@ static void fft_routine(){
         complex even_sum = {.re=0,.im=0};
 
         for(int n=0;n<FFT_LENGTH;n=n+2){
-            complex n_term = complex_sum(array_in[n],complex_exp((-2*PI*n*k)/FFT_LENGTH));
+            complex n_term = complex_sum(array_in[n],complex_exp((-2*M_PI*n*k)/FFT_LENGTH));
 
             complex_sum(even_sum,n_term);
         }
@@ -89,7 +91,7 @@ static void fft_routine(){
         complex odd_sum = {.re=0,.im=0};
 
         for(int n=1;n<FFT_LENGTH;n=n+2){
-            complex n_term = complex_sum(array_in[n],complex_exp((-2*PI*n*k)/FFT_LENGTH));
+            complex n_term = complex_sum(array_in[n],complex_exp((-2*M_PI*n*k)/FFT_LENGTH));
 
             complex_sum(odd_sum,n_term);
         }
