@@ -46,8 +46,10 @@ foreach(PATH ${KERNELS_SRC})
     target_include_directories(${BENCH_NAME} PRIVATE ../include)
 endforeach()
 
+target_link_libraries(biquad m)
 target_link_libraries(eq_root m)
 target_link_libraries(fft m)
+target_link_libraries(fir_avg m)
 target_link_libraries(dct m)
 target_link_libraries(gauss_filter m)
 

@@ -5,6 +5,7 @@ This folder contains common algorithms of various complexity. In particular:
     - `matrix_mult`: multiplication between two random square matrices;
     - `lu_dec`: LU decomposition of random square matrix (Doolittle algorithm);
     - `matrix_det`: computation of the determinant of a random square matrix exploiting LU decomposition;
+    - `matrix_inv`: computation of the inverse of a random square matrix exploiting LU decomposition;
 - Image manipulation
     - Morphological operations
         - `erode`: it applies erosion operation on a random binary image;
@@ -25,6 +26,9 @@ This folder contains common algorithms of various complexity. In particular:
 - Digital signal processing:
     - `fft`: it computes FFT of a random array exploiting Cooley–Tukey algorithm;
     - `dct`: it computes DCT of a random array;
-
-- `crc_32`: it computes CRC32 of a random byte array;
+    - `biquad`: it applies biquad filter to a noisy cosine signal;
+    - `fir_avg`: it applies moving average filter to a noisy sine signal;
+- Misc:
+    - `crc_32`: it computes CRC32 of a random byte array;
+    - `md5`: it computes md5 of a random byte array;
 
