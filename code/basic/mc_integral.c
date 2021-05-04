@@ -19,9 +19,14 @@
 
 MEASURE_GLOBAL_VARIABLES()
 
-//TODO
+/**
+ * @brief f(x)=1/((x+1)^3+1)
+ * 
+ * @param x variable
+ * @return double f(x)=1/((x+1)^3+1)
+ */
 static double f(double x){
-    return x;
+    return 1/((x+1)*(x+1)*(x+1)+1);
 }
 /**
  * @brief Actual Monte Carlo integration algorithm 
@@ -42,7 +47,7 @@ static double mc_integral_routine(double a, double b, int n){
 }
 
 /**
- * @brief It computes integral exploiting Monte Carlo method. The execution is repeated as many times
+ * @brief It computes integral of a function difficult to integrate analytically, exploiting Monte Carlo method. The execution is repeated as many times
  * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  * 
  * @param seed seed used to initialize random number generator  
@@ -53,10 +58,18 @@ void mc_integral(int seed){
     
 
     int s = random_get()*ARRAY_LENGTH;
-
+    double a,b;
+    do{
+        a=random_get();
+        b=random_get();
+    }while(a<b);
+    //double res;
     MEASURE_START();
-    for(int i=0; i<1;i++){
-        mc_integral_routine(0,1,s);
+    for(int i=0; i<ITERATIONS;i++){
+      // res= mc_integral_routine(0,1,s);
+      mc_integral_routine(a,b,s);
+
     }
     MEASURE_STOP(); 
+    //printf("%f\n",res);
 }
