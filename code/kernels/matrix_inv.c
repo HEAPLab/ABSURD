@@ -29,27 +29,30 @@ static double inv[ARRAY_LENGTH][ARRAY_LENGTH];
  * 
  */
 static void lu_decomposition(){
-    
-    for(int i=0;i<ARRAY_LENGTH;i++){
-        //compute u matrix i row
-        for(int j=i;j<ARRAY_LENGTH;j++){
+    int i;
+    for(i=0;i<ARRAY_LENGTH;i++){
+        /*compute u matrix i row*/
+        int j;
+        for(j=i;j<ARRAY_LENGTH;j++){
             double sum = 0;
-            for (int k = 0; k < i; k++){
+            int k;
+            for (k = 0; k < i; k++){
                 sum += (l[i][k] * u[k][j]);
             }
             u[i][j]=mat[i][j] - sum;
         }  
         
 
-        //compute l matrix j column
-        for(int j=i;j<ARRAY_LENGTH;j++){
+        /*compute l matrix j column*/
+        for(j=i;j<ARRAY_LENGTH;j++){
             if(i==j){
                 l[j][i] = 1; 
             }
             else
             {
                 double sum = 0;
-                for (int k = 0; k < i; k++){
+                int k;
+                for (k = 0; k < i; k++){
                     sum += l[j][k] * u[k][i];
                 }
                 
@@ -66,8 +69,11 @@ static void lu_decomposition(){
  * @return double mat determinant
  */
 static double matrix_det(){
-    double det=1;
-    for(int i=0;i<ARRAY_LENGTH;i++){
+    int i;
+    double det;
+    
+    det=1;
+    for(i=0;i<ARRAY_LENGTH;i++){
         det *= l[i][i]*u[i][i];
     }
     return det;
@@ -79,45 +85,31 @@ static double matrix_det(){
  * @return int 1 if inverse exists, 0 otherwise
  */
 static int matrix_inv_routine(){
+    int j;
     lu_decomposition();
     
     if(matrix_det() == 0){
         return 0;
     }
-    /*
-    printf("L:\n");
-    for(int i=0; i<ARRAY_LENGTH;i++){
-        for(int j=0; j<ARRAY_LENGTH;j++){
-            printf("%f\t",l[i][j]);
-        }
-        printf("\n");
-    }
-    printf("\n");
-
-    printf("U:\n");
-    for(int i=0; i<ARRAY_LENGTH;i++){
-        for(int j=0; j<ARRAY_LENGTH;j++){
-            printf("%f\t",u[i][j]);
-        }
-        printf("\n");
-    }
-    printf("\n");
-    */
-    //forward-backward pass foreach column
-    for(int j=0;j<ARRAY_LENGTH;j++){
-        //first j rows equals to 0
-        for(int i=0;i<j;i++) tmp[i]=0;
+  
+    /*forward-backward pass foreach column*/
+    for(j=0;j<ARRAY_LENGTH;j++){
+        /*first j rows equals to 0*/
+        int i;
+        for(i=0;i<j;i++) tmp[i]=0;
         tmp[j]=1;
-        for(int i=j+1;i<ARRAY_LENGTH;i++){
+        for(i=j+1;i<ARRAY_LENGTH;i++){
             double sum=0;
-            for(int k=0;k<i;k++) sum+=l[i][k]*tmp[k];
+            int k;
+            for(k=0;k<i;k++) sum+=l[i][k]*tmp[k];
             tmp[i]=-sum;
         }
 
-        //backward pass
-        for(int i=ARRAY_LENGTH-1;i>=0;i--){
+        /*backward pass*/
+        for(i=ARRAY_LENGTH-1;i>=0;i--){
             double sum=0;
-            for(int k=i+1;k<ARRAY_LENGTH;k++) sum+=u[i][k]*inv[k][j];
+            int k;
+            for(k=i+1;k<ARRAY_LENGTH;k++) sum+=u[i][k]*inv[k][j];
             inv[i][j]=(-sum+tmp[i])/u[i][i];
         }
        
@@ -133,36 +125,21 @@ static int matrix_inv_routine(){
  * @param seed seed used to initialize random number generator  
  */
 void matrix_inv(int seed){
-    
-    //Matrix initialization
+    int i;
+    /*Matrix initialization*/
     random_set_seed(seed);
-    for(int i=0; i<ARRAY_LENGTH;i++){
+    for(i=0; i<ARRAY_LENGTH;i++){
         random_get_array(mat[i],ARRAY_LENGTH);
     }
 
-    /*printf("A:\n");
-    for(int i=0; i<ARRAY_LENGTH;i++){
-        for(int j=0; j<ARRAY_LENGTH;j++){
-            printf("%f\t",mat[i][j]);
-        }
-        printf("\n");
-    }
-    printf("\n");*/
+
 
     MEASURE_START();
-    for(int i=0; i<ITERATIONS;i++){
+    for(i=0; i<ITERATIONS;i++){
         matrix_inv_routine();
     }
     MEASURE_STOP();
 
-    /*  printf("Inv:\n");
-    for(int i=0; i<ARRAY_LENGTH;i++){
-        for(int j=0; j<ARRAY_LENGTH;j++){
-            printf("%f\t",inv[i][j]);
-        }
-        printf("\n");
-    }
-    printf("\n");*/
 
 
 }

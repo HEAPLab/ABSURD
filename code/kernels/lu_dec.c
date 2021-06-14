@@ -27,27 +27,29 @@ static double u[ARRAY_LENGTH][ARRAY_LENGTH];
  * 
  */
 static void lu_dec_routine(){
-    
-    for(int i=0;i<ARRAY_LENGTH;i++){
-        //compute u mat i row
-        for(int j=i;j<ARRAY_LENGTH;j++){
+    int i,j;
+    for(i=0;i<ARRAY_LENGTH;i++){
+        /*compute u mat i row*/
+        for(j=i;j<ARRAY_LENGTH;j++){
             double sum = 0;
-            for (int k = 0; k < i; k++){
+            int k;
+            for (k = 0; k < i; k++){
                 sum += (l[i][k] * u[k][j]);
             }
             u[i][j]=mat[i][j] - sum;
         }  
         
 
-        //compute l mat j column
-        for(int j=i;j<ARRAY_LENGTH;j++){
+        /*compute l mat j column*/
+        for(j=i;j<ARRAY_LENGTH;j++){
             if(i==j){
                 l[j][i] = 1; 
             }
             else
             {
                 double sum = 0;
-                for (int k = 0; k < i; k++){
+                int k;
+                for (k = 0; k < i; k++){
                     sum += l[j][k] * u[k][i];
                 }
                 
@@ -66,47 +68,26 @@ static void lu_dec_routine(){
  * @param seed seed used to initialize random number generator  
  */
 void lu_dec(int seed){
+    int i,j;
     
-    //Matrix initialization
+    /*Matrix initialization*/
     random_set_seed(seed);
-    for(int i=0; i<ARRAY_LENGTH;i++){
+    for(i=0; i<ARRAY_LENGTH;i++){
         random_get_array(mat[i],ARRAY_LENGTH);
     }
 
-    for(int i=0; i<ARRAY_LENGTH;i++){
-        for(int j=0; j<ARRAY_LENGTH;j++){
+    for(i=0; i<ARRAY_LENGTH;i++){
+        for(j=0; j<ARRAY_LENGTH;j++){
             l[i][j]=0;
             u[i][j]=0;
         }
     }
     
-    /*for(int i=0; i<ARRAY_LENGTH;i++){
-        for(int j=0; j<ARRAY_LENGTH;j++){
-            printf("%.2f\t",mat[i][j]);
-        }
-        printf("\n");
-    }
-    printf("\n");*/
 
     MEASURE_START();
-    for(int i=0; i<ITERATIONS;i++){
+    for(i=0; i<ITERATIONS;i++){
         lu_dec_routine();
     }
     MEASURE_STOP();
 
-   /* for(int i=0; i<ARRAY_LENGTH;i++){
-        for(int j=0; j<ARRAY_LENGTH;j++){
-            printf("%.2f\t",u[i][j]);
-        }
-        printf("\n");
-    }
-    printf("\n");
-
-    for(int i=0; i<ARRAY_LENGTH;i++){
-        for(int j=0; j<ARRAY_LENGTH;j++){
-            printf("%.2f\t",l[i][j]);
-        }
-        printf("\n");
-    }
-    printf("\n");*/
 }

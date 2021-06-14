@@ -35,9 +35,10 @@ static double kernel[KERNEL_SIZE][KERNEL_SIZE];
  * 
  */
 static void gaussian_kernel_init(){
+    int i,j;
     double sum=0;
-    for (int i = 0; i < KERNEL_SIZE; i++) {
-        for (int j = 0; j < KERNEL_SIZE; j++) {
+    for (i = 0; i < KERNEL_SIZE; i++) {
+        for (j = 0; j < KERNEL_SIZE; j++) {
             double x = i - (KERNEL_SIZE - 1) / 2.0;
             double y = j - (KERNEL_SIZE - 1) / 2.0;
             kernel[i][j] =  exp(((pow(x, 2) + pow(y, 2)) / ((2 * pow(SIGMA, 2)))) * (-1));
@@ -45,8 +46,8 @@ static void gaussian_kernel_init(){
         }
     }
 
-    for (int i = 0; i < KERNEL_SIZE; i++) {
-        for (int j = 0; j < KERNEL_SIZE; j++) {
+    for (i = 0; i < KERNEL_SIZE; i++) {
+        for (j = 0; j < KERNEL_SIZE; j++) {
             kernel[i][j] /= sum;
         }
     }
@@ -61,20 +62,23 @@ static void gaussian_kernel_init(){
  * @return int result of 2d convolution of kernel centred in mat_in[p_x][p_y]
  */
 static int convolution2D(int p_x, int p_y){
-    //Kernel radius 
-    int k_r=KERNEL_SIZE/2;
+    int k_r,offset_x,offset_y,i,j;
+    double temp;
 
-    //kernel can be superimposed? if not we are on borders, then we keep the values unchanged
+    /*Kernel radius*/ 
+    k_r=KERNEL_SIZE/2;
+
+    /*kernel can be superimposed? if not we are on borders, then we keep the values unchanged*/
     if(p_x-k_r<0 || p_y-k_r<0 || p_x+k_r>=ARRAY_LENGTH || p_y+k_r>=ARRAY_LENGTH){
         return mat_in[p_x][p_y];
     }
-    //offset between kernel's indexes and array's ones 
-    int offset_x=p_x-k_r;
-    int offset_y=p_y-k_r;
+    /*offset between kernel's indexes and array's ones*/
+    offset_x=p_x-k_r;
+    offset_y=p_y-k_r;
 
-    double temp=0;
-    for(int i=p_x-k_r;i<=p_x+k_r;i++){
-        for(int j=p_y-k_r;j<=p_y+k_r;j++){
+    temp=0;
+    for(i=p_x-k_r;i<=p_x+k_r;i++){
+        for(j=p_y-k_r;j<=p_y+k_r;j++){
             temp+=kernel[i-offset_x][j-offset_y] * mat_in[i][j];
         }
     }
@@ -86,10 +90,11 @@ static int convolution2D(int p_x, int p_y){
  * 
  */
 static void gauss_filter_routine(){
-   for(int i=0;i<ARRAY_LENGTH;i++){
-       for(int j=0;j<ARRAY_LENGTH;j++){
-           mat_out[i][j]=convolution2D(i,j);
-       }
+    int i,j;
+    for(i=0;i<ARRAY_LENGTH;i++){
+        for(j=0;j<ARRAY_LENGTH;j++){
+            mat_out[i][j]=convolution2D(i,j);
+        }
     }
     
 }
@@ -101,32 +106,20 @@ static void gauss_filter_routine(){
  * @param seed seed used to initialize random number generator  
  */
 void gauss_filter(int seed){
-
+    int i,j;
     random_set_seed(seed);
-    for (int i = 0; i < ARRAY_LENGTH; i++){
-        for (int j = 0; j < ARRAY_LENGTH; j++){
+    for (i = 0; i < ARRAY_LENGTH; i++){
+        for (j = 0; j < ARRAY_LENGTH; j++){
             mat_in[i][j]=random_get()*256;
         }
     }
-    //kernel initialization
+    /*kernel initialization*/
     gaussian_kernel_init();
-    /*for (int i = 0; i < KERNEL_SIZE; i++){
-        for (int j = 0; j < KERNEL_SIZE; j++){
-            printf("%f\t",kernel[i][j]);
-        }
-        printf("\n");
-    }
-    printf("\n");*/
+    
     MEASURE_START();
-    for(int i=0; i<ITERATIONS;i++){
+    for(i=0; i<ITERATIONS;i++){
         gauss_filter_routine();
     }
     MEASURE_STOP();
 
-    /*for (int i = 0; i < ARRAY_LENGTH; i++){
-        for (int j = 0; j < ARRAY_LENGTH; j++){
-            printf("%d\t",mat_out[i][j]);
-        }
-        printf("\n");
-    }*/
 }

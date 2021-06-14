@@ -64,7 +64,7 @@ static complex complex_mult(complex a, complex b){
  * @return Re and Im components
  */
 static complex complex_exp(double x){
-    // e^(i*x)=cos(x) + i*sin(x)
+    /* e^(i*x)=cos(x) + i*sin(x)*/
     complex res;
     res.re=cos(x);
     res.im=sin(x);
@@ -77,20 +77,26 @@ static complex complex_exp(double x){
  * @return Fourier transform for input array
  */
 static void fft_routine(){
-    for(int k=0;k<FFT_LENGTH;k++){
-        //X_k=[sum{0,N/2-1} x_2n * e^(i*(-2*pi*2n*k)/N)] + [sum{0,N/2-1} x_(2n+1) * e^(i*(-2*pi*(2n+1)*k)/N)]
-        
-        complex even_sum = {.re=0,.im=0};
+    int k;
 
-        for(int n=0;n<FFT_LENGTH;n=n+2){
+    for(k=0;k<FFT_LENGTH;k++){
+        /*X_k=[sum{0,N/2-1} x_2n * e^(i*(-2*pi*2n*k)/N)] + [sum{0,N/2-1} x_(2n+1) * e^(i*(-2*pi*(2n+1)*k)/N)]*/
+        int n;
+        complex even_sum,odd_sum;
+
+        even_sum.re=0;
+        even_sum.im=0;
+
+        for(n=0;n<FFT_LENGTH;n=n+2){
             complex n_term = complex_sum(array_in[n],complex_exp((-2*M_PI*n*k)/FFT_LENGTH));
 
             complex_sum(even_sum,n_term);
         }
         
-        complex odd_sum = {.re=0,.im=0};
-
-        for(int n=1;n<FFT_LENGTH;n=n+2){
+        
+        odd_sum.re=0;
+        odd_sum.im=0;
+        for(n=1;n<FFT_LENGTH;n=n+2){
             complex n_term = complex_sum(array_in[n],complex_exp((-2*M_PI*n*k)/FFT_LENGTH));
 
             complex_sum(odd_sum,n_term);
@@ -107,16 +113,19 @@ static void fft_routine(){
  * @param seed seed used to initialize random number generator  
  */
 void fft(int seed){
-    
-    //Matrix initialization
+    int i;
+    /*Matrix initialization*/
     random_set_seed(seed);
-    for(int i=0; i<FFT_LENGTH;i++){
-        complex x = {.re=random_get(),.im=random_get()};
+    for(i=0; i<FFT_LENGTH;i++){
+        complex x;
+        x.re=random_get();
+        x.im=random_get();
+        
         array_in[i]=x;
     }
 
     MEASURE_START();
-    for(int i=0; i<ITERATIONS;i++){
+    for(i=0; i<ITERATIONS;i++){
         fft_routine();
     }
     MEASURE_STOP();

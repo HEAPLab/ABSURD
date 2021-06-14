@@ -28,8 +28,10 @@ MEASURE_GLOBAL_VARIABLES()
  * @return double square root of s
  */
 static double bsqrt_routine(int s){
-   double x=s;
-   double y=(x+s/x)/2;
+   double x,y;
+   
+   x=s;
+   y=(x+s/x)/2;
 
    while(x-y>ACCURACY){
        x=y;
@@ -46,20 +48,20 @@ static double bsqrt_routine(int s){
  */
 void bsqrt(int seed){
 
+    int i,s;
     random_set_seed(seed);
     
 
-    int s = random_get()*ARRAY_LENGTH;
+    s = random_get()*ARRAY_LENGTH;
 
-    printf("s=%d\n",s);
-    double res;
+
     MEASURE_START();
-    for(int i=0; i<1;i++){
-        res=bsqrt_routine(s);
+    
+    for(i=0; i<1;i++){
+        bsqrt_routine(s);
     }
     MEASURE_STOP();
-   
-    printf("res=%.15f\n",res);
+ 
 
 
     

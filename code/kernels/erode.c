@@ -22,22 +22,7 @@ MEASURE_GLOBAL_VARIABLES()
 
 static int mat_in[ARRAY_LENGTH][ARRAY_LENGTH];
 static int mat_out[ARRAY_LENGTH][ARRAY_LENGTH];
-/*#define ARRAY_LENGTH 13
-static int mat_in[ARRAY_LENGTH][ARRAY_LENGTH]={{1,1,1,1,1,1,1,1,1,1,1,1,1},
-                                                 {1,1,1,1,1,1,0,1,1,1,1,1,1},
-                                                 {1,1,1,1,1,1,1,1,1,1,1,1,1},
-                                                 {1,1,1,1,1,1,1,1,1,1,1,1,1},
-                                                 {1,1,1,1,1,1,1,1,1,1,1,1,1},
-                                                 {1,1,1,1,1,1,1,1,1,1,1,1,1},
-                                                 {1,1,1,1,1,1,1,1,1,1,1,1,1},
-                                                 {1,1,1,1,1,1,1,1,1,1,1,1,1},
-                                                 {1,1,1,1,1,1,1,1,1,1,1,1,1},
-                                                 {1,1,1,1,1,1,1,1,1,1,1,1,1},
-                                                 {1,1,1,1,1,1,1,1,1,1,1,1,1},
-                                                 {1,1,1,1,1,1,1,1,1,1,1,1,1},
-                                                 {1,1,1,1,1,1,1,1,1,1,1,1,1}
-                                                 };
-*/
+
 
 /* 3x3 structuring elements with origin in (1,1) */
 static int kernel[KERNEL_SIZE][KERNEL_SIZE]={
@@ -54,19 +39,20 @@ static int kernel[KERNEL_SIZE][KERNEL_SIZE]={
  * @return int result of 2d convolution of kernel centred in mat_in[p_x][p_y]
  */
 static int convolution2D(int p_x, int p_y){
-    //Kernel radius 
-    int k_r=KERNEL_SIZE/2;
+    int i,j,k_r,offset_x,offset_y;
+    /*Kernel radius*/ 
+    k_r=KERNEL_SIZE/2;
 
-    //kernel can be superimposed? if not is 0
+    /*kernel can be superimposed? if not is 0*/
     if(p_x-k_r<0 || p_y-k_r<0 || p_x+k_r>=ARRAY_LENGTH || p_y+k_r>=ARRAY_LENGTH){
         return 0;
     }
-    //offset between kernel's indexes and array's ones 
-    int offset_x=p_x-k_r;
-    int offset_y=p_y-k_r;
+    /*offset between kernel's indexes and array's ones*/ 
+    offset_x=p_x-k_r;
+    offset_y=p_y-k_r;
 
-    for(int i=p_x-k_r;i<=p_x+k_r;i++){
-        for(int j=p_y-k_r;j<=p_y+k_r;j++){
+    for(i=p_x-k_r;i<=p_x+k_r;i++){
+        for(j=p_y-k_r;j<=p_y+k_r;j++){
             if(!(kernel[i-offset_x][j-offset_y] && mat_in[i][j])){
                 return 0;
             }
@@ -80,10 +66,11 @@ static int convolution2D(int p_x, int p_y){
  * 
  */
 static void erode_routine(){
-   for(int i=0;i<ARRAY_LENGTH;i++){
-       for(int j=0;j<ARRAY_LENGTH;j++){
-           mat_out[i][j]=convolution2D(i,j);
-       }
+    int i,j;
+    for(i=0;i<ARRAY_LENGTH;i++){
+        for(j=0;j<ARRAY_LENGTH;j++){
+            mat_out[i][j]=convolution2D(i,j);
+        }
     }
     
 }
@@ -95,22 +82,16 @@ static void erode_routine(){
  * @param seed seed used to initialize random number generator  
  */
 void erode(int seed){
-
+    int i;
     random_set_seed(seed);
-    for (int i = 0; i < ARRAY_LENGTH; i++){
+    for (i = 0; i < ARRAY_LENGTH; i++){
         random_get_barray(mat_in[i],ARRAY_LENGTH);
     }
     
     MEASURE_START();
-    for(int i=0; i<ITERATIONS;i++){
+    for(i=0; i<ITERATIONS;i++){
         erode_routine();
     }
     MEASURE_STOP();
 
-    /*for (int i = 0; i < ARRAY_LENGTH; i++){
-        for (int j = 0; j < ARRAY_LENGTH; j++){
-            printf("%d\t",mat_out[i][j]);
-        }
-        printf("\n");
-    }*/
 }

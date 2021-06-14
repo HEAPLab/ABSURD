@@ -35,9 +35,10 @@ static double array_out[ARRAY_LENGTH];
  * @return Discrete cosine transformation of input array
  */
 static void dct_routine(){
-   for(int k=0;k<ARRAY_LENGTH;k++){
+    int k,n;
+    for(k=0;k<ARRAY_LENGTH;k++){
        double sum=0;
-       for(int n=0;n<ARRAY_LENGTH;n++){
+       for(n=0;n<ARRAY_LENGTH;n++){
            sum += (array_in[n] * cos((M_PI*(n+0.5)*k)/ARRAY_LENGTH));
        }
        array_out[k]=sum;
@@ -51,13 +52,13 @@ static void dct_routine(){
  * @param seed seed used to initialize random number generator  
  */
 void dct(int seed){
-    
-    //Matrix initialization
+    int i;
+    /*Matrix initialization*/
     random_set_seed(seed);
     random_get_array(array_in,ARRAY_LENGTH);
 
     MEASURE_START();
-    for(int i=0; i<ITERATIONS;i++){
+    for(i=0; i<ITERATIONS;i++){
         dct_routine();
     }
     MEASURE_STOP();

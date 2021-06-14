@@ -51,7 +51,8 @@ static double exp_int_routine(double x, int n){
     
     double term_1=0;
 
-    for(int i=1;i<=n;i++){
+    int i;
+    for(i=1;i<=n;i++){
         term_1 += pow(x,i)/(fact(i)*i);
     }
 
@@ -65,25 +66,24 @@ static double exp_int_routine(double x, int n){
  * @param seed seed used to initialize random number generator  
  */
 void exp_int(int seed){
-
+    int i,n;
+    double x;
     random_set_seed(seed);
     
-    double x;
     do{
         x=(random_get()<0.5?-1:1) * random_get();
     }while (x==0);
 
-    int n= random_get()*ARRAY_LENGTH;
+    n= random_get()*ARRAY_LENGTH;
 
-    //printf("x=%f\tn=%d\t%f\n",x,n);
-    double res;
+
     MEASURE_START();
-    for(int i=0; i<1;i++){
-        res=exp_int_routine(x,n);
+    
+    for(i=0; i<1;i++){
+        exp_int_routine(x,n);
     }
     MEASURE_STOP();
    
-    //printf("res=%f\n",res);
 
 
     

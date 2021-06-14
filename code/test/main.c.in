@@ -27,9 +27,9 @@
 #define SEED 123U
 
 extern void BENCH_NAME(UINT32_T seed);
-
+#ifndef WITH_ANSI
 extern double result;
-
+#endif
 int main() {
 
     printf("***************** HEAP WCET Benchmarks *****************\n");
@@ -44,8 +44,10 @@ int main() {
     printf("********************************************************\n");
 
     BENCH_NAME(SEED);
-
+#ifdef WITH_ANSI
+    printf("[" BENCH_NAME_STR "]\tCompleted\n");
+#else
     printf("[" BENCH_NAME_STR "]\tExecution time:\t%.0f ns\n", result);
-
+#endif
     return 0;    
 }

@@ -26,7 +26,9 @@ static double array_2[ARRAY_LENGTH];
 
 static double sum(double a[]){
     double s=0;
-    for(int i=0;i<ARRAY_LENGTH;i++){
+    int i;
+
+    for(i=0;i<ARRAY_LENGTH;i++){
         s += a[i];
     }
     return s;
@@ -38,8 +40,9 @@ static double mean(double a[]){
 
 static double var(double a[]){
     double m=mean(a), v=0;
+    int i;
 
-    for(int i=0; i<ARRAY_LENGTH;i++){
+    for(i=0; i<ARRAY_LENGTH;i++){
         v += (a[i]-m)*(a[i]-m);
     }
     return v/ARRAY_LENGTH;
@@ -51,7 +54,9 @@ static double std(double a[]){
 
 static double corr(double a[],double b[]){
     double mean_a=mean(a),mean_b=mean(b),temp=0;
-    for(int i=0; i<ARRAY_LENGTH;i++){
+    int i;
+
+    for(i=0; i<ARRAY_LENGTH;i++){
         temp+=((a[i]-mean_a)*(b[i]-mean_b))/ARRAY_LENGTH;
     }
 
@@ -89,6 +94,8 @@ static void array_stats_routine(){
  */
 void array_stats(int seed){
 
+    int i;
+    
     random_set_seed(seed);
 
     random_get_array(array_1,ARRAY_LENGTH);
@@ -97,7 +104,8 @@ void array_stats(int seed){
     
     
     MEASURE_START();
-    for(int i=0; i<ITERATIONS;i++){
+    
+    for(i=0; i<ITERATIONS;i++){
         array_stats_routine();
     }
     MEASURE_STOP();

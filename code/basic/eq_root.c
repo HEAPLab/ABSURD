@@ -36,7 +36,8 @@ static complex roots[2];
  */
 static void eq_root_routine(double a, double b, double c){
 
-    double delta=b*b-4*a*c;
+    double delta;
+    delta=b*b-4*a*c;
 
     if(delta>=0){
         delta=sqrt(delta);
@@ -65,20 +66,23 @@ static void eq_root_routine(double a, double b, double c){
  */
 void eq_root(int seed){
 
+    double a,b,c;
+    int i;
+
     random_set_seed(seed);
     
-    double a=random_get();
-    double b=random_get()*2;
-    double c=random_get();
+    a=random_get();
+    b=random_get()*2;
+    c=random_get();
 
-   // printf("INPUT:%f\t%f\t%f\n",a,b,c);
+  
     MEASURE_START();
-    for(int i=0; i<ITERATIONS;i++){
+    
+    for(i=0; i<ITERATIONS;i++){
         eq_root_routine(a,b,c);
     }
     MEASURE_STOP();
-    //printf("solution 1:%f\t%f\n",roots[0].re,roots[0].im);
-    //printf("solution 2:%f\t%f\n",roots[1].re,roots[1].im);
+
 
 
     

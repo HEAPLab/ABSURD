@@ -26,27 +26,29 @@ static double u[ARRAY_LENGTH][ARRAY_LENGTH];
  * 
  */
 static void lu_decomposition(){
-    
-    for(int i=0;i<ARRAY_LENGTH;i++){
-        //compute u matrix i row
-        for(int j=i;j<ARRAY_LENGTH;j++){
+    int i,j;
+    for(i=0;i<ARRAY_LENGTH;i++){
+        /*compute u matrix i row*/
+        for(j=i;j<ARRAY_LENGTH;j++){
             double sum = 0;
-            for (int k = 0; k < i; k++){
+            int k;
+            for (k = 0; k < i; k++){
                 sum += (l[i][k] * u[k][j]);
             }
             u[i][j]=mat[i][j] - sum;
         }  
         
 
-        //compute l matrix j column
-        for(int j=i;j<ARRAY_LENGTH;j++){
+        /*compute l matrix j column*/
+        for(j=i;j<ARRAY_LENGTH;j++){
             if(i==j){
                 l[j][i] = 1; 
             }
             else
             {
                 double sum = 0;
-                for (int k = 0; k < i; k++){
+                int k;
+                for (k = 0; k < i; k++){
                     sum += l[j][k] * u[k][i];
                 }
                 
@@ -63,9 +65,12 @@ static void lu_decomposition(){
  * @return double mat determinant
  */
 static double matrix_det_routine(){
+    double det;
+    int i;
+
     lu_decomposition();
-    double det=1;
-    for(int i=0;i<ARRAY_LENGTH;i++){
+    det=1;
+    for(i=0;i<ARRAY_LENGTH;i++){
         det *= l[i][i]*u[i][i];
     }
     return det;
@@ -78,15 +83,16 @@ static double matrix_det_routine(){
  * @param seed seed used to initialize random number generator  
  */
 void matrix_det(int seed){
+    int i;
     
-    //Matrix initialization
+    /*Matrix initialization*/
     random_set_seed(seed);
-    for(int i=0; i<ARRAY_LENGTH;i++){
+    for(i=0; i<ARRAY_LENGTH;i++){
         random_get_array(mat[i],ARRAY_LENGTH);
     }
 
     MEASURE_START();
-    for(int i=0; i<ITERATIONS;i++){
+    for(i=0; i<ITERATIONS;i++){
         matrix_det_routine();
     }
     MEASURE_STOP();

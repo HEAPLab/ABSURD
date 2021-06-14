@@ -23,20 +23,6 @@ MEASURE_GLOBAL_VARIABLES()
 static int mat_in[ARRAY_LENGTH][ARRAY_LENGTH];
 static int mat_out[ARRAY_LENGTH][ARRAY_LENGTH];
 
-/*#define ARRAY_LENGTH 11
-static int mat_in[ARRAY_LENGTH][ARRAY_LENGTH]={{0,0,0,0,0,0,0,0,0,0,0},
-                                                 {0,1,1,1,1,0,0,1,1,1,0},
-                                                 {0,1,1,1,1,0,0,1,1,1,0},
-                                                 {0,1,1,1,1,1,1,1,1,1,0},
-                                                 {0,1,1,1,1,1,1,1,1,1,0},
-                                                 {0,1,1,0,0,0,1,1,1,1,0},
-                                                 {0,1,1,0,0,0,1,1,1,1,0},
-                                                 {0,1,1,0,0,0,1,1,1,1,0},
-                                                 {0,1,1,1,1,1,1,1,0,0,0},
-                                                 {0,1,1,1,1,1,1,1,0,0,0},
-                                                 {0,0,0,0,0,0,0,0,0,0,0}
-                                                 };
-*/
 
 /* 3x3 structuring elements with origin in (1,1) */
 static int kernel[KERNEL_SIZE][KERNEL_SIZE]={
@@ -53,20 +39,21 @@ static int kernel[KERNEL_SIZE][KERNEL_SIZE]={
  * @return int result of 2d convolution of kernel centred in mat_in[p_x][p_y]
  */
 static int convolution2D(int p_x, int p_y){
-    //Kernel origin coordinates
-    int k_x=KERNEL_SIZE/2;
-    int k_y=KERNEL_SIZE/2;
+    int i,j,k_x,k_y,s_xl,s_xr,s_yl,s_yr;
+    /*Kernel origin coordinates*/
+    k_x=KERNEL_SIZE/2;
+    k_y=KERNEL_SIZE/2;
 
-    //limit of the "superimposition"
-    int s_xl=p_x-k_x<0? 0: p_x-k_x; 
-    int s_xr=p_x+k_x>=ARRAY_LENGTH? ARRAY_LENGTH-1 : p_x+k_x;
+    /*Limit of the "superimposition"*/
+    s_xl=p_x-k_x<0? 0: p_x-k_x; 
+    s_xr=p_x+k_x>=ARRAY_LENGTH? ARRAY_LENGTH-1 : p_x+k_x;
 
-    int s_yl=p_y-k_y<0? 0: p_y-k_y; 
-    int s_yr=p_y+k_y>=ARRAY_LENGTH? ARRAY_LENGTH-1 : p_y+k_y;
+    s_yl=p_y-k_y<0? 0: p_y-k_y; 
+    s_yr=p_y+k_y>=ARRAY_LENGTH? ARRAY_LENGTH-1 : p_y+k_y;
 
     
-    for(int i=s_xl;i<=s_xr;i++){
-        for(int j=s_yl;j<=s_yr;j++){
+    for(i=s_xl;i<=s_xr;i++){
+        for(j=s_yl;j<=s_yr;j++){
             if(kernel[i-s_xl][j-s_yl] && mat_in[i][j]){
                 return 1;
             }
@@ -80,10 +67,11 @@ static int convolution2D(int p_x, int p_y){
  * 
  */
 static void dilate_routine(){
-   for(int i=0;i<ARRAY_LENGTH;i++){
-       for(int j=0;j<ARRAY_LENGTH;j++){
-           mat_out[i][j]=convolution2D(i,j);
-       }
+    int i,j;
+    for(i=0;i<ARRAY_LENGTH;i++){
+        for(j=0;j<ARRAY_LENGTH;j++){
+            mat_out[i][j]=convolution2D(i,j);
+        }
     }
     
 }
@@ -95,22 +83,17 @@ static void dilate_routine(){
  * @param seed seed used to initialize random number generator  
  */
 void dilate(int seed){
+    int i;
 
     random_set_seed(seed);
-    for (int i = 0; i < ARRAY_LENGTH; i++){
+    for (i = 0; i < ARRAY_LENGTH; i++){
         random_get_barray(mat_in[i],ARRAY_LENGTH);
     }
     
     MEASURE_START();
-    for(int i=0; i<ITERATIONS;i++){
+    for(i=0; i<ITERATIONS;i++){
         dilate_routine();
     }
     MEASURE_STOP();
     
-    /*for (int i = 0; i < ARRAY_LENGTH; i++){
-        for (int j = 0; j < ARRAY_LENGTH; j++){
-            printf("%d\t",mat_out[i][j]);
-        }
-        printf("\n");
-    }*/
 }

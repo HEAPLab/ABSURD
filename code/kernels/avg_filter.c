@@ -35,20 +35,22 @@ static double kernel[KERNEL_SIZE][KERNEL_SIZE];
  * @return int result of 2d convolution of kernel centred in mat_in[p_x][p_y]
  */
 static int convolution2D(int p_x, int p_y){
-    //Kernel radius 
-    int k_r=KERNEL_SIZE/2;
-
-    //kernel can be superimposed? if not we are on borders, then we keep the values unchanged
+    int k_r,offset_x,offset_y,i,j;
+    double temp;
+    /*Kernel radius*/ 
+    k_r=KERNEL_SIZE/2;
+    /*offset between kernel's indexes and array's ones*/ 
+    offset_x=p_x-k_r;
+    offset_y=p_y-k_r;
+    /*kernel can be superimposed? if not we are on borders, then we keep the values unchanged*/
     if(p_x-k_r<0 || p_y-k_r<0 || p_x+k_r>=ARRAY_LENGTH || p_y+k_r>=ARRAY_LENGTH){
         return mat_in[p_x][p_y];
     }
-    //offset between kernel's indexes and array's ones 
-    int offset_x=p_x-k_r;
-    int offset_y=p_y-k_r;
+    
 
-    double temp=0;
-    for(int i=p_x-k_r;i<=p_x+k_r;i++){
-        for(int j=p_y-k_r;j<=p_y+k_r;j++){
+    temp=0;
+    for(i=p_x-k_r;i<=p_x+k_r;i++){
+        for(j=p_y-k_r;j<=p_y+k_r;j++){
             temp+=kernel[i-offset_x][j-offset_y] * mat_in[i][j];
         }
     }
@@ -59,8 +61,9 @@ static int convolution2D(int p_x, int p_y){
  * 
  */
 static void avg_filter_routine(){
-   for(int i=0;i<ARRAY_LENGTH;i++){
-       for(int j=0;j<ARRAY_LENGTH;j++){
+    int i,j;
+    for(i=0;i<ARRAY_LENGTH;i++){
+        for(j=0;j<ARRAY_LENGTH;j++){
            mat_out[i][j]=convolution2D(i,j);
        }
     }
@@ -74,30 +77,24 @@ static void avg_filter_routine(){
  * @param seed seed used to initialize random number generator  
  */
 void avg_filter(int seed){
-
+    int i,j;
     random_set_seed(seed);
-    for (int i = 0; i < ARRAY_LENGTH; i++){
-        for (int j = 0; j < ARRAY_LENGTH; j++){
+    for (i = 0; i < ARRAY_LENGTH; i++){
+        for (j = 0; j < ARRAY_LENGTH; j++){
             mat_in[i][j]=random_get()*256;
         }
     }
-    //kernel initialization
-    for (int i = 0; i < KERNEL_SIZE; i++){
-        for (int j = 0; j < KERNEL_SIZE; j++){
+    /*kernel initialization*/
+    for (i = 0; i < KERNEL_SIZE; i++){
+        for (j = 0; j < KERNEL_SIZE; j++){
             kernel[i][j]=1/(KERNEL_SIZE*KERNEL_SIZE);
         }
     }
 
     MEASURE_START();
-    for(int i=0; i<ITERATIONS;i++){
+    for(i=0; i<ITERATIONS;i++){
         avg_filter_routine();
     }
     MEASURE_STOP();
 
-    /*for (int i = 0; i < ARRAY_LENGTH; i++){
-        for (int j = 0; j < ARRAY_LENGTH; j++){
-            printf("%d\t",array_out[i][j]);
-        }
-        printf("\n");
-    }*/
 }

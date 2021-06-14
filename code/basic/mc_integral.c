@@ -38,8 +38,9 @@ static double f(double x){
  */
 static double mc_integral_routine(double a, double b, int n){
     double sum=0;
-    for(int i=0;i<n;i++){
-        //uniformly sampled point 
+    int i;
+    for(i=0;i<n;i++){
+        /*uniformly sampled point*/ 
         double ran_x=a+(b-a)*random_get();
         sum += f(ran_x);
     }
@@ -54,22 +55,24 @@ static double mc_integral_routine(double a, double b, int n){
  */
 void mc_integral(int seed){
 
+    double a,b;
+    int i,s;
+
     random_set_seed(seed);
     
 
-    int s = random_get()*ARRAY_LENGTH;
-    double a,b;
+    s = random_get()*ARRAY_LENGTH;
+    
     do{
         a=random_get();
         b=random_get();
     }while(a<b);
-    //double res;
     MEASURE_START();
-    for(int i=0; i<ITERATIONS;i++){
-      // res= mc_integral_routine(0,1,s);
+    
+    for(i=0; i<ITERATIONS;i++){
+     
       mc_integral_routine(a,b,s);
 
     }
     MEASURE_STOP(); 
-    //printf("%f\n",res);
 }

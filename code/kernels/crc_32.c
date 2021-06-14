@@ -20,7 +20,7 @@
 MEASURE_GLOBAL_VARIABLES()
 
 static unsigned char bytes_in[ARRAY_LENGTH];
-//static  char * bytes_in= "The quick brown fox jumps over the lazy dog";
+
 
 
 /**
@@ -31,10 +31,12 @@ static unsigned char bytes_in[ARRAY_LENGTH];
 static unsigned int crc_32_routine(){
     
     unsigned int crc32 = 0xFFFFFFFF;
+    int i;
 
-    for(int i=0;i<ARRAY_LENGTH;i++){
+    for(i=0;i<ARRAY_LENGTH;i++){
+        int j;
         crc32 ^= bytes_in[i];
-        for(int j=0;j<8;j++){
+        for(j=0;j<8;j++){
             if(crc32 & 1){
                crc32 = (crc32 >> 1) ^ 0xEDB88320;
                
@@ -55,16 +57,15 @@ static unsigned int crc_32_routine(){
  */
 void crc_32(int seed){
     
-    
+    int i;
     random_set_seed(seed);
-    for(int i=0;i<ARRAY_LENGTH;i++){
+    for(i=0;i<ARRAY_LENGTH;i++){
         bytes_in[i] = 0xFF & (int)(random_get()*ARRAY_LENGTH);
-        //printf("0x%x\t",bytes_in[i]);
     }
 
  
     MEASURE_START();
-    for(int i=0; i<ITERATIONS;i++){
+    for(i=0; i<ITERATIONS;i++){
         crc_32_routine();
     }
     MEASURE_STOP();

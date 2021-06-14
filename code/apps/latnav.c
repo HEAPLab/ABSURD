@@ -23,7 +23,7 @@
 
 #define CLAMP(x, minim, maxim) (x < minim ? minim : (x > maxim ? maxim : x))
 
-MEASURE_GLOBAL_VARIABLES();
+MEASURE_GLOBAL_VARIABLES()
 
 
 typedef struct pid_controller_s {
@@ -41,9 +41,9 @@ typedef struct pid_controller_s {
 
 
 double run_pid(pid_controller_t* pid, double error) {
-
-
-    double output = error * pid->p;
+    double output; 
+    
+    output = error * pid->p;
     pid->integral_sum += ((error * pid->i) + (pid->b * pid->backpropagation)) * TIME_STEP;
     output += pid->integral_sum;
 
@@ -55,6 +55,8 @@ double run_pid(pid_controller_t* pid, double error) {
 }
 
 double roll_limiter(double desired_roll, double speed) {
+    double limit_perc,limit;
+
     if (speed <= 140) {
         return CLAMP(desired_roll, -30, 30);
     }
@@ -62,8 +64,8 @@ double roll_limiter(double desired_roll, double speed) {
         return CLAMP(desired_roll, -40, 40);    
     }
         
-    double limit_perc = (speed < 220) ? (speed-140) / 80 : ((speed-220) / 80);
-    double limit = (speed < 220) ? (30 + limit_perc * 37) : (40 + (1-limit_perc) * 27);
+    limit_perc = (speed < 220) ? (speed-140) / 80 : ((speed-220) / 80);
+    limit = (speed < 220) ? (30 + limit_perc * 37) : (40 + (1-limit_perc) * 27);
     
     return CLAMP (desired_roll, -limit, limit);
 }
@@ -84,22 +86,24 @@ double ailerons_limiter(double aileron) {
 
 
 void latnav(int seed) {
+    pid_controller_t pid_roll_rate,pid_roll,pid_heading;
+    double curr_heading,curr_roll,curr_roll_rate;
+    int i;
 
     random_set_seed(seed);
 
-    pid_controller_t pid_roll_rate;
+    
     pid_roll_rate.p = random_get();
     pid_roll_rate.i = random_get();
     pid_roll_rate.d = random_get();
     pid_roll_rate.b = random_get();
 
-    pid_controller_t pid_roll;
+    
     pid_roll.p = random_get();
     pid_roll.i = random_get();
     pid_roll.d = random_get();
     pid_roll.b = random_get();
 
-    pid_controller_t pid_heading;
     pid_heading.p = random_get();
     pid_heading.i = random_get();
     pid_heading.d = random_get();
@@ -110,27 +114,29 @@ void latnav(int seed) {
     pid_heading.integral_sum  = pid_heading.prev_error  = pid_heading.backpropagation  = 0;
 
         
-    double curr_heading = random_get();
-    double curr_roll = random_get();
-    double curr_roll_rate = random_get();
+    curr_heading = random_get();
+    curr_roll = random_get();
+    curr_roll_rate = random_get();
 
     MEASURE_START();
-    for(int i=0; i<ITERATIONS; i++) {
+    for(i=0; i<ITERATIONS; i++) {
     
-        double desired_roll = run_pid(&pid_heading, curr_heading-random_get()); 
-        double actual_roll = roll_limiter(desired_roll, 400);
+        double desired_roll,actual_roll,desired_roll_rate,actual_roll_rate,desired_ailerons,actual_ailerons;
+        
+        desired_roll = run_pid(&pid_heading, curr_heading-random_get()); 
+        actual_roll = roll_limiter(desired_roll, 400);
         pid_heading.backpropagation = actual_roll - desired_roll; 
         
-        double desired_roll_rate = run_pid(&pid_roll, curr_roll - actual_roll); 
-        double actual_roll_rate = roll_rate_limiter(desired_roll_rate, curr_roll);
+        desired_roll_rate = run_pid(&pid_roll, curr_roll - actual_roll); 
+        actual_roll_rate = roll_rate_limiter(desired_roll_rate, curr_roll);
         pid_roll.backpropagation = actual_roll_rate - desired_roll_rate; 
 
         
-        double desired_ailerons = run_pid(&pid_roll, curr_roll - actual_roll); 
-        double actual_ailerons = ailerons_limiter(desired_roll_rate);
+        desired_ailerons = run_pid(&pid_roll, curr_roll - actual_roll); 
+        actual_ailerons = ailerons_limiter(desired_roll_rate);
         pid_roll.backpropagation = actual_ailerons - desired_ailerons; 
 
-        // Just a random plane model
+        /* Just a random plane model*/
         curr_heading += curr_roll/10 * TIME_STEP;
         curr_roll += curr_roll_rate * TIME_STEP;
         curr_roll_rate += desired_ailerons / 5;

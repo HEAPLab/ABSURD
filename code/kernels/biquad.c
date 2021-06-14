@@ -41,7 +41,9 @@ static double array_out[ARRAY_LENGTH];
  * @param b2 Digital biquad filter b2 param
  */
 static void biquad_routine(double a0, double a1, double a2, double b0, double b1, double b2){
-    //params normalization
+    int i;
+
+    /*Params normalization*/
     a1/=a0;
     a2/=a0;
     b0/=a0;
@@ -51,7 +53,7 @@ static void biquad_routine(double a0, double a1, double a2, double b0, double b1
     array_out[0]=b0*array_in[0];
     array_out[1]=b0*array_in[1]+b1*array_in[0]-a1*array_out[0];
 
-    for(int i=2;i<ARRAY_LENGTH;i++){
+    for(i=2;i<ARRAY_LENGTH;i++){
         array_out[i]=b0*array_in[i]+b1*array_in[i-1]+b2*array_in[i-2]-a1*array_out[i-1]-a2*array_out[i-2];
     }
 }
@@ -63,19 +65,22 @@ static void biquad_routine(double a0, double a1, double a2, double b0, double b1
  * @param seed seed used to initialize random number generator  
  */
 void biquad(int seed){
-    
-    //Signal initialization
+    double alpha,w0,Q=0.5,f0=120,a0,a1,a2,b0,b1,b2;
+    int i;
+
+    /*Signal initialization*/
     random_set_seed(seed);
-    for(int i=0;i<ARRAY_LENGTH;i++){
+    for(i=0;i<ARRAY_LENGTH;i++){
         array_in[i]=cos(2*M_PI*120*0.001*i)+random_get();
     }
 
-    //param initialization
-    double alpha,w0,Q=0.5,f0=120;
+    /*param initialization*/
+    Q=0.5;
+    f0=120;
     w0=(2*M_PI*f0)/ARRAY_LENGTH;
     alpha=sin(w0)/(2*Q);
 
-    double a0,a1,a2,b0,b1,b2;
+    
     a0=1+alpha;
     a1=-2*cos(w0);
     a2=1-alpha;
@@ -84,26 +89,12 @@ void biquad(int seed){
     b2=(1-cos(w0))/2;
 
     b1=1-cos(w0);
-
-    /*printf("in=[%f",array_in[0]);
-    for(int i=1;i<ARRAY_LENGTH;i++){
-        printf(",%f",array_in[i]);
-    }
-    printf("]\n\n");*/
-
-    
-    //printf("w0=%f\ta0=%f\ta1=%f\ta2=%f\tb0=%f\tb1=%f\tb2=%f\n\n\n",w0,a0,a1,a2,b0,b1,b2);
     
     MEASURE_START();
-    for(int i=0; i<ITERATIONS;i++){
+    for(i=0; i<ITERATIONS;i++){
         biquad_routine(a0,a1,a2,b0,b1,b2);
     }
     MEASURE_STOP();
 
-    /*printf("out=[%f",array_out[0]);
-    for(int i=1;i<ARRAY_LENGTH;i++){
-        printf(",%f",array_out[i]);
-    }
-    printf("]\n\n");*/
 
 }

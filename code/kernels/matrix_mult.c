@@ -27,10 +27,12 @@ static double res[ARRAY_LENGTH][ARRAY_LENGTH];
  * 
  */
 static void matrix_mult_routine(){
-    for(int i=0;i<ARRAY_LENGTH;i++){
-        for(int j=0;j<ARRAY_LENGTH;j++){
+    int i,j;
+    for(i=0;i<ARRAY_LENGTH;i++){
+        for(j=0;j<ARRAY_LENGTH;j++){
             double sum=0;
-            for(int k=0;k<ARRAY_LENGTH;k++){
+            int k;
+            for(k=0;k<ARRAY_LENGTH;k++){
                 sum += mat_1[i][k]*mat_2[k][j];    
             }
             res[i][j]=sum;
@@ -45,16 +47,16 @@ static void matrix_mult_routine(){
  * @param seed seed used to initialize random number generator  
  */
 void matrix_mult(int seed){
-    
-    //Matrix initialization
+    int i;
+    /*Matrix initialization*/
     random_set_seed(seed);
-    for(int i=0; i<ARRAY_LENGTH;i++){
+    for(i=0; i<ARRAY_LENGTH;i++){
         random_get_array(mat_1[i],ARRAY_LENGTH);
         random_get_array(mat_2[i],ARRAY_LENGTH);
     }
 
     MEASURE_START();
-    for(int i=0; i<ITERATIONS;i++){
+    for(i=0; i<ITERATIONS;i++){
         matrix_mult_routine();
     }
     MEASURE_STOP();

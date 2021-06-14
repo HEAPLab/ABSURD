@@ -16,7 +16,8 @@
 #include "simple_random.h"
 #include "user.h"
 
-MEASURE_GLOBAL_VARIABLES();
+#define MAX_FIBONACCI 92 /*Last fibonacci's term that can be stored in long int */
+MEASURE_GLOBAL_VARIABLES()
 
 /**
  * Actual recursive implementation of Fibonacci's sequence.
@@ -37,14 +38,16 @@ static long int fibonacci_routine(long int n){
  * @param seed seed used to initialize random number generator  
  */
 void fibonacci(int seed){
-    
+    int i;
+    long int n;
+
     random_set_seed(seed);
-    int n=ARRAY_LENGTH*random_get();
+    n=MAX_FIBONACCI*random_get();
     
 
     MEASURE_START();
-    for(int i=0; i<ITERATIONS;i++){
-        fibonacci_routine(n);
+    for(i=0; i<ITERATIONS;i++){
+        fibonacci_routine(60L);
     }
     
     MEASURE_STOP();

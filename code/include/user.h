@@ -13,7 +13,6 @@
 *   See the License for the specific language governing permissions and
 *   limitations under the License.
 *******************************************************************************/
-
 #ifndef USER_H_
 #define USER_H_
 
@@ -36,6 +35,7 @@
 /** User-needed constants (e.g., for measurements) **/
 #define BILLION 1000000000L
 
+#ifndef WITH_ANSI
 /** Variables declared in the global scope to support measurements **/
 #define MEASURE_GLOBAL_VARIABLES()  static struct timespec start,stop; \
                                     double result;
@@ -51,6 +51,11 @@
                               clock_gettime(CLOCK_MONOTONIC, &stop); \
                               result=(stop.tv_sec - start.tv_sec)*BILLION + (stop.tv_nsec - start.tv_nsec); \
                            } while(0);
+#else
+   #define MEASURE_GLOBAL_VARIABLES()
+   #define MEASURE_START()
+   #define MEASURE_STOP() 
 
-
+#endif
+   
 #endif

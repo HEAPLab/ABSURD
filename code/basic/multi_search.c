@@ -16,7 +16,7 @@
 #include "user.h"
 #include "simple_random.h"
 
-MEASURE_GLOBAL_VARIABLES();
+MEASURE_GLOBAL_VARIABLES()
 
 static double matrix[ARRAY_LENGTH][ARRAY_LENGTH];
 
@@ -27,8 +27,9 @@ static double matrix[ARRAY_LENGTH][ARRAY_LENGTH];
  * @return int 1 if found, 0 otherwise
  */
 static int multi_search_routine(double n){
-    for(int i=0; i<ARRAY_LENGTH;i++){
-        for(int j=0; j<ARRAY_LENGTH;j++){
+    int i,j;
+    for(i=0; i<ARRAY_LENGTH;i++){
+        for(j=0; j<ARRAY_LENGTH;j++){
             if(matrix[i][j] == n) return 1;
         }
     }
@@ -43,15 +44,16 @@ static int multi_search_routine(double n){
  * @param seed seed used to initialize random number generator  
  */
 void multi_search(int seed){
-    
-    //Matrix initialization
+     int i;
+    /*Matrix initialization*/
     random_set_seed(seed);
-    for(int i=0; i<ARRAY_LENGTH;i++){
+   
+    for(i=0; i<ARRAY_LENGTH;i++){
         random_get_array(matrix[i],ARRAY_LENGTH);
     }
 
     MEASURE_START();
-    for(int i=0; i<ITERATIONS;i++){
+    for(i=0; i<ITERATIONS;i++){
         multi_search_routine(random_get());
     }
     MEASURE_STOP();

@@ -21,18 +21,20 @@ MEASURE_GLOBAL_VARIABLES()
 static double array[ARRAY_LENGTH];
 
 static int partition(int low,int high){
-
-    double pivot = array[high];
-    int i=low;
-    for(int j=low;j<=high;j++){
+    int i,j;
+    double pivot,temp;
+    
+    pivot = array[high];
+    i=low;
+    for(j=low;j<=high;j++){
         if(array[j]<pivot){
-            double temp=array[j];
+            temp=array[j];
             array[j]=array[i];
             array[i]=temp;
             i++;
         }
     }
-    double temp=array[i];
+    temp=array[i];
     array[i]=array[high];
     array[high]=temp;
             
@@ -47,7 +49,8 @@ static int partition(int low,int high){
 static void quick_sort_routine(int low,int high){
 
     if(low<high){
-        int pivot=partition(low,high);
+        int pivot;
+        pivot=partition(low,high);
         quick_sort_routine(low, pivot-1);
         quick_sort_routine(pivot+1,high);
     }
@@ -61,12 +64,13 @@ static void quick_sort_routine(int low,int high){
  * @param seed seed used to initialize random number generator  
  */
 void quick_sort(int seed){
+    int i;
 
     random_set_seed(seed);
     random_get_array(array,ARRAY_LENGTH);
 
     MEASURE_START();
-    for(int i=0; i<ITERATIONS;i++){
+    for(i=0; i<ITERATIONS;i++){
         quick_sort_routine(0,ARRAY_LENGTH-1);
     }
     MEASURE_STOP();

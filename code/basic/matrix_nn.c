@@ -16,7 +16,7 @@
 #include "user.h"
 #include "simple_random.h"
 
-MEASURE_GLOBAL_VARIABLES();
+MEASURE_GLOBAL_VARIABLES()
 
 static double mat[ARRAY_LENGTH][ARRAY_LENGTH];
 
@@ -26,10 +26,11 @@ static double mat[ARRAY_LENGTH][ARRAY_LENGTH];
  * @return int number of non negative numbers
  */
 static int matrix_nn_routine(){
-    int cnt=0;
-
-    for(int i=0; i<ARRAY_LENGTH;i++){
-        for(int j=0; j<ARRAY_LENGTH;j++){
+    int cnt,i,j;
+    
+    cnt=0;
+    for(i=0; i<ARRAY_LENGTH;i++){
+        for(j=0; j<ARRAY_LENGTH;j++){
             if(mat[i][j] > 0) cnt++;
         }
     }
@@ -44,15 +45,16 @@ static int matrix_nn_routine(){
  * @param seed seed used to initialize random number generator  
  */
 void matrix_nn(int seed){
-    
-    //Matrix initialization
+    int i;
+    /*Matrix initialization*/
     random_set_seed(seed);
-    for(int i=0; i<ARRAY_LENGTH;i++){
+    
+    for(i=0; i<ARRAY_LENGTH;i++){
         random_get_array(mat[i],ARRAY_LENGTH);
     }
 
     MEASURE_START();
-    for(int i=0; i<ITERATIONS;i++){
+    for(i=0; i<ITERATIONS;i++){
         matrix_nn_routine();
     }
     MEASURE_STOP();

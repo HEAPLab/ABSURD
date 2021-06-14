@@ -24,8 +24,8 @@ static double array[ARRAY_LENGTH];
  * 
  */
 static void insertion_sort_routine(){
-
-    for(int i=1; i<ARRAY_LENGTH; i++){
+    int i;
+    for(i=1; i<ARRAY_LENGTH; i++){
         int j=i-1;
         double temp=array[i];
 
@@ -45,12 +45,12 @@ static void insertion_sort_routine(){
  * @param seed seed used to initialize random number generator  
  */
 void insertion_sort(int seed){
-
+    int i;
     random_set_seed(seed);
     random_get_array(array,ARRAY_LENGTH);
 
     MEASURE_START();
-    for(int i=0; i<ITERATIONS;i++){
+    for(i=0; i<ITERATIONS;i++){
         insertion_sort_routine();
     }
     MEASURE_STOP();

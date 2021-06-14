@@ -25,9 +25,9 @@ static double array[ARRAY_LENGTH];
  * 
  */
 static void bubble_sort_routine(){
-
-    for(int i=0;i<ARRAY_LENGTH-1;i++){
-        for(int j=0;j<ARRAY_LENGTH-i-1;j++){
+    int i,j;
+    for(i=0;i<ARRAY_LENGTH-1;i++){
+        for(j=0;j<ARRAY_LENGTH-i-1;j++){
             if(array[j]>array[j+1]){
                 double temp=array[j];
                 array[j]=array[j+1];
@@ -45,12 +45,12 @@ static void bubble_sort_routine(){
  * @param seed seed used to initialize random number generator  
  */
 void bubble_sort(int seed){
-
+    int i;
     random_set_seed(seed);
     random_get_array(array,ARRAY_LENGTH);
     
     MEASURE_START();
-    for(int i=0; i<ITERATIONS;i++){
+    for(i=0; i<ITERATIONS;i++){
         bubble_sort_routine();
     }
     MEASURE_STOP();

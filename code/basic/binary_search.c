@@ -16,7 +16,7 @@
 #include "user.h"
 #include "simple_random.h"
 
-MEASURE_GLOBAL_VARIABLES();
+MEASURE_GLOBAL_VARIABLES()
 
 static double array[ARRAY_LENGTH];
 
@@ -48,14 +48,17 @@ static int binary_search_routine(double n){
  * @param seed seed used to initialize random number generator  
  */
 void binary_search(int seed){
+    int i;
+    double n;
 
     random_set_seed(seed);
     random_get_sarray(array,ARRAY_LENGTH);
 
-    double n=random_get();
+    n=random_get();
     
     MEASURE_START();
-    for(int i=0; i<ITERATIONS;i++){
+    
+    for(i=0; i<ITERATIONS;i++){
         binary_search_routine(n);
     }
     MEASURE_STOP();

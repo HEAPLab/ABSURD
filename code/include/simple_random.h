@@ -30,7 +30,7 @@
 
 static UINT32_T z1, z2, z3, z4;
 
-inline static void random_set_seed(UINT32_T seed)
+static void random_set_seed(UINT32_T seed)
 {
     z1 = 1+seed;
     z2 = 7+seed;
@@ -38,7 +38,7 @@ inline static void random_set_seed(UINT32_T seed)
     z4 = 127+seed;
 }
 
-inline static double random_get(void)
+static double random_get(void)
 {
     UINT32_T b;
     b  = ((z1 << 6) ^ z1) >> 13;
@@ -52,34 +52,40 @@ inline static double random_get(void)
     return (z1 ^ z2 ^ z3 ^ z4) * 2.3283064365386963e-10;
 }
 
-inline static void random_get_array(double a[], int len){
-    for(int i = 0;i < len; i++){
+static void random_get_array(double a[], int len){
+    int i;
+    for(i = 0;i < len; i++){
         a[i] = random_get();  
     }
 }
 
-inline static void random_get_sarray(double a[], int len){
-    for(int i = 0;i < len; i++){
+static void random_get_sarray(double a[], int len){
+    int i,min;
+
+    for(i = 0;i < len; i++){
         a[i] = random_get();
     }
     
-    int min;
-    for (int i=0; i<len-1; i++) {
+    for (i=0; i<len-1; i++) {
+        int j;
+        double temp;
+
         min=i;
-        for (int j=i+1; j<len; j++){
+        for (j=i+1; j<len; j++){
             if (a[j] < a[min]){
                 min = j;
             }
         }
-        double temp=a[i];
+        temp=a[i];
         a[i]=a[min];
         a[min]=temp;
     }
     
 }
 
-inline static void random_get_barray(int a[], int len){
-    for(int i = 0;i < len; i++){
+static void random_get_barray(int a[], int len){
+    int i;
+    for(i = 0;i < len; i++){
         a[i] = random_get() > 0.5 ? 1 : 0;  
     }
 }

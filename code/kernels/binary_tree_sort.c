@@ -84,13 +84,14 @@ static void order_sweep(int node_idx){
  * 
  */
 static void binary_tree_sort_routine(){
+    int i;
 
-    //insert first node
+    /*Insert first node*/
     btree[0].data=array[0];
     btree[0].left=-1;
     btree[0].right=-1;
     
-    for(int i=1;i<ARRAY_LENGTH;i++){
+    for(i=1;i<ARRAY_LENGTH;i++){
         insert_node(array[i],0);
     }
 
@@ -98,7 +99,7 @@ static void binary_tree_sort_routine(){
 
     order_sweep(0);
      
-    //reset for other iterations
+    /*Reset for other iterations*/
     last_used=0;
 }
 
@@ -109,12 +110,12 @@ static void binary_tree_sort_routine(){
  * @param seed seed used to initialize random number generator  
  */
 void binary_tree_sort(int seed){
-
+    int i;
     random_set_seed(seed);
     random_get_array(array,ARRAY_LENGTH);
 
     MEASURE_START();
-    for(int i=0; i<ITERATIONS;i++){
+    for(i=0; i<ITERATIONS;i++){
         binary_tree_sort_routine();
     }
     MEASURE_STOP();

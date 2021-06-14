@@ -35,11 +35,10 @@ static double weights[5];
  * 
  */
 static void fir_avg_routine(){
-    
-
-    for(int i=0;i<ARRAY_LENGTH-5;i++){
+    int i,j;
+    for(i=0;i<ARRAY_LENGTH-5;i++){
         double accum=0;
-        for(int j=0;j<5;j++){
+        for(j=0;j<5;j++){
             accum+=weights[j]*array_in[i+j];
         }
         array_out[i]=accum/5;
@@ -53,36 +52,22 @@ static void fir_avg_routine(){
  * @param seed seed used to initialize random number generator  
  */
 void fir_avg(int seed){
-    
-    //Signal initialization
+    int i;
+    /*Signal initialization*/
     random_set_seed(seed);
-    for(int i=0;i<ARRAY_LENGTH;i++){
+    for(i=0;i<ARRAY_LENGTH;i++){
         double dt=0.0001;
         array_in[i]=sin(2*M_PI*120*dt*i)+random_get();
     }
 
-    //weight initialization
+    /*weight initialization*/
     random_get_array(weights,5);
-    
 
-    printf("in=[%f",array_in[0]);
-    for(int i=1;i<ARRAY_LENGTH;i++){
-        printf(",%f",array_in[i]);
-    }
-    printf("]\n\n");
-
-    
     
     MEASURE_START();
-    for(int i=0; i<ITERATIONS;i++){
+    for(i=0; i<ITERATIONS;i++){
         fir_avg_routine();
     }
     MEASURE_STOP();
-
-    printf("out=[%f",array_out[0]);
-    for(int i=1;i<ARRAY_LENGTH;i++){
-        printf(",%f",array_out[i]);
-    }
-    printf("]\n\n");
 
 }

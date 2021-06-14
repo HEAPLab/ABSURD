@@ -16,7 +16,7 @@
 #include "user.h"
 #include "simple_random.h"
 
-MEASURE_GLOBAL_VARIABLES();
+MEASURE_GLOBAL_VARIABLES()
 
 static double array[ARRAY_LENGTH];
 
@@ -29,15 +29,16 @@ static double array[ARRAY_LENGTH];
  */
 static double select_nmax_routine(double a[], int pos){
     double nmax = 0;
-    for(int j = 0; j < ARRAY_LENGTH; j++){
+    int i,j;
+    for(j = 0; j < ARRAY_LENGTH; j++){
             if(a[j] > nmax){
                 nmax = a[j];
             } 
     }
 
-    for(int i=0;i<pos-1;i++){   
+    for(i=0;i<pos-1;i++){   
         double max=0; 
-        for(int j = 0; j < ARRAY_LENGTH; j++){
+        for(j = 0; j < ARRAY_LENGTH; j++){
             if(a[j] > max && a[j]<nmax){
                 nmax = a[j];
             } 
@@ -56,16 +57,16 @@ static double select_nmax_routine(double a[], int pos){
  * @param seed seed used to initialize random number generator  
  */
 void select_nmax(int seed){
-    
-    //Array initialization
+    int pos,i;
+    /*Array initialization*/
     random_set_seed(seed);
     random_get_array(array,ARRAY_LENGTH);
 
-    int pos=ARRAY_LENGTH * random_get();  
+    pos=ARRAY_LENGTH * random_get();  
     
     MEASURE_START();
     
-    for(int i=0; i<ITERATIONS;i++){
+    for(i=0; i<ITERATIONS;i++){
         select_nmax_routine(array,pos);
     }
     
