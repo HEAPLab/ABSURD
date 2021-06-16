@@ -24,6 +24,22 @@
 
 #include "dev_classes.h"
 
+/**Uncomment the following constants to enable the use of user-defined images in the respective benchmarks  **/
+
+/*#define USER_AVG_FILTER_RGB*/
+/*#define USER_GAUSS_FILTER_RGB*/
+
+/*#define USER_AVG_FILTER*/
+/*#define USER_GAUSS_FILTER*/
+/*#define USER_DILATE*/
+/*#define USER_ERODE*/
+
+/*#define USER_IMAGE_CANNY*/
+/*#define USER_IMAGE_SCALING*/
+
+
+
+
 
 #define UINT32_T unsigned int
 

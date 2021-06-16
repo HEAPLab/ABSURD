@@ -23,9 +23,12 @@
 
 MEASURE_GLOBAL_VARIABLES()
 
+#ifdef USER_AVG_FILTER_RGB
+#include "avg_filter_RGB_image.h"
+#else
 static unsigned char mat_in[3][ARRAY_LENGTH][ARRAY_LENGTH];
 static unsigned char mat_out[3][ARRAY_LENGTH][ARRAY_LENGTH];
-
+#endif
 /* KERNEL_SIZExKERNEL_SIZE box filter with origin in (1,1) */
 static double kernel[KERNEL_SIZE][KERNEL_SIZE];
 
@@ -82,6 +85,7 @@ static void avg_filter_RGB_routine(int channel){
 void avg_filter_RGB(int seed){
 
     random_set_seed(seed);
+    #ifndef USER_AVG_FILTER_RGB
     for(int c=0;c<IMG_CH;c++){
         for (int i = 0; i < ARRAY_LENGTH; i++){
             for (int j = 0; j < ARRAY_LENGTH; j++){
@@ -89,6 +93,7 @@ void avg_filter_RGB(int seed){
             }
         }
     }
+    #endif
     //kernel initialization
     for (int i = 0; i < KERNEL_SIZE; i++){
         for (int j = 0; j < KERNEL_SIZE; j++){

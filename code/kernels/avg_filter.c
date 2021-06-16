@@ -20,9 +20,12 @@
 
 MEASURE_GLOBAL_VARIABLES()
 
+#ifdef USER_AVG_FILTER
+#include "avg_filter_image.h"
+#else
 static unsigned char mat_in[ARRAY_LENGTH][ARRAY_LENGTH];
 static unsigned char mat_out[ARRAY_LENGTH][ARRAY_LENGTH];
-
+#endif
 /* KERNEL_SIZExKERNEL_SIZE box filter with origin in (1,1) */
 static double kernel[KERNEL_SIZE][KERNEL_SIZE];
 
@@ -77,13 +80,16 @@ static void avg_filter_routine(){
  * @param seed seed used to initialize random number generator  
  */
 void avg_filter(int seed){
-    int i,j;
+    int i;
+    #ifndef USER_AVG_FILTER
+    int j;
     random_set_seed(seed);
     for (i = 0; i < ARRAY_LENGTH; i++){
         for (j = 0; j < ARRAY_LENGTH; j++){
             mat_in[i][j]=random_get()*256;
         }
     }
+    #endif
     /*kernel initialization*/
     for (i = 0; i < KERNEL_SIZE; i++){
         for (j = 0; j < KERNEL_SIZE; j++){

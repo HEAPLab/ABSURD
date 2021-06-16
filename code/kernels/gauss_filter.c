@@ -24,9 +24,12 @@
 
 MEASURE_GLOBAL_VARIABLES()
 
+#ifdef USER_GAUSS_FILTER
+#include "gauss_filter_image.h"
+#else
 static unsigned char mat_in[ARRAY_LENGTH][ARRAY_LENGTH];
 static unsigned char mat_out[ARRAY_LENGTH][ARRAY_LENGTH];
-
+#endif
 /* KERNEL_SIZExKERNEL_SIZE gaussian filter with origin in (1,1) */
 static double kernel[KERNEL_SIZE][KERNEL_SIZE];
 
@@ -106,13 +109,16 @@ static void gauss_filter_routine(){
  * @param seed seed used to initialize random number generator  
  */
 void gauss_filter(int seed){
-    int i,j;
+    int i;
+    #ifndef USER_GAUSS_FILTER
+    int j;
     random_set_seed(seed);
     for (i = 0; i < ARRAY_LENGTH; i++){
         for (j = 0; j < ARRAY_LENGTH; j++){
             mat_in[i][j]=random_get()*256;
         }
     }
+    #endif
     /*kernel initialization*/
     gaussian_kernel_init();
     

@@ -20,9 +20,12 @@
 
 MEASURE_GLOBAL_VARIABLES()
 
+#ifdef USER_ERODE
+#include "erode_image.h"
+#else
 static int mat_in[ARRAY_LENGTH][ARRAY_LENGTH];
 static int mat_out[ARRAY_LENGTH][ARRAY_LENGTH];
-
+#endif
 
 /* 3x3 structuring elements with origin in (1,1) */
 static int kernel[KERNEL_SIZE][KERNEL_SIZE]={
@@ -83,10 +86,12 @@ static void erode_routine(){
  */
 void erode(int seed){
     int i;
+    #ifndef USER_ERODE
     random_set_seed(seed);
     for (i = 0; i < ARRAY_LENGTH; i++){
         random_get_barray(mat_in[i],ARRAY_LENGTH);
     }
+    #endif
     
     MEASURE_START();
     for(i=0; i<ITERATIONS;i++){

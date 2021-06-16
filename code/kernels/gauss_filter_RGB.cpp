@@ -27,8 +27,12 @@
 
 MEASURE_GLOBAL_VARIABLES()
 
+#ifdef USER_GAUSS_FILTER_RGB
+#include "gauss_filter_RGB_image.h"
+#else
 static unsigned char mat_in[IMG_CH][ARRAY_LENGTH][ARRAY_LENGTH];
 static unsigned char mat_out[IMG_CH][ARRAY_LENGTH][ARRAY_LENGTH];
+#endif
 
 /* KERNEL_SIZExKERNEL_SIZE gaussian filter with origin in (1,1) */
 static double kernel[KERNEL_SIZE][KERNEL_SIZE];
@@ -106,7 +110,7 @@ static void gauss_filter_RGB_routine(int channel){
  * @param seed seed used to initialize random number generator  
  */
 void gauss_filter_RGB(int seed){
-
+    #ifndef USER_GAUSS_FILTER_RGB
     random_set_seed(seed);
     for(int c=0;c<IMG_CH;c++){
         for (int i = 0; i < ARRAY_LENGTH; i++){
@@ -115,6 +119,7 @@ void gauss_filter_RGB(int seed){
             }
         }
     }
+    #endif
     //kernel initialization
     gaussian_kernel_init();
     /*for (int i = 0; i < KERNEL_SIZE; i++){

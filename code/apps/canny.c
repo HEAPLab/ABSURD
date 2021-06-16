@@ -19,9 +19,11 @@
 
 #include <math.h>
 
+
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
+
 
 #define SIGMA 1.0
 #define KERNEL_SIZE 5
@@ -29,9 +31,12 @@
 
 MEASURE_GLOBAL_VARIABLES()
 
+#ifdef USER_IMAGE_CANNY
+#include "image_canny.h"
+#else
 static unsigned char mat_in[ARRAY_LENGTH][ARRAY_LENGTH];
 static unsigned char mat_out[ARRAY_LENGTH][ARRAY_LENGTH];
-
+#endif
 static unsigned char mat_blured[ARRAY_LENGTH][ARRAY_LENGTH];
 static double grad_orientation[ARRAY_LENGTH][ARRAY_LENGTH];
 static unsigned char mat_edges[ARRAY_LENGTH][ARRAY_LENGTH];
@@ -314,7 +319,9 @@ static void canny_routine(){
  * @param seed seed used to initialize random number generator  
  */
 void canny(int seed){
-    int i,j;
+    int i;
+    #ifndef USER_IMAGE_CANNY
+    int j;
 
     random_set_seed(seed);
     for (i = 0; i < ARRAY_LENGTH; i++){
@@ -322,6 +329,7 @@ void canny(int seed){
             mat_in[i][j]=random_get()*256;
         }
     }
+    #endif
     
     MEASURE_START();
     for(i=0; i<ITERATIONS;i++){
