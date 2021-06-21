@@ -36,6 +36,8 @@
 
 /*#define USER_IMAGE_CANNY*/
 /*#define USER_IMAGE_SCALING*/
+/*#define USER_JPEG_COMPRESS*/
+
 
 
 
