@@ -19,8 +19,10 @@
 #include <math.h>
 
 #define EULER 0.5772156649
-
+#define RESULT 1.0649071946 /*Ei(0.7)*/
 MEASURE_GLOBAL_VARIABLES()
+
+
 
 static double fact(int n){
     if(n==0){
@@ -67,7 +69,7 @@ static double exp_int_routine(double x, int n){
  */
 void exp_int(int seed){
     int i,n;
-    double x;
+    double x,res;
     random_set_seed(seed);
     
     do{
@@ -80,11 +82,11 @@ void exp_int(int seed){
     MEASURE_START();
     
     for(i=0; i<1;i++){
-        exp_int_routine(x,n);
+        res=exp_int_routine(0.7,n);
     }
     MEASURE_STOP();
    
 
-
+    CHECK_RESULT(dabs(res-RESULT)<0.01);
     
 }

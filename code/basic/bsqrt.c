@@ -21,6 +21,11 @@
 
 MEASURE_GLOBAL_VARIABLES()
 
+static double abs(double x){
+    if(x<0) x=-x;
+    return x;
+}
+
 /**
  * @brief Actual square root implementation 
  * 
@@ -49,6 +54,7 @@ static double bsqrt_routine(int s){
 void bsqrt(int seed){
 
     int i,s;
+    double res;
     random_set_seed(seed);
     
 
@@ -58,11 +64,11 @@ void bsqrt(int seed){
     MEASURE_START();
     
     for(i=0; i<1;i++){
-        bsqrt_routine(s);
+        res=bsqrt_routine(s);
     }
     MEASURE_STOP();
  
 
-
+    CHECK_RESULT(abs(res*res-s)<0.01);
     
 }

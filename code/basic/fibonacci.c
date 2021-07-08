@@ -17,6 +17,7 @@
 #include "user.h"
 
 #define MAX_FIBONACCI 92 /*Last fibonacci's term that can be stored in long int */
+#define RESULT 102334155L
 MEASURE_GLOBAL_VARIABLES()
 
 /**
@@ -39,17 +40,14 @@ static long int fibonacci_routine(long int n){
  */
 void fibonacci(int seed){
     int i;
-    long int n;
-
-    random_set_seed(seed);
-    n=MAX_FIBONACCI*random_get();
-    
+    long int res;
 
     MEASURE_START();
     for(i=0; i<ITERATIONS;i++){
-        fibonacci_routine(60L);
+        fibonacci_routine(40L);
     }
     
     MEASURE_STOP();
 
+    CHECK_RESULT(res==RESULT);
 }

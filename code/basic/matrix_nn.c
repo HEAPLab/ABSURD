@@ -45,7 +45,7 @@ static int matrix_nn_routine(){
  * @param seed seed used to initialize random number generator  
  */
 void matrix_nn(int seed){
-    int i;
+    int i,j,res;
     /*Matrix initialization*/
     random_set_seed(seed);
     
@@ -58,5 +58,13 @@ void matrix_nn(int seed){
         matrix_nn_routine();
     }
     MEASURE_STOP();
+
+    for(i=0; i<ARRAY_LENGTH;i++){
+        for(j=0; j<ARRAY_LENGTH;j++){
+            if(mat[i][j] > 0) res--;
+        }
+    }
+
+    CHECK_RESULT(res==0);
 
 }

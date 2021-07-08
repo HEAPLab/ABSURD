@@ -55,4 +55,9 @@ void insertion_sort(int seed){
     }
     MEASURE_STOP();
     
+    for(i=0;i<ARRAY_LENGTH-1;i++){
+        if(array[i]>array[i+1])
+            break;
+    }
+    CHECK_RESULT(i==ARRAY_LENGTH-1);
 }

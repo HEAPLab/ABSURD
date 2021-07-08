@@ -48,19 +48,21 @@ static int binary_search_routine(double n){
  * @param seed seed used to initialize random number generator  
  */
 void binary_search(int seed){
-    int i;
-    double n;
+    int i,n,res;
+    
 
     random_set_seed(seed);
     random_get_sarray(array,ARRAY_LENGTH);
 
-    n=random_get();
+    n=random_get()*ARRAY_LENGTH;
     
     MEASURE_START();
     
     for(i=0; i<ITERATIONS;i++){
-        binary_search_routine(n);
+        res=binary_search_routine(array[n]);
     }
     MEASURE_STOP();
+
+    CHECK_RESULT(res==n);
 
 }

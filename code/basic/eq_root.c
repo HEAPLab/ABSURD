@@ -28,6 +28,35 @@ typedef struct{
 static complex roots[2];
 
 /**
+ * @brief It performs sum between two complex numbers
+ * 
+ * @param a first complex number
+ * @param b second complex number
+ * @return complex sum of a and b
+ */
+static complex complex_sum(complex a, complex b){
+    complex res;
+    res.re=a.re + b.re;
+    res.im=a.im + b.im;
+    return res;
+}
+
+/**
+ * @brief It performs multiplication between two complex numbers
+ * 
+ * @param a first complex number
+ * @param b second complex number
+ * @return complex mult of a and b
+ */
+static complex complex_mult(complex a, complex b){
+    complex res;
+    res.re=(a.re * b.re) - (a.im*b.im);
+    res.im=(a.im*b.re) + (a.re*b.im);
+    return res;
+}
+
+
+/**
  * @brief Actual quadratic equation solver implementation
  * 
  * @param a 
@@ -67,6 +96,7 @@ static void eq_root_routine(double a, double b, double c){
 void eq_root(int seed){
 
     double a,b,c;
+    complex eq,a_cmp,b_cmp,c_cmp;
     int i;
 
     random_set_seed(seed);
@@ -83,7 +113,47 @@ void eq_root(int seed){
     }
     MEASURE_STOP();
 
+    
 
+    a_cmp.re=a;
+    a_cmp.im=0;
+
+    b_cmp.re=b;
+    b_cmp.im=0;
+    
+    c_cmp.re=c;
+    c_cmp.im=0;
+
+    /* eq=a*x1*x1 */
+    eq=complex_mult(a_cmp,roots[0]);
+    eq=complex_mult(eq,roots[0]);
+
+    b_cmp=complex_mult(b_cmp,roots[0]);
+
+    eq=complex_sum(eq,b_cmp);
+    eq=complex_sum(eq,c_cmp);
+
+    CHECK_RESULT(eq.re==0 && eq.im==0);
+
+    a_cmp.re=a;
+    a_cmp.im=0;
+
+    b_cmp.re=b;
+    b_cmp.im=0;
+    
+    c_cmp.re=c;
+    c_cmp.im=0;
+
+    /* eq=a*x1*x1 */
+    eq=complex_mult(a_cmp,roots[1]);
+    eq=complex_mult(eq,roots[1]);
+
+    b_cmp=complex_mult(b_cmp,roots[1]);
+
+    eq=complex_sum(eq,b_cmp);
+    eq=complex_sum(eq,c_cmp);
+
+    CHECK_RESULT(eq.re==0 && eq.im==0);
 
     
 }

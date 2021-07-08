@@ -53,15 +53,16 @@ static int unstruct_routine(int n){
  */
 void unstruct(int seed){
 
-    int i,n;
+    int i,n,res;
     random_set_seed(seed);
 
     n=random_get()*ARRAY_LENGTH;
     
     MEASURE_START();
     for(i=0; i<ITERATIONS;i++){
-        unstruct_routine(n);
+        res=unstruct_routine(n);
     }
     MEASURE_STOP();
 
+    CHECK_RESULT((res == n) || ( n==0 && res == 10));
 }

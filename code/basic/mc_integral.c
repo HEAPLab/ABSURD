@@ -16,9 +16,14 @@
 #include "user.h"
 #include "simple_random.h"
 
+#define RESULT  1.15445
 
 MEASURE_GLOBAL_VARIABLES()
 
+static double abs(double x){
+    if(x<0) x=-x;
+    return x;
+}
 /**
  * @brief f(x)=1/((x+1)^3+1)
  * 
@@ -55,7 +60,7 @@ static double mc_integral_routine(double a, double b, int n){
  */
 void mc_integral(int seed){
 
-    double a,b;
+    double res;
     int i,s;
 
     random_set_seed(seed);
@@ -63,16 +68,15 @@ void mc_integral(int seed){
 
     s = random_get()*ARRAY_LENGTH;
     
-    do{
-        a=random_get();
-        b=random_get();
-    }while(a<b);
+    
     MEASURE_START();
     
     for(i=0; i<ITERATIONS;i++){
      
-      mc_integral_routine(a,b,s);
+      res=mc_integral_routine(-1,2,s);
 
     }
     MEASURE_STOP(); 
+
+    CHECK_RESULT(abs(res-RESULT)<0.01);
 }

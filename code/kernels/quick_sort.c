@@ -74,5 +74,11 @@ void quick_sort(int seed){
         quick_sort_routine(0,ARRAY_LENGTH-1);
     }
     MEASURE_STOP();
+
+    for(i=0;i<ARRAY_LENGTH-1;i++){
+        if(array[i]>array[i+1])
+            break;
+    }
+    CHECK_RESULT(i==ARRAY_LENGTH-1);
     
 }

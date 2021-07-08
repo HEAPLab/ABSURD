@@ -44,7 +44,7 @@ static int multi_search_routine(double n){
  * @param seed seed used to initialize random number generator  
  */
 void multi_search(int seed){
-     int i;
+     int i,x,y,res;
     /*Matrix initialization*/
     random_set_seed(seed);
    
@@ -52,10 +52,15 @@ void multi_search(int seed){
         random_get_array(matrix[i],ARRAY_LENGTH);
     }
 
+    x=random_get()*ARRAY_LENGTH;
+    y=random_get()*ARRAY_LENGTH;
+
     MEASURE_START();
     for(i=0; i<ITERATIONS;i++){
-        multi_search_routine(random_get());
+        res=multi_search_routine(matrix[x][y]);
     }
     MEASURE_STOP();
+
+    CHECK_RESULT(res);
 
 }

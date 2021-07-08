@@ -57,7 +57,8 @@ static double select_nmax_routine(double a[], int pos){
  * @param seed seed used to initialize random number generator  
  */
 void select_nmax(int seed){
-    int pos,i;
+    int pos,i,check;
+    double res;
     /*Array initialization*/
     random_set_seed(seed);
     random_get_array(array,ARRAY_LENGTH);
@@ -67,9 +68,16 @@ void select_nmax(int seed){
     MEASURE_START();
     
     for(i=0; i<ITERATIONS;i++){
-        select_nmax_routine(array,pos);
+        res=select_nmax_routine(array,pos);
     }
     
     MEASURE_STOP();
 
+    for(i = 0; i < ARRAY_LENGTH; i++){
+            if(array[i] > res){
+                check++;
+            } 
+    }
+
+    CHECK_RESULT((check+1)==pos);
 }

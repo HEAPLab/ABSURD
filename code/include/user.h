@@ -46,8 +46,9 @@
 #define UINT32_T unsigned int
 
 /** User-needed libraries (e.g., for measurements) **/
-#include <time.h>
+#include <assert.h>
 #include <stdio.h>
+#include <time.h>
 
 
 /** User-needed constants (e.g., for measurements) **/
@@ -75,5 +76,6 @@
    #define MEASURE_STOP() 
 
 #endif
-   
+
+#define CHECK_RESULT(x) assert(x);
 #endif
