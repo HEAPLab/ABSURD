@@ -17,18 +17,20 @@
 #include "simple_random.h"
 
 
+#define SCALING_FACTOR 2
 
+#ifdef USER_IMAGE_SCALING
+#include "data/scaling_image.h"
+#else
+#define IMG_WIDTH ARRAY_LENGTH
+#define IMG_HEIGHT ARRAY_LENGTH
+#endif
 
 #define CLAMP(v, min, max) if (v < min) { v = min; } else if (v > max) { v = max; }
 
 MEASURE_GLOBAL_VARIABLES()
 
-#ifdef USER_IMAGE_SCALING
-#include "image_scaling.h"
-#else
-#define IMG_WIDTH 300
-#define IMG_HEIGHT 300
-#define SCALING_FACTOR 2
+#ifndef USER_IMAGE_SCALING
 static unsigned char mat_in[IMG_HEIGHT][IMG_WIDTH];
 static unsigned char mat_out[SCALING_FACTOR*IMG_HEIGHT][SCALING_FACTOR*IMG_WIDTH];
 #endif
@@ -93,8 +95,8 @@ void img_scaling(int seed){
     #ifndef USER_IMAGE_SCALING
     int j;
     random_set_seed(seed);
-    for (i = 0; i < ARRAY_LENGTH; i++){
-        for (j = 0; j < ARRAY_LENGTH; j++){
+    for (i = 0; i < IMG_HEIGHT; i++){
+        for (j = 0; j < IMG_WIDTH; j++){
             mat_in[i][j]=random_get()*256;
         }
     }

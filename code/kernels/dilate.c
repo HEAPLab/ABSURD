@@ -15,16 +15,22 @@
 *******************************************************************************/
 #include "user.h"
 #include "simple_random.h"
+#ifdef USER_DILATE
+#include "data/dilate_image.h"
+#else
+#define IMG_HEIGHT ARRAY_LENGTH
+#define IMG_WIDTH ARRAY_LENGTH
+#endif
 
 #define KERNEL_SIZE 3
 
 MEASURE_GLOBAL_VARIABLES()
 
-#ifdef USER_DILATE
-#include "dilate_image.h"
-#else
-static int mat_in[ARRAY_LENGTH][ARRAY_LENGTH];
-static int mat_out[ARRAY_LENGTH][ARRAY_LENGTH];
+
+
+#ifndef USER_DILATE
+static int mat_in[IMG_HEIGHT][IMG_WIDTH];
+static int mat_out[IMG_HEIGHT][IMG_WIDTH];
 #endif
 
 /* 3x3 structuring elements with origin in (1,1) */
@@ -49,10 +55,10 @@ static int convolution2D(int p_x, int p_y){
 
     /*Limit of the "superimposition"*/
     s_xl=p_x-k_x<0? 0: p_x-k_x; 
-    s_xr=p_x+k_x>=ARRAY_LENGTH? ARRAY_LENGTH-1 : p_x+k_x;
+    s_xr=p_x+k_x>=IMG_HEIGHT? IMG_HEIGHT-1 : p_x+k_x;
 
     s_yl=p_y-k_y<0? 0: p_y-k_y; 
-    s_yr=p_y+k_y>=ARRAY_LENGTH? ARRAY_LENGTH-1 : p_y+k_y;
+    s_yr=p_y+k_y>=IMG_WIDTH? IMG_WIDTH-1 : p_y+k_y;
 
     
     for(i=s_xl;i<=s_xr;i++){
@@ -71,8 +77,8 @@ static int convolution2D(int p_x, int p_y){
  */
 static void dilate_routine(){
     int i,j;
-    for(i=0;i<ARRAY_LENGTH;i++){
-        for(j=0;j<ARRAY_LENGTH;j++){
+    for(i=0;i<IMG_HEIGHT;i++){
+        for(j=0;j<IMG_WIDTH;j++){
             mat_out[i][j]=convolution2D(i,j);
         }
     }
@@ -90,8 +96,8 @@ void dilate(int seed){
 
     #ifndef USER_DILATE
     random_set_seed(seed);
-    for (i = 0; i < ARRAY_LENGTH; i++){
-        random_get_barray(mat_in[i],ARRAY_LENGTH);
+    for (i = 0; i < IMG_HEIGHT; i++){
+        random_get_barray(mat_in[i],IMG_WIDTH);
     }
     #endif
     

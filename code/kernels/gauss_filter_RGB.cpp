@@ -19,19 +19,23 @@
 #include <math.h>
 #include <thread>
 
+#ifdef USER_GAUSS_FILTER_RGB
+#include "data/gauss_filter_RGB_image.h"
+#else
+#define IMG_HEIGHT ARRAY_LENGTH
+#define IMG_WIDTH ARRAY_LENGTH
+#endif
 
 #define KERNEL_SIZE 5
-#define IMG_CH 3
+
 
 #define SIGMA 1.0
 
 MEASURE_GLOBAL_VARIABLES()
 
-#ifdef USER_GAUSS_FILTER_RGB
-#include "gauss_filter_RGB_image.h"
-#else
-static unsigned char mat_in[IMG_CH][ARRAY_LENGTH][ARRAY_LENGTH];
-static unsigned char mat_out[IMG_CH][ARRAY_LENGTH][ARRAY_LENGTH];
+#ifndef USER_GAUSS_FILTER_RGB
+static unsigned char mat_in[3][IMG_HEIGHT][IMG_WIDTH];
+static unsigned char mat_out[3][IMG_HEIGHT][IMG_WIDTH];
 #endif
 
 /* KERNEL_SIZExKERNEL_SIZE gaussian filter with origin in (1,1) */
@@ -74,7 +78,7 @@ static int convolution2D(int channel,int p_x, int p_y){
     int k_r=KERNEL_SIZE/2;
 
     //kernel can be superimposed? if not we are on borders, then we keep the values unchanged
-    if(p_x-k_r<0 || p_y-k_r<0 || p_x+k_r>=ARRAY_LENGTH || p_y+k_r>=ARRAY_LENGTH){
+    if(p_x-k_r<0 || p_y-k_r<0 || p_x+k_r>=IMG_HEIGHT || p_y+k_r>=IMG_WIDTH){
         return mat_in[channel][p_x][p_y];
     }
     //offset between kernel's indexes and array's ones 
@@ -95,8 +99,8 @@ static int convolution2D(int channel,int p_x, int p_y){
  * @param channel image channel to be elaborated
  */
 static void gauss_filter_RGB_routine(int channel){
-   for(int i=0;i<ARRAY_LENGTH;i++){
-       for(int j=0;j<ARRAY_LENGTH;j++){
+   for(int i=0;i<IMG_HEIGHT;i++){
+       for(int j=0;j<IMG_WIDTH;j++){
            mat_out[channel][i][j]=convolution2D(channel,i,j);
        }
     }
@@ -112,9 +116,9 @@ static void gauss_filter_RGB_routine(int channel){
 void gauss_filter_RGB(int seed){
     #ifndef USER_GAUSS_FILTER_RGB
     random_set_seed(seed);
-    for(int c=0;c<IMG_CH;c++){
-        for (int i = 0; i < ARRAY_LENGTH; i++){
-            for (int j = 0; j < ARRAY_LENGTH; j++){
+    for(int c=0;c<3;c++){
+        for (int i = 0; i < IMG_HEIGHT; i++){
+            for (int j = 0; j < IMG_WIDTH; j++){
                 mat_in[c][i][j]=random_get()*256;
             }
         }

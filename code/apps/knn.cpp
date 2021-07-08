@@ -15,7 +15,7 @@
 *******************************************************************************/
 #include "user.h"
 #include "simple_random.h"
-#include "iris_dataset.h"
+#include "data/iris_dataset.h"
 
 #include <algorithm>
 #include <cmath>

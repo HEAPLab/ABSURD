@@ -15,16 +15,22 @@
 *******************************************************************************/
 #include "user.h"
 #include "simple_random.h"
+#ifdef USER_ERODE
+#include "data/erode_image.h"
+#else
+#define IMG_HEIGHT ARRAY_LENGTH
+#define IMG_WIDTH ARRAY_LENGTH
+#endif
 
 #define KERNEL_SIZE 3
 
 MEASURE_GLOBAL_VARIABLES()
 
-#ifdef USER_ERODE
-#include "erode_image.h"
-#else
-static int mat_in[ARRAY_LENGTH][ARRAY_LENGTH];
-static int mat_out[ARRAY_LENGTH][ARRAY_LENGTH];
+
+
+#ifndef USER_ERODE
+static int mat_in[IMG_HEIGHT][IMG_WIDTH];
+static int mat_out[IMG_HEIGHT][IMG_WIDTH];
 #endif
 
 /* 3x3 structuring elements with origin in (1,1) */
@@ -47,7 +53,7 @@ static int convolution2D(int p_x, int p_y){
     k_r=KERNEL_SIZE/2;
 
     /*kernel can be superimposed? if not is 0*/
-    if(p_x-k_r<0 || p_y-k_r<0 || p_x+k_r>=ARRAY_LENGTH || p_y+k_r>=ARRAY_LENGTH){
+    if(p_x-k_r<0 || p_y-k_r<0 || p_x+k_r>=IMG_HEIGHT || p_y+k_r>=IMG_WIDTH){
         return 0;
     }
     /*offset between kernel's indexes and array's ones*/ 
@@ -70,8 +76,8 @@ static int convolution2D(int p_x, int p_y){
  */
 static void erode_routine(){
     int i,j;
-    for(i=0;i<ARRAY_LENGTH;i++){
-        for(j=0;j<ARRAY_LENGTH;j++){
+    for(i=0;i<IMG_HEIGHT;i++){
+        for(j=0;j<IMG_WIDTH;j++){
             mat_out[i][j]=convolution2D(i,j);
         }
     }
@@ -88,8 +94,8 @@ void erode(int seed){
     int i;
     #ifndef USER_ERODE
     random_set_seed(seed);
-    for (i = 0; i < ARRAY_LENGTH; i++){
-        random_get_barray(mat_in[i],ARRAY_LENGTH);
+    for (i = 0; i < IMG_HEIGHT; i++){
+        random_get_barray(mat_in[i],IMG_WIDTH);
     }
     #endif
     

@@ -18,18 +18,25 @@
 
 #include <math.h>
 
+#ifdef USER_GAUSS_FILTER
+#include "data/gauss_filter_image.h"
+#else
+#define IMG_HEIGHT ARRAY_LENGTH
+#define IMG_WIDTH ARRAY_LENGTH
+#endif
+
+
 #define KERNEL_SIZE 5
 
 #define SIGMA 1.0
 
 MEASURE_GLOBAL_VARIABLES()
 
-#ifdef USER_GAUSS_FILTER
-#include "gauss_filter_image.h"
-#else
-static unsigned char mat_in[ARRAY_LENGTH][ARRAY_LENGTH];
-static unsigned char mat_out[ARRAY_LENGTH][ARRAY_LENGTH];
+#ifndef USER_GAUSS_FILTER
+static unsigned char mat_in[IMG_HEIGHT][IMG_WIDTH];
+static unsigned char mat_out[IMG_HEIGHT][IMG_WIDTH];
 #endif
+
 /* KERNEL_SIZExKERNEL_SIZE gaussian filter with origin in (1,1) */
 static double kernel[KERNEL_SIZE][KERNEL_SIZE];
 
@@ -72,7 +79,7 @@ static int convolution2D(int p_x, int p_y){
     k_r=KERNEL_SIZE/2;
 
     /*kernel can be superimposed? if not we are on borders, then we keep the values unchanged*/
-    if(p_x-k_r<0 || p_y-k_r<0 || p_x+k_r>=ARRAY_LENGTH || p_y+k_r>=ARRAY_LENGTH){
+    if(p_x-k_r<0 || p_y-k_r<0 || p_x+k_r>=IMG_HEIGHT || p_y+k_r>=IMG_WIDTH){
         return mat_in[p_x][p_y];
     }
     /*offset between kernel's indexes and array's ones*/
@@ -94,8 +101,8 @@ static int convolution2D(int p_x, int p_y){
  */
 static void gauss_filter_routine(){
     int i,j;
-    for(i=0;i<ARRAY_LENGTH;i++){
-        for(j=0;j<ARRAY_LENGTH;j++){
+    for(i=0;i<IMG_HEIGHT;i++){
+        for(j=0;j<IMG_WIDTH;j++){
             mat_out[i][j]=convolution2D(i,j);
         }
     }
@@ -113,8 +120,8 @@ void gauss_filter(int seed){
     #ifndef USER_GAUSS_FILTER
     int j;
     random_set_seed(seed);
-    for (i = 0; i < ARRAY_LENGTH; i++){
-        for (j = 0; j < ARRAY_LENGTH; j++){
+    for (i = 0; i < IMG_HEIGHT; i++){
+        for (j = 0; j < IMG_WIDTH; j++){
             mat_in[i][j]=random_get()*256;
         }
     }

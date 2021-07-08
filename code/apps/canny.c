@@ -19,6 +19,12 @@
 
 #include <math.h>
 
+#ifdef USER_IMAGE_CANNY
+#include "data/canny_image.h"
+#else
+#define IMG_HEIGHT ARRAY_LENGTH
+#define IMG_WIDTH ARRAY_LENGTH
+#endif
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -31,20 +37,19 @@
 
 MEASURE_GLOBAL_VARIABLES()
 
-#ifdef USER_IMAGE_CANNY
-#include "image_canny.h"
-#else
-static unsigned char mat_in[ARRAY_LENGTH][ARRAY_LENGTH];
-static unsigned char mat_out[ARRAY_LENGTH][ARRAY_LENGTH];
-#endif
-static unsigned char mat_blured[ARRAY_LENGTH][ARRAY_LENGTH];
-static double grad_orientation[ARRAY_LENGTH][ARRAY_LENGTH];
-static unsigned char mat_edges[ARRAY_LENGTH][ARRAY_LENGTH];
 
-static unsigned char top_bottom[ARRAY_LENGTH][ARRAY_LENGTH];
-static unsigned char bottom_top[ARRAY_LENGTH][ARRAY_LENGTH];
-static unsigned char left_right[ARRAY_LENGTH][ARRAY_LENGTH];
-static unsigned char right_left[ARRAY_LENGTH][ARRAY_LENGTH];
+#ifndef USER_IMAGE_CANNY
+static unsigned char mat_in[IMG_HEIGHT][IMG_WIDTH];
+static unsigned char mat_out[IMG_HEIGHT][IMG_WIDTH];
+#endif
+static unsigned char mat_blured[IMG_HEIGHT][IMG_WIDTH];
+static double grad_orientation[IMG_HEIGHT][IMG_WIDTH];
+static unsigned char mat_edges[IMG_HEIGHT][IMG_WIDTH];
+
+static unsigned char top_bottom[IMG_HEIGHT][IMG_WIDTH];
+static unsigned char bottom_top[IMG_HEIGHT][IMG_WIDTH];
+static unsigned char left_right[IMG_HEIGHT][IMG_WIDTH];
+static unsigned char right_left[IMG_HEIGHT][IMG_WIDTH];
 
 /* KERNEL_SIZExKERNEL_SIZE gaussian filter with origin in (1,1) */
 static double kernel_gauss[KERNEL_SIZE][KERNEL_SIZE];
@@ -94,12 +99,12 @@ static void gaussian_kernel_init(){
  * @param k 3x3 kernel
  * @return int 
  */
-static int convolution2D_3x3(unsigned char src[ARRAY_LENGTH][ARRAY_LENGTH], int p_x, int p_y,double k[3][3]){
+static int convolution2D_3x3(unsigned char src[IMG_HEIGHT][IMG_WIDTH], int p_x, int p_y,double k[3][3]){
     int k_r,offset_x,offset_y,i;
     double temp;
     k_r=1;
     /*kernel can be superimposed? if not we are on borders, then we keep the values unchanged*/
-    if(p_x-k_r<0 || p_y-k_r<0 || p_x+k_r>=ARRAY_LENGTH || p_y+k_r>=ARRAY_LENGTH){
+    if(p_x-k_r<0 || p_y-k_r<0 || p_x+k_r>=IMG_HEIGHT || p_y+k_r>=IMG_WIDTH){
         return src[p_x][p_y];
     }
     /*offset between kernel's indexes and array's ones */
@@ -123,12 +128,12 @@ static int convolution2D_3x3(unsigned char src[ARRAY_LENGTH][ARRAY_LENGTH], int 
  * @param k 5x5 kernel
  * @return int 
  */
-static int convolution2D_5x5(unsigned char src[ARRAY_LENGTH][ARRAY_LENGTH], int p_x, int p_y,double k[5][5]){
+static int convolution2D_5x5(unsigned char src[IMG_HEIGHT][IMG_WIDTH], int p_x, int p_y,double k[5][5]){
     int k_r,offset_x,offset_y,i;
     double temp;
     k_r=2;
     /*kernel can be superimposed? if not we are on borders, then we keep the values unchanged*/
-    if(p_x-k_r<0 || p_y-k_r<0 || p_x+k_r>=ARRAY_LENGTH || p_y+k_r>=ARRAY_LENGTH){
+    if(p_x-k_r<0 || p_y-k_r<0 || p_x+k_r>=IMG_HEIGHT || p_y+k_r>=IMG_WIDTH){
         return src[p_x][p_y];
     }
     /*offset between kernel's indexes and array's ones */
@@ -150,9 +155,9 @@ static int convolution2D_5x5(unsigned char src[ARRAY_LENGTH][ARRAY_LENGTH], int 
  */
 static void sobel(){
     int i;
-    for(i=0;i<ARRAY_LENGTH;i++){
+    for(i=0;i<IMG_HEIGHT;i++){
        int j;
-       for(j=0;j<ARRAY_LENGTH;j++){
+       for(j=0;j<IMG_WIDTH;j++){
             int mag_x,mag_y,mag;
             
             mag_x=convolution2D_3x3(mat_blured,i,j,sobel_x);
@@ -174,8 +179,8 @@ static void sobel(){
 static void gauss_filter(){
    int i,j;
 
-   for(i=0;i<ARRAY_LENGTH;i++){
-       for(j=0;j<ARRAY_LENGTH;j++){
+   for(i=0;i<IMG_HEIGHT;i++){
+       for(j=0;j<IMG_WIDTH;j++){
            mat_blured[i][j]=convolution2D_5x5(mat_in,i,j,kernel_gauss);
        }
     }
@@ -187,8 +192,8 @@ static void gauss_filter(){
  */
 static void nms(){
     int i,j;
-    for(i=1;i<ARRAY_LENGTH;i++){
-       for(j=1;j<ARRAY_LENGTH;j++){
+    for(i=1;i<IMG_HEIGHT;i++){
+       for(j=1;j<IMG_WIDTH;j++){
            double direction,curr_p,next_p,prev_p;
 
            direction=grad_orientation[i][j];
@@ -228,8 +233,8 @@ static void nms(){
 static unsigned char check_neighbours(int x, int y){
     int i,j;
 
-    for(i=x;x-1>0 && i<ARRAY_LENGTH;i++){
-       for(j=y;y-1>0 &&j<ARRAY_LENGTH;j++){
+    for(i=x;x-1>0 && i<IMG_HEIGHT;i++){
+       for(j=y;y-1>0 &&j<IMG_WIDTH;j++){
            if(mat_out[i][j]==255) return 255;
        }
     }
@@ -244,8 +249,8 @@ static unsigned char check_neighbours(int x, int y){
 static void hyst_tresh(int low_thresh, int high_thresh){
     int i,j;
 
-    for(i=0;i<ARRAY_LENGTH;i++){
-       for(j=0;j<ARRAY_LENGTH;j++){
+    for(i=0;i<IMG_HEIGHT;i++){
+       for(j=0;j<IMG_WIDTH;j++){
            int elem;
            
            elem= mat_out[i][j];
@@ -256,8 +261,8 @@ static void hyst_tresh(int low_thresh, int high_thresh){
     }
     
     
-    for(i=ARRAY_LENGTH-1;i>=0;i--){
-       for(j=ARRAY_LENGTH-1;j>=0;j--){
+    for(i=IMG_HEIGHT-1;i>=0;i--){
+       for(j=IMG_WIDTH-1;j>=0;j--){
            int elem;
            
            elem= mat_out[i][j];
@@ -268,8 +273,8 @@ static void hyst_tresh(int low_thresh, int high_thresh){
     }
    
     
-    for(i=0;i<ARRAY_LENGTH;i++){
-       for(j=ARRAY_LENGTH-1;j>=0;j--){
+    for(i=0;i<IMG_HEIGHT;i++){
+       for(j=IMG_WIDTH-1;j>=0;j--){
            int elem;
            
            elem= mat_out[i][j];
@@ -279,8 +284,8 @@ static void hyst_tresh(int low_thresh, int high_thresh){
         }
     }
     
-    for(i=ARRAY_LENGTH-1;i>=0;i--){
-       for(j=0;j<ARRAY_LENGTH;j++){
+    for(i=IMG_HEIGHT-1;i>=0;i--){
+       for(j=0;j<IMG_WIDTH;j++){
            int elem;
            
            elem= mat_out[i][j];
@@ -290,8 +295,8 @@ static void hyst_tresh(int low_thresh, int high_thresh){
         }
     }
 
-    for(i=0;i<ARRAY_LENGTH;i++){
-       for(j=0;j<ARRAY_LENGTH;j++){
+    for(i=0;i<IMG_HEIGHT;i++){
+       for(j=0;j<IMG_WIDTH;j++){
             int sum;
 
             sum=top_bottom[i][j]+bottom_top[i][j]+left_right[i][j]+right_left[i][j];
@@ -324,8 +329,8 @@ void canny(int seed){
     int j;
 
     random_set_seed(seed);
-    for (i = 0; i < ARRAY_LENGTH; i++){
-        for (j = 0; j < ARRAY_LENGTH; j++){
+    for (i = 0; i < IMG_HEIGHT; i++){
+        for (j = 0; j < IMG_WIDTH; j++){
             mat_in[i][j]=random_get()*256;
         }
     }

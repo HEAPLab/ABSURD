@@ -17,18 +17,20 @@
 #include "simple_random.h"
 
 #include <cmath>
-#include <iostream>
 #include <vector>
 #include <list>
 #include <bitset>
 
+
 #ifdef USER_JPEG_COMPRESS
-#include "jpeg_image.h"
+#include "data/jpeg_image.h"
 #else
+#define IMG_WIDTH ARRAY_LENGTH
+#define IMG_HEIGHT ARRAY_LENGTH
+static unsigned char mat_in[3][IMG_HEIGHT][IMG_WIDTH];
 #endif
 
 MEASURE_GLOBAL_VARIABLES()
-#define ARRAY_LENGTH 10
 
 
 template<typename T> 
@@ -48,8 +50,8 @@ class Matrix3D {
                 }
         };
 
-        Matrix3D(T *** data_in, int width,int height):
-        height(height),width(width){
+        Matrix3D(T data_in[3][IMG_HEIGHT][IMG_WIDTH]):
+        height(IMG_HEIGHT),width(IMG_WIDTH){
             //std::cout<<"Creating image: "<<this->height<<" "<<this->width<<"\n";
             data = new T **[3];
                 for(int i=0;i<3;i++){
@@ -194,8 +196,8 @@ class JPEGCompressor{
          * @param width 
          * @param height 
          */
-        JPEGCompressor(uint8_t ***mat_in,int width, int height):
-            in_img(Matrix3D<uint8_t>(mat_in,width, height)),
+        JPEGCompressor(uint8_t mat_in[3][IMG_HEIGHT][IMG_WIDTH],int width, int height):
+            in_img(Matrix3D<uint8_t>(mat_in)),
             preprocessed_img(Matrix3D<uint8_t>(width, height)),
             dct_img(Matrix3D<double>(width, height)){};
 
@@ -549,9 +551,9 @@ class JPEGCompressor{
  * @brief Actual jpeg compression implementation
  * 
  */
-static void jpeg_compress_routine(uint8_t *** mat_in){
+static void jpeg_compress_routine(){
 
-   JPEGCompressor compressor(mat_in,ARRAY_LENGTH,ARRAY_LENGTH);
+   JPEGCompressor compressor(mat_in,IMG_WIDTH,IMG_HEIGHT);
    
    
    compressor.compress();
@@ -568,13 +570,10 @@ static void jpeg_compress_routine(uint8_t *** mat_in){
 extern "C" void jpeg_compress(int seed){
 #ifndef USER_JPEG_COMPRESS
     random_set_seed(seed);
-    auto mat_in = new uint8_t **[3];
     //std::cout<<"Image:"<<'\n';
     for(int i=0;i<3;i++){
-        mat_in[i]=new uint8_t *[ARRAY_LENGTH];
-        for(int j=0;j<ARRAY_LENGTH;j++){
-            mat_in[i][j]=new uint8_t [ARRAY_LENGTH];
-            for(int z=0;z<ARRAY_LENGTH;z++){
+        for(int j=0;j<IMG_HEIGHT;j++){
+            for(int z=0;z<IMG_WIDTH;z++){
                 mat_in[i][j][z]=random_get()*256;
                 //std::cout<<+mat_in[i][j][z]<<",";
             }
@@ -589,16 +588,9 @@ extern "C" void jpeg_compress(int seed){
 
     MEASURE_START();
     for(int i=0; i<ITERATIONS;i++){
-        jpeg_compress_routine(mat_in);
+        jpeg_compress_routine();
     }
     MEASURE_STOP();
 
-#ifndef USER_JPEG_COMPRESS
-    for(int i=0;i<3;i++){
-        for(int j=0;j<ARRAY_LENGTH;j++){
-            delete[] mat_in[i][j];
-        }
-        delete mat_in[i];
-    }
-#endif
+
 }
