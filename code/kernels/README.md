@@ -8,13 +8,13 @@ This folder contains common algorithms of various complexity. In particular:
     - `matrix_inv`: computation of the inverse of a random square matrix exploiting LU decomposition;
 - Image manipulation
     - Morphological operations
-        - `erode`: it applies erosion operation on a random binary image;
-        - `dilate`: it applies dilation operation on a random binary image;
+        - `erode`: it applies erosion operation on a random/user defined binary image;
+        - `dilate`: it applies dilation operation on a random/user defined binary image;
     - Image filtering
-        - `avg_filter`: it applies average filtering to a random grayscale image;
-        - `avg_filter_RGB`: it applies average filtering to a random RGB image exploiting multiple threads;
-        - `gauss_filter`: it applies gaussian filtering to a random grayscale image;
-        - `gauss_filter_RGB`: it applies gaussian filtering to a random grayscale image;
+        - `avg_filter`: it applies average filtering to a random/user defined grayscale image;
+        - `avg_filter_RGB`: it applies average filtering to a random/user defined RGB image exploiting multiple threads;
+        - `gauss_filter`: it applies gaussian filtering to a rrandom/user defined grayscale image;
+        - `gauss_filter_RGB`: it applies gaussian filtering to a random/user defined RGB image exploiting multiple threads;
         
 - Sorting algorithms:
     - `binary_tree_sort`: it sorts a random array using binary tree sort algorithm;
@@ -30,5 +30,7 @@ This folder contains common algorithms of various complexity. In particular:
     - `fir_avg`: it applies moving average filter to a noisy sine signal;
 - Misc:
     - `crc_32`: it computes CRC32 of a random byte array;
+    - `knn`: implementation of k-nearest neighbors(k-NN) classification algorithm
     - `md5`: it computes md5 of a random byte array;
+    - `zo_adamm`: implementation of Zeroth-Order ADAptive Momentum Method(ZO-ADAMM) optimization algorithm
 
