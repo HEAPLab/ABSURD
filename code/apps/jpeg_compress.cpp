@@ -19,7 +19,7 @@
 #include <cmath>
 #include <vector>
 #include <list>
-#include <bitset>
+
 
 
 #ifdef USER_JPEG_COMPRESS
@@ -32,6 +32,8 @@ static unsigned char mat_in[3][IMG_HEIGHT][IMG_WIDTH];
 
 MEASURE_GLOBAL_VARIABLES()
 
+typedef unsigned char  uint8_t;
+typedef unsigned short uint16_t;
 
 template<typename T> 
 class Matrix3D {
@@ -39,7 +41,6 @@ class Matrix3D {
         Matrix3D();
         Matrix3D(int width,int height):
         height(height),width(width){
-            //std::cout<<"Creating image: "<<this->height<<" "<<this->width<<"\n";
             data = new T **[3];
                 for(int i=0;i<3;i++){
                    data[i]=new T*[height];
@@ -52,7 +53,6 @@ class Matrix3D {
 
         Matrix3D(T data_in[3][IMG_HEIGHT][IMG_WIDTH]):
         height(IMG_HEIGHT),width(IMG_WIDTH){
-            //std::cout<<"Creating image: "<<this->height<<" "<<this->width<<"\n";
             data = new T **[3];
                 for(int i=0;i<3;i++){
                    data[i]=new T*[height];
@@ -66,7 +66,6 @@ class Matrix3D {
                 }
         };
         void resize(int new_width,int new_height){
-            //std::cout<<"Creating image: "<<this->height<<"x"<<this->width<<"--->"<<new_height<<"x"<<new_width<<"\n";
             auto new_data=new T **[3];
             for(int i=0;i<3;i++){
                 new_data[i]=new T*[new_height];
@@ -83,9 +82,8 @@ class Matrix3D {
                         
                         new_data[i][j][z]=data[i][j_clamped][z_clamped];
                         
-                        //std::cout<<+(new_data[i][j][z])<<",";
                     }
-                    //std::cout<<"\n";
+                    
                 }
                 
             }
@@ -114,7 +112,6 @@ class Matrix3D {
         };
 
         void wipe_image(){
-            //std::cout<<"Deleting image\n";
             for(int i=0;i<3;i++){
                     for(int j=0;j<height;j++){
                         delete[] data[i][j];
@@ -168,17 +165,8 @@ class BitStream{
                     available_bits=16;
                 }
             }
-        }
-        void print(){
-            for(auto i:bits){
-                std::bitset<16> y(i);
-                std::cout<<y;
-            }
-            if(next){
-                std::bitset<16> y(next);
-                std::cout<<y;
-            }
-        }
+        };
+        
     private:
         std::vector<uint16_t> bits;
         int available_bits=16;
@@ -207,14 +195,12 @@ class JPEGCompressor{
          * 
          */
         void compress(){
-            //std::cout<<"READY TO COMPRESS\n";
+            
             img_preprocess();
             
             for(int i=0;i<preprocessed_img.height;i=i+8){
                 for(int j=0;j<preprocessed_img.width;j=j+8){
                     for(int c=0;c<3;c++){
-                    //std::cout<<"READY TO APPLY DCT\n";
-                        
                         if(c){
                             quantized_DCT(c,i,j,quant_chrominance);
                             entropy_encoding(c,i,j,DC_C_values,DC_C_codes_size,AC_C_values,AC_C_codes_size);
@@ -235,7 +221,6 @@ class JPEGCompressor{
          * 
          */
         void img_preprocess(){
-            //std::cout<<"PREPROCESSING_IMAGE\n";
             // RGB to YCbCr using https://en.wikipedia.org/wiki/YCbCr#JPEG_conversion while substituting 128 from each to prepare for DCT
             for(int i=0;i<in_img.height;i++){
                 for(int j=0;j<in_img.width;j++){
@@ -267,8 +252,6 @@ class JPEGCompressor{
          * @param quant_table Quantization table to be used
          */
         void quantized_DCT(int ch,int id_x, int id_y,const uint8_t quant_table[8][8]){
-            //std::cout<<"8x8 DCT on: "<<ch<<'\t'<<id_x<<'\t'<<id_y<<"\n";
-
             for(int i=0;i<8;i++){
                 for(int j=0;j<8;j++){
                     auto alpha_i = i==0? 1/std::sqrt(2) : 1;
@@ -276,30 +259,18 @@ class JPEGCompressor{
                     double dct=0;
                     for(int x=0;x<8;x++){
                         for(int y=0;y<8;y++){
-                            //std::cout<<"cumulative DCT on: "<<ch<<'\t'<<x+id_x<<'\t'<<y+id_y<<"\n";
                             dct+= preprocessed_img.data[ch][id_x+x][id_y+y]*std::cos(((2*x+1)*i*M_PI)/16)*std::cos(((2*y+1)*j*M_PI)/16);
-                             //std::cout<<"DCT: "<<dct<<"\n";
+                            
                         }
                     }
                     
                     dct=0.25*alpha_i*alpha_j*dct;
-                    //std::cout<<"DCT: "<<dct<<'\t'<<quant_mat50[i][j]<<'\t'<<std::round(dct/quant_mat50[i][j])<<"\n";
-                    
+                   
                     dct_img.data[ch][id_x+i][id_y+j]=std::round(dct/quant_table[i][j]);
                     
                     
                 }
             }
-           /* for(int i=0;i<8;i++){
-                for(int j=0;j<8;j++){
-                    std::cout<<dct_img.data[ch][id_x+i][id_y+j]<<"\t";
-                }
-                 std::cout<<"\n";
-            }
-             std::cout<<"\n";*/
-           
-
-
         }
         /**
          * @brief It returns the number of bit needed to represent a number
@@ -362,7 +333,7 @@ class JPEGCompressor{
                         {
                             zeroes++;
                         }
-                       // std::cout<<dct_img.data[ch][x+id_x][y+id_y]<<",";
+
                     }
                  }
                 else{
@@ -376,11 +347,11 @@ class JPEGCompressor{
                         {
                             zeroes++;
                         }
-                      //  std::cout<<dct_img.data[ch][x+id_x][y+id_y]<<",";
+
 
                     }
                 }
-                //std::cout<<"\n";
+
             }
             for(int row=1; row<8;row++,inv=!inv){
                 if(inv){
@@ -394,7 +365,7 @@ class JPEGCompressor{
                         {
                             zeroes++;
                         }
-                      //  std::cout<<dct_img.data[ch][x+id_x][y+id_y]<<",";
+                     
                     }
                 }
                 else{
@@ -408,7 +379,6 @@ class JPEGCompressor{
                         {
                             zeroes++;
                         }
-                       // std::cout<<dct_img.data[ch][x+id_x][y+id_y]<<",";
 
                     }
                 }
@@ -421,18 +391,8 @@ class JPEGCompressor{
                 int ac=e.second>=0?e.second: e.second+((1<<ac_cat)-1);
                 
                 compressed_img.write_bits((ac_values[nz_cat][ac_cat] << ac_cat) | dc,ac_codes_size[nz_cat][ac_cat]);
-                
-                //std::cout<<"("<<e.first<<","<<e.second<<"),";
             }
-           // std::cout<<"\n";
-
-           /* for(auto e : AC_component[ch]){
-                std::cout<<"("<<e.first<<","<<e.second<<"),";
-            }
-               
-            std::cout<<"\n";*/
-
-            
+          
         };
     Matrix3D<uint8_t> in_img;
     Matrix3D<uint8_t> preprocessed_img;
@@ -570,17 +530,14 @@ static void jpeg_compress_routine(){
 extern "C" void jpeg_compress(int seed){
 #ifndef USER_JPEG_COMPRESS
     random_set_seed(seed);
-    //std::cout<<"Image:"<<'\n';
     for(int i=0;i<3;i++){
         for(int j=0;j<IMG_HEIGHT;j++){
             for(int z=0;z<IMG_WIDTH;z++){
                 mat_in[i][j][z]=random_get()*256;
-                //std::cout<<+mat_in[i][j][z]<<",";
             }
-            //std::cout<<"\n";
+            
         }
-        //std::cout<<"\n";
-        //std::cout<<"\n";
+        
         
     }
 #endif

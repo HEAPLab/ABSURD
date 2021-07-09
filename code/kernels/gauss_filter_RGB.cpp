@@ -126,13 +126,7 @@ void gauss_filter_RGB(int seed){
     #endif
     //kernel initialization
     gaussian_kernel_init();
-    /*for (int i = 0; i < KERNEL_SIZE; i++){
-        for (int j = 0; j < KERNEL_SIZE; j++){
-            printf("%f\t",kernel[i][j]);
-        }
-        printf("\n");
-    }
-    printf("\n");*/
+    
     MEASURE_START();
     for(int i=0; i<ITERATIONS;i++){
         std::thread r(gauss_filter_RGB_routine,0);
@@ -145,10 +139,4 @@ void gauss_filter_RGB(int seed){
     }
     MEASURE_STOP();
 
-    /*for (int i = 0; i < ARRAY_LENGTH; i++){
-        for (int j = 0; j < ARRAY_LENGTH; j++){
-            printf("%d\t",mat_out[i][j]);
-        }
-        printf("\n");
-    }*/
 }

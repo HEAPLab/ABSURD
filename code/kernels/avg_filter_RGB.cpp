@@ -118,10 +118,4 @@ void avg_filter_RGB(int seed){
     }
     MEASURE_STOP();
 
-    /*for (int i = 0; i < ARRAY_LENGTH; i++){
-        for (int j = 0; j < ARRAY_LENGTH; j++){
-            printf("%d\t",array_out[i][j]);
-        }
-        printf("\n");
-    }*/
 }

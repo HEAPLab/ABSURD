@@ -21,7 +21,7 @@
 
 MEASURE_GLOBAL_VARIABLES()
 
-static double abs(double x){
+static double dabs(double x){
     if(x<0) x=-x;
     return x;
 }
@@ -69,6 +69,6 @@ void bsqrt(int seed){
     MEASURE_STOP();
  
 
-    CHECK_RESULT(abs(res*res-s)<0.01);
+    CHECK_RESULT(dabs(res*res-s)<0.01);
     
 }

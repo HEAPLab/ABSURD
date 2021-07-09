@@ -56,7 +56,7 @@ void unstruct(int seed){
     int i,n,res;
     random_set_seed(seed);
 
-    n=random_get()*ARRAY_LENGTH;
+    n=random_get()*ARRAY_LENGTH+1;
     
     MEASURE_START();
     for(i=0; i<ITERATIONS;i++){
@@ -64,5 +64,5 @@ void unstruct(int seed){
     }
     MEASURE_STOP();
 
-    CHECK_RESULT((res == n) || ( n==0 && res == 10));
+    CHECK_RESULT(res == n);
 }

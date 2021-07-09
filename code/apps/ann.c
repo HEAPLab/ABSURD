@@ -255,25 +255,7 @@ static void back_propagation(int train_idx){
     }
     
 }
-/*void print_summary(int i){
-    int j;
-    printf("INPUT:\t");
-    for(j=0; j<IN_NODES;j++){
-        printf("%f\t",train_in[i][j]);
-    }
-    printf("\n");
 
-    printf("EXPECTED OUTPUT:\t");
-    for(j=0; j<OUT_NODES;j++){
-        printf("%f\t",train_out[i][j]);
-    }
-    printf("\n");
-    printf("NET OUTPUT:\t");
-    for(j=0; j<OUT_NODES;j++){
-        printf("%f\t",net_out[j]);
-    }
-    printf("\n");
-}*/
 /**
  * @brief Actual neural network training implementation
  * 
@@ -310,7 +292,6 @@ void ann(int seed){
     MEASURE_START()
     for(i=0; i<ITERATIONS;i++){
         ann_routine();    
-        /*print_summary(i);*/
     }
     MEASURE_STOP()
 }
