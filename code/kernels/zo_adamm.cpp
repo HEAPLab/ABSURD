@@ -16,13 +16,14 @@
 #include "user.h"
 #include "simple_random.h"
 
-#include <iostream>
 
 #include <cmath>
 #include <vector>
 #include <functional>
 #include <algorithm>
 #include <random>
+
+#define RESULT 2.38629
 
 MEASURE_GLOBAL_VARIABLES()
 
@@ -38,7 +39,7 @@ class ZO_AdaMM_Optimizer{
                            double mu=0.0001,
                            double lr=0.01,
                            int q=10,
-                           int epoch=100):
+                           int epoch=1000):
         x(x),
         process(process),
         beta_1(beta_1),
@@ -146,17 +147,18 @@ static std::vector<double> zo_adamm_routine(std::vector<double> x){
     
     ZO_AdaMM_Optimizer optimizer(x,f);
     return optimizer.optimize();
-    //std::cout<<"X:\t["<<res[0]<<"\t"<<res[1]<<"]\nf(X)=\t"<<f(res)<<std::endl;
 }
 
 extern "C" void zo_adamm(int seed){
 
-    std::vector<double> x(2,0);
+    std::vector<double> x(2,0),res;
     random_set_seed(seed);
     MEASURE_START();
     for(int i=0; i<ITERATIONS;i++){
-        zo_adamm_routine(x);
+        res=zo_adamm_routine(x);
     }
     MEASURE_STOP();
+
+    CHECK_RESULT(std::abs(f(res)-RESULT)<0.01);
 
 }
