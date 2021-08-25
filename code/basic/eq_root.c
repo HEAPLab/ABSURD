@@ -63,28 +63,39 @@ static complex complex_mult(complex a, complex b){
  * @param b 
  * @param c 
  */
-static void eq_root_routine(double a, double b, double c){
+static int eq_root_routine(double a, double b, double c){
 
     double delta;
-    delta=b*b-4*a*c;
 
-    if(delta>=0){
-        delta=sqrt(delta);
+	if (a==0){
+		if(b==0){
+			return c!=0?-1:0;
+		}
+		roots[0].re=c/b;
+		roots[0].im=0;
+		return 1;
+	}
 
-        roots[0].re=(-b+delta)/(2*a);
-        roots[0].im=0;
+	delta=b*b-4*a*c;
 
-        roots[1].re=(-b-delta)/(2*a);
-        roots[1].im=0;
-    }
-    else{
-        delta=sqrt(-delta);
-        roots[0].re=-b/(2*a);
-        roots[0].im=delta/(2*a);
+	if(delta>=0){
+		delta=sqrt(delta);
 
-        roots[1].re=-b/(2*a);
-        roots[1].im=-delta/(2*a);
-    }
+		roots[0].re=(-b+delta)/(2*a);
+		roots[0].im=0;
+
+		roots[1].re=(-b-delta)/(2*a);
+		roots[1].im=0;
+	}
+	else{
+		delta=sqrt(-delta);
+		roots[0].re=-b/(2*a);
+		roots[0].im=delta/(2*a);
+
+		roots[1].re=-b/(2*a);
+		roots[1].im=-delta/(2*a);
+	}
+	return 2;
 }
 
 /**
@@ -97,7 +108,7 @@ void eq_root(int seed){
 
     double a,b,c;
     complex eq,a_cmp,b_cmp,c_cmp;
-    int i;
+    int i,res;
 
     random_set_seed(seed);
     
@@ -109,51 +120,64 @@ void eq_root(int seed){
     MEASURE_START();
     
     for(i=0; i<ITERATIONS;i++){
-        eq_root_routine(a,b,c);
+        res=eq_root_routine(a,b,c);
     }
     MEASURE_STOP();
 
     
+    if(res==0){
+        CHECK_RESULT(a==0 && b==0 && c==0);
+    }
+    else if(res==1){
+        double x=roots[0].re;
+        CHECK_RESULT(a==0 && b*x+c==0);
+    }
+    else if(res==-1){
+        CHECK_RESULT(a==0 && b==0 && c!=0);
+        
+    }
+    else{
+        a_cmp.re=a;
+        a_cmp.im=0;
 
-    a_cmp.re=a;
-    a_cmp.im=0;
+        b_cmp.re=b;
+        b_cmp.im=0;
+        
+        c_cmp.re=c;
+        c_cmp.im=0;
 
-    b_cmp.re=b;
-    b_cmp.im=0;
+        /* eq=a*x1*x1 */
+        eq=complex_mult(a_cmp,roots[0]);
+        eq=complex_mult(eq,roots[0]);
+
+        b_cmp=complex_mult(b_cmp,roots[0]);
+
+        eq=complex_sum(eq,b_cmp);
+        eq=complex_sum(eq,c_cmp);
+
+        CHECK_RESULT(eq.re==0 && eq.im==0);
+
+        a_cmp.re=a;
+        a_cmp.im=0;
+
+        b_cmp.re=b;
+        b_cmp.im=0;
+        
+        c_cmp.re=c;
+        c_cmp.im=0;
+
+        /* eq=a*x1*x1 */
+        eq=complex_mult(a_cmp,roots[1]);
+        eq=complex_mult(eq,roots[1]);
+
+        b_cmp=complex_mult(b_cmp,roots[1]);
+
+        eq=complex_sum(eq,b_cmp);
+        eq=complex_sum(eq,c_cmp);
+
+        CHECK_RESULT(eq.re==0 && eq.im==0);
+    }
     
-    c_cmp.re=c;
-    c_cmp.im=0;
-
-    /* eq=a*x1*x1 */
-    eq=complex_mult(a_cmp,roots[0]);
-    eq=complex_mult(eq,roots[0]);
-
-    b_cmp=complex_mult(b_cmp,roots[0]);
-
-    eq=complex_sum(eq,b_cmp);
-    eq=complex_sum(eq,c_cmp);
-
-    CHECK_RESULT(eq.re==0 && eq.im==0);
-
-    a_cmp.re=a;
-    a_cmp.im=0;
-
-    b_cmp.re=b;
-    b_cmp.im=0;
-    
-    c_cmp.re=c;
-    c_cmp.im=0;
-
-    /* eq=a*x1*x1 */
-    eq=complex_mult(a_cmp,roots[1]);
-    eq=complex_mult(eq,roots[1]);
-
-    b_cmp=complex_mult(b_cmp,roots[1]);
-
-    eq=complex_sum(eq,b_cmp);
-    eq=complex_sum(eq,c_cmp);
-
-    CHECK_RESULT(eq.re==0 && eq.im==0);
 
     
 }

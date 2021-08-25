@@ -34,7 +34,9 @@ static double dabs(double x){
  */
 static double bsqrt_routine(int s){
    double x,y;
-   
+   if(s<0){
+       return -1;
+   }
    x=s;
    y=(x+s/x)/2;
 
@@ -68,7 +70,7 @@ void bsqrt(int seed){
     }
     MEASURE_STOP();
  
-
-    CHECK_RESULT(dabs(res*res-s)<0.01);
+    
+    CHECK_RESULT((res!=-1 && s>=0) && dabs(res*res-s)<0.01);
     
 }
