@@ -14,12 +14,31 @@
 #   limitations under the License.
 #******************************************************************************/
 
+
 project(HEAP-WCET-Benchmarks)
 cmake_minimum_required(VERSION 3.00)
 
 option(MULTI_THREAD "Compile multi-threaded benchmarks" ON)
 option(WITH_ANSI "Use ANSI C standard" OFF)
+option(NUCLEO_F746ZG "Compile benchmarks for NUCLEO-F746ZG board" OFF)
 
+option(CLASS_A "CLASS A" OFF)
+option(CLASS_B "CLASS B" OFF)
+option(CLASS_C "CLASS C" OFF)
+option(CLASS_D "CLASS D" OFF)
+option(CLASS_E "CLASS E" OFF)
+
+if(CLASS_A)
+    add_definitions(-DCLASS_A)
+elseif(CLASS_B)
+    add_definitions(-DCLASS_B)
+elseif(CLASS_C)
+    add_definitions(-DCLASS_C)
+elseif(CLASS_D)
+    add_definitions(-DCLASS_D)
+else()
+    add_definitions(-DCLASS_E)
+endif()
 
 if(WITH_ANSI)
     message("Compiling using ANSI C standard")
@@ -27,13 +46,15 @@ if(WITH_ANSI)
     add_definitions(-DWITH_ANSI)
 endif(WITH_ANSI)
 
+set(RANDOM_SRC "../util/simple_random.c")
+message("Random src:${RANDOM_SRC}")
 
 file(GLOB BASIC_SRC ../basic/*.c)
 foreach(PATH ${BASIC_SRC})
     get_filename_component(BENCH_NAME ${PATH} NAME_WE)
     message("Configuring ${BENCH_NAME}...")
     configure_file( main.c.in mains/main_${BENCH_NAME}.c )
-    add_executable(${BENCH_NAME} mains/main_${BENCH_NAME}.c ${PATH})
+    add_executable(${BENCH_NAME} mains/main_${BENCH_NAME}.c ${PATH} ${RANDOM_SRC})
     target_include_directories(${BENCH_NAME} PRIVATE ../include)
 endforeach()
 
@@ -46,7 +67,7 @@ foreach(PATH ${KERNELS_SRC})
     get_filename_component(BENCH_NAME ${PATH} NAME_WE)
     message("Configuring ${BENCH_NAME}...")
     configure_file( main.c.in mains/main_${BENCH_NAME}.c )
-    add_executable(${BENCH_NAME} mains/main_${BENCH_NAME}.c ${PATH})
+    add_executable(${BENCH_NAME} mains/main_${BENCH_NAME}.c ${PATH} ${RANDOM_SRC})
     target_include_directories(${BENCH_NAME} PRIVATE ../include)
 endforeach()
 
@@ -66,7 +87,7 @@ if(MULTI_THREAD)
         get_filename_component(BENCH_NAME ${PATH} NAME_WE)
         message("Configuring ${BENCH_NAME}...")
         configure_file( main.c.in mains/main_${BENCH_NAME}.c )
-        add_executable(${BENCH_NAME} mains/main_${BENCH_NAME}.c ${PATH})
+        add_executable(${BENCH_NAME} mains/main_${BENCH_NAME}.c ${PATH} ${RANDOM_SRC})
         target_include_directories(${BENCH_NAME} PRIVATE ../include)
         target_link_libraries(${BENCH_NAME} Threads::Threads)
     endforeach()
@@ -79,7 +100,7 @@ foreach(PATH ${KERNELS_SRC})
     get_filename_component(BENCH_NAME ${PATH} NAME_WE)
     message("Configuring ${BENCH_NAME}...")
     configure_file( main.c.in mains/main_${BENCH_NAME}.c )
-    add_executable(${BENCH_NAME} mains/main_${BENCH_NAME}.c ${PATH})
+    add_executable(${BENCH_NAME} mains/main_${BENCH_NAME}.c ${PATH} ${RANDOM_SRC})
     target_include_directories(${BENCH_NAME} PRIVATE ../include)
 endforeach()
 
@@ -87,4 +108,6 @@ target_link_libraries(tcas m)
 target_link_libraries(canny m)
 target_link_libraries(ann m)
 
-
+IF(NUCLEO_F746ZG AND (CLASS_A OR CLASS_B))
+    add_subdirectory(STM32F7)
+endif()

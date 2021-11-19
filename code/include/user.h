@@ -16,7 +16,7 @@
 #ifndef USER_H_
 #define USER_H_
 
-#define CLASS_A
+/*#define CLASS_A*/
 
 /** Set this to 0 to disable the outer loop on benchmarks (it will considerably reduce the execution time) **/
 #define USE_ITERATIONS_LOOP 1
@@ -49,12 +49,28 @@
 #include <assert.h>
 #include <stdio.h>
 #include <time.h>
-
+#ifdef NUCLEO_F746ZG
+#include "stm32f7xx_hal.h"
+#endif
 
 /** User-needed constants (e.g., for measurements) **/
 #define BILLION 1000000000L
 
+
 #ifndef WITH_ANSI
+#ifdef NUCLEO_F746ZG
+   #define MEASURE_GLOBAL_VARIABLES()  extern TIM_HandleTypeDef htim5;\
+                                       unsigned int result;
+   #define MEASURE_START()  do { \
+                              HAL_TIM_Base_Start(&htim5); \
+                           } while(0);
+
+   #define MEASURE_STOP() do { \
+                                 HAL_TIM_Base_Stop(&htim5); \
+                                  result=__HAL_TIM_GET_COUNTER(&htim5); \
+                                 __HAL_TIM_SET_COUNTER(&htim5,0); \
+                              } while(0);
+#else
 /** Variables declared in the global scope to support measurements **/
 #define MEASURE_GLOBAL_VARIABLES()  static struct timespec start,stop; \
                                     double result;
@@ -70,7 +86,24 @@
                               clock_gettime(CLOCK_MONOTONIC, &stop); \
                               result=(stop.tv_sec - start.tv_sec)*BILLION + (stop.tv_nsec - start.tv_nsec); \
                            } while(0);
+
+#endif
+#define CHECK_RESULT(x) assert(x);
 #else
+   #ifdef NUCLEO_F746ZG
+   #define MEASURE_GLOBAL_VARIABLES()  extern TIM_HandleTypeDef htim5;\
+                                       long unsigned int result;
+   #define MEASURE_START()  do { \
+                              HAL_TIM_Base_Start(&htim5); \
+                           } while(0);
+
+   #define MEASURE_STOP() do { \
+                                 HAL_TIM_Base_Stop(&htim5); \
+                                  result=__HAL_TIM_GET_COUNTER(&htim5); \
+                                 __HAL_TIM_SET_COUNTER(&htim5,0); \
+
+                              } while(0);
+   #else
    #define MEASURE_GLOBAL_VARIABLES()
    #define MEASURE_START()
    #define MEASURE_STOP() 
@@ -79,3 +112,5 @@
 
 #define CHECK_RESULT(x) assert(x);
 #endif
+
+#endif //USER_H_

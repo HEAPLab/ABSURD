@@ -26,13 +26,13 @@
 
 #define SEED 123U
 
-extern void BENCH_NAME(UINT32_T seed);
+extern void BENCH_NAME();
 #ifndef WITH_ANSI
 extern double result;
 #endif
 int main() {
-
-    printf("***************** HEAP WCET Benchmarks *****************\n");
+    int i;
+    printf("HEAP WCET Benchmarks - " BENCH_NAME_STR "n");
     printf("Running with:\n");
 #if USE_ITERATIONS_LOOP
     printf("ITERATIONS:\t%d\n", ITERATIONS);
@@ -43,11 +43,13 @@ int main() {
     printf("SEED:\t\t%d\n",SEED);
     printf("********************************************************\n");
 
-    BENCH_NAME(SEED);
-#ifdef WITH_ANSI
-    printf("[" BENCH_NAME_STR "]\tCompleted\n");
-#else
-    printf("[" BENCH_NAME_STR "]\tExecution time:\t%.0f ns\n", result);
-#endif
+    random_set_seed(SEED);
+    for(i=0;i<1000;i++){
+      BENCH_NAME();
+      #ifndef WITH_ANSI
+          printf("[" BENCH_NAME_STR "] Execution time: %f ns\n", result);
+      #endif
+    }
+    printf("[" BENCH_NAME_STR "] Completed\n");
     return 0;    
 }
