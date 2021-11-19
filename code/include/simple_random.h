@@ -23,70 +23,15 @@
 #define SIMPLE_RANDOM_H_
 
 #include "user.h"
-/**** VERY IMPORTANT **** :
-  The initial seeds z1, z2, z3, z4  MUST be larger than
-  1, 7, 15, and 127 respectively.
-****/
 
-static UINT32_T z1, z2, z3, z4;
+void random_set_seed(UINT32_T seed);
 
-static void random_set_seed(UINT32_T seed)
-{
-    z1 = 1+seed;
-    z2 = 7+seed;
-    z3 = 15+seed;
-    z4 = 127+seed;
-}
+double random_get(void);
 
-static double random_get(void)
-{
-    UINT32_T b;
-    b  = ((z1 << 6) ^ z1) >> 13;
-    z1 = ((z1 & 4294967294U) << 18) ^ b;
-    b  = ((z2 << 2) ^ z2) >> 27;
-    z2 = ((z2 & 4294967288U) << 2) ^ b;
-    b  = ((z3 << 13) ^ z3) >> 21;
-    z3 = ((z3 & 4294967280U) << 7) ^ b;
-    b  = ((z4 << 3) ^ z4) >> 12;
-    z4 = ((z4 & 4294967168U) << 13) ^ b;
-    return (z1 ^ z2 ^ z3 ^ z4) * 2.3283064365386963e-10;
-}
+void random_get_array(double a[], int len);
 
-static void random_get_array(double a[], int len){
-    int i;
-    for(i = 0;i < len; i++){
-        a[i] = random_get();  
-    }
-}
+void random_get_sarray(double a[], int len);
 
-static void random_get_sarray(double a[], int len){
-    int i,min;
+void random_get_barray(int a[], int len);
 
-    for(i = 0;i < len; i++){
-        a[i] = random_get();
-    }
-    
-    for (i=0; i<len-1; i++) {
-        int j;
-        double temp;
-
-        min=i;
-        for (j=i+1; j<len; j++){
-            if (a[j] < a[min]){
-                min = j;
-            }
-        }
-        temp=a[i];
-        a[i]=a[min];
-        a[min]=temp;
-    }
-    
-}
-
-static void random_get_barray(int a[], int len){
-    int i;
-    for(i = 0;i < len; i++){
-        a[i] = random_get() > 0.5 ? 1 : 0;  
-    }
-}
 #endif
