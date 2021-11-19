@@ -35,12 +35,11 @@ static double select_nmax_routine(double a[], int pos){
                 nmax = a[j];
             } 
     }
-
     for(i=0;i<pos-1;i++){   
         double max=0; 
         for(j = 0; j < ARRAY_LENGTH; j++){
             if(a[j] > max && a[j]<nmax){
-                nmax = a[j];
+                max = a[j];
             } 
         }
         nmax=max;
@@ -56,28 +55,28 @@ static double select_nmax_routine(double a[], int pos){
  * 
  * @param seed seed used to initialize random number generator  
  */
-void select_nmax(int seed){
+void select_nmax(){
     int pos,i,check;
     double res;
     /*Array initialization*/
-    random_set_seed(seed);
-    random_get_array(array,ARRAY_LENGTH);
-
-    pos=ARRAY_LENGTH * random_get();  
     
+    random_get_array(array,ARRAY_LENGTH);
+    
+    pos=ARRAY_LENGTH * random_get(); 
     MEASURE_START();
     
     for(i=0; i<ITERATIONS;i++){
         res=select_nmax_routine(array,pos);
     }
+
     
     MEASURE_STOP();
-
+    check=0;
     for(i = 0; i < ARRAY_LENGTH; i++){
             if(array[i] > res){
                 check++;
             } 
     }
-
-    CHECK_RESULT((check+1)==pos);
+    
+    CHECK_RESULT((pos==0 && check==0) || (check==(pos-1)));
 }

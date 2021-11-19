@@ -67,16 +67,16 @@ static double exp_int_routine(double x, int n){
  * 
  * @param seed seed used to initialize random number generator  
  */
-void exp_int(int seed){
+void exp_int(){
     int i,n;
     double x,res;
-    random_set_seed(seed);
+    
     
     do{
-        x=(random_get()<0.5?-1:1) * random_get();
-    }while (x==0);
+        n= (int)(random_get()*ARRAY_LENGTH);
+    }while (n<=5);
 
-    n= random_get()*ARRAY_LENGTH;
+    
 
 
     MEASURE_START();
@@ -86,7 +86,6 @@ void exp_int(int seed){
     }
     MEASURE_STOP();
    
-
     CHECK_RESULT(dabs(res-RESULT)<0.01);
     
 }

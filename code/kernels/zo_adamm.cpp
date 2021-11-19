@@ -14,7 +14,9 @@
 *   limitations under the License.
 *******************************************************************************/
 #include "user.h"
+extern "C" {
 #include "simple_random.h"
+}
 
 
 #include <cmath>
@@ -149,10 +151,10 @@ static std::vector<double> zo_adamm_routine(std::vector<double> x){
     return optimizer.optimize();
 }
 
-extern "C" void zo_adamm(int seed){
+extern "C" void zo_adamm(){
 
     std::vector<double> x(2,0),res;
-    random_set_seed(seed);
+    
     MEASURE_START();
     for(int i=0; i<ITERATIONS;i++){
         res=zo_adamm_routine(x);

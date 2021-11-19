@@ -44,9 +44,9 @@ static void insertion_sort_routine(){
  * 
  * @param seed seed used to initialize random number generator  
  */
-void insertion_sort(int seed){
+void insertion_sort(){
     int i;
-    random_set_seed(seed);
+    
     random_get_array(array,ARRAY_LENGTH);
 
     MEASURE_START();

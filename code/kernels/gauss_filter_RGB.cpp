@@ -14,16 +14,15 @@
 *   limitations under the License.
 *******************************************************************************/
 #include "user.h"
+extern "C" {
 #include "simple_random.h"
+}
 
 #include <math.h>
 #include <thread>
 
 #ifdef USER_GAUSS_FILTER_RGB
 #include "data/gauss_filter_RGB_image.h"
-#else
-#define IMG_HEIGHT ARRAY_LENGTH
-#define IMG_WIDTH ARRAY_LENGTH
 #endif
 
 #define KERNEL_SIZE 5
@@ -41,7 +40,7 @@ static unsigned char mat_out[3][IMG_HEIGHT][IMG_WIDTH];
 /* KERNEL_SIZExKERNEL_SIZE gaussian filter with origin in (1,1) */
 static double kernel[KERNEL_SIZE][KERNEL_SIZE];
 
-extern "C" void gauss_filter_RGB(int seed);
+extern "C" void gauss_filter_RGB();
 /**
  * @brief It generates a KERNEL_SIZE x KERNEL_SIZE gaussian kernel
  * 
@@ -113,9 +112,9 @@ static void gauss_filter_RGB_routine(int channel){
  * 
  * @param seed seed used to initialize random number generator  
  */
-void gauss_filter_RGB(int seed){
+void gauss_filter_RGB(){
     #ifndef USER_GAUSS_FILTER_RGB
-    random_set_seed(seed);
+    
     for(int c=0;c<3;c++){
         for (int i = 0; i < IMG_HEIGHT; i++){
             for (int j = 0; j < IMG_WIDTH; j++){

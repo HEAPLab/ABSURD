@@ -14,7 +14,9 @@
 *   limitations under the License.
 *******************************************************************************/
 #include "user.h"
+extern "C" {
 #include "simple_random.h"
+}
 #include "data/iris_dataset.h"
 
 #include <algorithm>
@@ -96,6 +98,7 @@ class kNN_classifier{
                 }
             }
             observation.label=observation_label;
+            return observation_label;
         }
         
     private:
@@ -127,9 +130,9 @@ static void knn_routine(int k,double data_points[][5], int data_len, std::vector
  * 
  * @param seed seed used to initialize random number generator  
  */
-extern "C" void knn(int seed){
+extern "C" void knn(){
     std::vector<DataPoint> observations;
-    random_set_seed(seed);
+    
     for(int i=0;i<ARRAY_LENGTH;i++){
         observations.emplace_back(random_get(),random_get(),random_get(),random_get());
     }

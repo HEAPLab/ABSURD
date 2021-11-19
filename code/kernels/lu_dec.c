@@ -18,9 +18,9 @@
 
 MEASURE_GLOBAL_VARIABLES()
 
-static double mat[ARRAY_LENGTH][ARRAY_LENGTH];
-static double l[ARRAY_LENGTH][ARRAY_LENGTH];
-static double u[ARRAY_LENGTH][ARRAY_LENGTH];
+static double mat[MATRIX_SIZE][MATRIX_SIZE];
+static double l[MATRIX_SIZE][MATRIX_SIZE];
+static double u[MATRIX_SIZE][MATRIX_SIZE];
 
 /**
  * @brief Actual LU decomposition implementation
@@ -28,9 +28,9 @@ static double u[ARRAY_LENGTH][ARRAY_LENGTH];
  */
 static void lu_dec_routine(){
     int i,j;
-    for(i=0;i<ARRAY_LENGTH;i++){
+    for(i=0;i<MATRIX_SIZE;i++){
         /*compute u mat i row*/
-        for(j=i;j<ARRAY_LENGTH;j++){
+        for(j=i;j<MATRIX_SIZE;j++){
             double sum = 0;
             int k;
             for (k = 0; k < i; k++){
@@ -41,7 +41,7 @@ static void lu_dec_routine(){
         
 
         /*compute l mat j column*/
-        for(j=i;j<ARRAY_LENGTH;j++){
+        for(j=i;j<MATRIX_SIZE;j++){
             if(i==j){
                 l[j][i] = 1; 
             }
@@ -67,17 +67,17 @@ static void lu_dec_routine(){
  * 
  * @param seed seed used to initialize random number generator  
  */
-void lu_dec(int seed){
+void lu_dec(){
     int i,j;
     
     /*Matrix initialization*/
-    random_set_seed(seed);
-    for(i=0; i<ARRAY_LENGTH;i++){
-        random_get_array(mat[i],ARRAY_LENGTH);
+    
+    for(i=0; i<MATRIX_SIZE;i++){
+        random_get_array(mat[i],MATRIX_SIZE);
     }
 
-    for(i=0; i<ARRAY_LENGTH;i++){
-        for(j=0; j<ARRAY_LENGTH;j++){
+    for(i=0; i<MATRIX_SIZE;i++){
+        for(j=0; j<MATRIX_SIZE;j++){
             l[i][j]=0;
             u[i][j]=0;
         }

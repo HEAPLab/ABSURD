@@ -64,12 +64,12 @@ static void biquad_routine(double a0, double a1, double a2, double b0, double b1
  * 
  * @param seed seed used to initialize random number generator  
  */
-void biquad(int seed){
+void biquad(){
     double alpha,w0,Q=0.5,f0=120,a0,a1,a2,b0,b1,b2;
     int i;
 
     /*Signal initialization*/
-    random_set_seed(seed);
+    
     for(i=0;i<ARRAY_LENGTH;i++){
         array_in[i]=cos(2*M_PI*120*0.001*i)+random_get();
     }

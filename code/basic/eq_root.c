@@ -104,13 +104,13 @@ static int eq_root_routine(double a, double b, double c){
  * 
  * @param seed seed used to initialize random number generator  
  */
-void eq_root(int seed){
+void eq_root(){
 
     double a,b,c;
     complex eq,a_cmp,b_cmp,c_cmp;
     int i,res;
 
-    random_set_seed(seed);
+    
     
     a=random_get();
     b=random_get()*2;
@@ -130,7 +130,7 @@ void eq_root(int seed){
     }
     else if(res==1){
         double x=roots[0].re;
-        CHECK_RESULT(a==0 && b*x+c==0);
+        CHECK_RESULT(a==0.0 && fabs(b*x+c)<1e-10);
     }
     else if(res==-1){
         CHECK_RESULT(a==0 && b==0 && c!=0);
@@ -145,17 +145,17 @@ void eq_root(int seed){
         
         c_cmp.re=c;
         c_cmp.im=0;
-
         /* eq=a*x1*x1 */
         eq=complex_mult(a_cmp,roots[0]);
         eq=complex_mult(eq,roots[0]);
+        
 
         b_cmp=complex_mult(b_cmp,roots[0]);
 
         eq=complex_sum(eq,b_cmp);
         eq=complex_sum(eq,c_cmp);
-
-        CHECK_RESULT(eq.re==0 && eq.im==0);
+        
+        CHECK_RESULT(fabs(eq.re)<1e-10 && fabs(eq.im)<1e-10);
 
         a_cmp.re=a;
         a_cmp.im=0;
@@ -175,7 +175,7 @@ void eq_root(int seed){
         eq=complex_sum(eq,b_cmp);
         eq=complex_sum(eq,c_cmp);
 
-        CHECK_RESULT(eq.re==0 && eq.im==0);
+        CHECK_RESULT(fabs(eq.re)<1e-10 && fabs(eq.im)<1e-10);
     }
     
 

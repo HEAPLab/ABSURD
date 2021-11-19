@@ -18,7 +18,7 @@
 
 MEASURE_GLOBAL_VARIABLES()
 
-static double matrix[ARRAY_LENGTH][ARRAY_LENGTH];
+static double matrix[MATRIX_SIZE][MATRIX_SIZE];
 
 /**
  * @brief It scans the matrix for the desired element
@@ -28,8 +28,8 @@ static double matrix[ARRAY_LENGTH][ARRAY_LENGTH];
  */
 static int multi_search_routine(double n){
     int i,j;
-    for(i=0; i<ARRAY_LENGTH;i++){
-        for(j=0; j<ARRAY_LENGTH;j++){
+    for(i=0; i<MATRIX_SIZE;i++){
+        for(j=0; j<MATRIX_SIZE;j++){
             if(matrix[i][j] == n) return 1;
         }
     }
@@ -43,17 +43,17 @@ static int multi_search_routine(double n){
  * 
  * @param seed seed used to initialize random number generator  
  */
-void multi_search(int seed){
+void multi_search(){
      int i,x,y,res;
     /*Matrix initialization*/
-    random_set_seed(seed);
+    
    
-    for(i=0; i<ARRAY_LENGTH;i++){
-        random_get_array(matrix[i],ARRAY_LENGTH);
+    for(i=0; i<MATRIX_SIZE;i++){
+        random_get_array(matrix[i],MATRIX_SIZE);
     }
 
-    x=random_get()*ARRAY_LENGTH;
-    y=random_get()*ARRAY_LENGTH;
+    x=random_get()*MATRIX_SIZE;
+    y=random_get()*MATRIX_SIZE;
 
     MEASURE_START();
     for(i=0; i<ITERATIONS;i++){

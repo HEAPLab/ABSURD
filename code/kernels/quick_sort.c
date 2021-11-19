@@ -63,10 +63,10 @@ static void quick_sort_routine(int low,int high){
  * 
  * @param seed seed used to initialize random number generator  
  */
-void quick_sort(int seed){
+void quick_sort(){
     int i;
 
-    random_set_seed(seed);
+    
     random_get_array(array,ARRAY_LENGTH);
 
     MEASURE_START();

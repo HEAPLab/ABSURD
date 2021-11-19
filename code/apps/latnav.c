@@ -85,12 +85,12 @@ double ailerons_limiter(double aileron) {
 }
 
 
-void latnav(int seed) {
+void latnav() {
     pid_controller_t pid_roll_rate,pid_roll,pid_heading;
     double curr_heading,curr_roll,curr_roll_rate;
     int i;
 
-    random_set_seed(seed);
+    
 
     
     pid_roll_rate.p = random_get();

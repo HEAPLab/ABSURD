@@ -14,15 +14,14 @@
 *   limitations under the License.
 *******************************************************************************/
 #include "user.h"
+extern "C" {
 #include "simple_random.h"
+}
 
 #include <thread>
 
 #ifdef USER_AVG_FILTER_RGB
 #include "data/avg_filter_RGB_image.h"
-#else
-#define IMG_HEIGHT ARRAY_LENGTH
-#define IMG_WIDTH ARRAY_LENGTH
 #endif
 
 #define KERNEL_SIZE 3
@@ -38,7 +37,7 @@ static unsigned char mat_out[3][IMG_HEIGHT][IMG_WIDTH];
 static double kernel[KERNEL_SIZE][KERNEL_SIZE];
 
 
-extern "C" void avg_filter_RGB(int seed);
+extern "C" void avg_filter_RGB();
 
 
 /**
@@ -87,9 +86,9 @@ static void avg_filter_RGB_routine(int channel){
  * 
  * @param seed seed used to initialize random number generator  
  */
-void avg_filter_RGB(int seed){
+void avg_filter_RGB(){
 
-    random_set_seed(seed);
+    
     #ifndef USER_AVG_FILTER_RGB
     for(int c=0;c<IMG_CH;c++){
         for (int i = 0; i < IMG_HEIGHT; i++){

@@ -18,9 +18,9 @@
 
 MEASURE_GLOBAL_VARIABLES()
 
-static double mat_1[ARRAY_LENGTH][ARRAY_LENGTH];
-static double mat_2[ARRAY_LENGTH][ARRAY_LENGTH];
-static double res[ARRAY_LENGTH][ARRAY_LENGTH];
+static double mat_1[MATRIX_SIZE][MATRIX_SIZE];
+static double mat_2[MATRIX_SIZE][MATRIX_SIZE];
+static double res[MATRIX_SIZE][MATRIX_SIZE];
 
 /**
  * @brief Actual matrices multiplication implementation
@@ -28,11 +28,11 @@ static double res[ARRAY_LENGTH][ARRAY_LENGTH];
  */
 static void matrix_mult_routine(){
     int i,j;
-    for(i=0;i<ARRAY_LENGTH;i++){
-        for(j=0;j<ARRAY_LENGTH;j++){
+    for(i=0;i<MATRIX_SIZE;i++){
+        for(j=0;j<MATRIX_SIZE;j++){
             double sum=0;
             int k;
-            for(k=0;k<ARRAY_LENGTH;k++){
+            for(k=0;k<MATRIX_SIZE;k++){
                 sum += mat_1[i][k]*mat_2[k][j];    
             }
             res[i][j]=sum;
@@ -46,13 +46,13 @@ static void matrix_mult_routine(){
  * 
  * @param seed seed used to initialize random number generator  
  */
-void matrix_mult(int seed){
+void matrix_mult(){
     int i;
     /*Matrix initialization*/
-    random_set_seed(seed);
-    for(i=0; i<ARRAY_LENGTH;i++){
-        random_get_array(mat_1[i],ARRAY_LENGTH);
-        random_get_array(mat_2[i],ARRAY_LENGTH);
+    
+    for(i=0; i<MATRIX_SIZE;i++){
+        random_get_array(mat_1[i],MATRIX_SIZE);
+        random_get_array(mat_2[i],MATRIX_SIZE);
     }
 
     MEASURE_START();

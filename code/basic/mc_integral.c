@@ -58,12 +58,12 @@ static double mc_integral_routine(double a, double b, int n){
  * 
  * @param seed seed used to initialize random number generator  
  */
-void mc_integral(int seed){
+void mc_integral(){
 
     double res;
     int i,s;
 
-    random_set_seed(seed);
+    
     
 
     s = random_get()*ARRAY_LENGTH;

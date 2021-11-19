@@ -51,10 +51,10 @@ static void fir_avg_routine(){
  * 
  * @param seed seed used to initialize random number generator  
  */
-void fir_avg(int seed){
+void fir_avg(){
     int i;
     /*Signal initialization*/
-    random_set_seed(seed);
+    
     for(i=0;i<ARRAY_LENGTH;i++){
         double dt=0.0001;
         array_in[i]=sin(2*M_PI*120*dt*i)+random_get();

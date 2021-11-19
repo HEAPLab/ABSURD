@@ -21,9 +21,6 @@
 
 #ifdef USER_IMAGE_SCALING
 #include "data/scaling_image.h"
-#else
-#define IMG_WIDTH ARRAY_LENGTH
-#define IMG_HEIGHT ARRAY_LENGTH
 #endif
 
 #define CLAMP(v, min, max) if (v < min) { v = min; } else if (v > max) { v = max; }
@@ -90,11 +87,11 @@ static void img_scaling_routine(){
  * 
  * @param seed seed used to initialize random number generator  
  */
-void img_scaling(int seed){
+void img_scaling(){
     int i;
     #ifndef USER_IMAGE_SCALING
     int j;
-    random_set_seed(seed);
+    
     for (i = 0; i < IMG_HEIGHT; i++){
         for (j = 0; j < IMG_WIDTH; j++){
             mat_in[i][j]=random_get()*256;

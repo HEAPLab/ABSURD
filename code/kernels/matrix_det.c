@@ -18,18 +18,18 @@
 
 MEASURE_GLOBAL_VARIABLES()
 
-static double mat[ARRAY_LENGTH][ARRAY_LENGTH];
-static double l[ARRAY_LENGTH][ARRAY_LENGTH];
-static double u[ARRAY_LENGTH][ARRAY_LENGTH];
+static double mat[MATRIX_SIZE][MATRIX_SIZE];
+static double l[MATRIX_SIZE][MATRIX_SIZE];
+static double u[MATRIX_SIZE][MATRIX_SIZE];
 /**
  * @brief It performs LU decomposition of mat matrix
  * 
  */
 static void lu_decomposition(){
     int i,j;
-    for(i=0;i<ARRAY_LENGTH;i++){
+    for(i=0;i<MATRIX_SIZE;i++){
         /*compute u matrix i row*/
-        for(j=i;j<ARRAY_LENGTH;j++){
+        for(j=i;j<MATRIX_SIZE;j++){
             double sum = 0;
             int k;
             for (k = 0; k < i; k++){
@@ -40,7 +40,7 @@ static void lu_decomposition(){
         
 
         /*compute l matrix j column*/
-        for(j=i;j<ARRAY_LENGTH;j++){
+        for(j=i;j<MATRIX_SIZE;j++){
             if(i==j){
                 l[j][i] = 1; 
             }
@@ -70,7 +70,7 @@ static double matrix_det_routine(){
 
     lu_decomposition();
     det=1;
-    for(i=0;i<ARRAY_LENGTH;i++){
+    for(i=0;i<MATRIX_SIZE;i++){
         det *= l[i][i]*u[i][i];
     }
     return det;
@@ -82,13 +82,13 @@ static double matrix_det_routine(){
  * 
  * @param seed seed used to initialize random number generator  
  */
-void matrix_det(int seed){
+void matrix_det(){
     int i;
     
     /*Matrix initialization*/
-    random_set_seed(seed);
-    for(i=0; i<ARRAY_LENGTH;i++){
-        random_get_array(mat[i],ARRAY_LENGTH);
+    
+    for(i=0; i<MATRIX_SIZE;i++){
+        random_get_array(mat[i],MATRIX_SIZE);
     }
 
     MEASURE_START();

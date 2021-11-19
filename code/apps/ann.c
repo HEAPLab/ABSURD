@@ -19,63 +19,15 @@
 
 #include <math.h>
 
-#ifdef CLASS_A
-#define NN_EPOCH 100
-
 #define IN_NODES 2
 
-#define HIDDEN_NODES 4
+#define HIDDEN_NODES 2
 #define HIDDEN_LAYERS 1
 
 #define OUT_NODES 1
-
 #define LR 0.1
+#define NN_EPOCH 1
 
-#elif CLASS_B
-#define NN_EPOCH 1000
-
-#define IN_NODES 4
-
-#define HIDDEN_NODES 6
-#define HIDDEN_LAYERS 2
-
-#define OUT_NODES 2
-
-#define LR 0.1
-#elif CLASS_C
-#define NN_EPOCH 10000
-
-#define IN_NODES 6
-
-#define HIDDEN_NODES 8
-#define HIDDEN_LAYERS 3
-
-#define OUT_NODES 3
-
-#define LR 0.1
-#elif CLASS_D
-#define NN_EPOCH 100000
-
-#define IN_NODES 8
-
-#define HIDDEN_NODES 10
-#define HIDDEN_LAYERS 4
-
-#define OUT_NODES 4
-
-#define LR 0.1
-#elif CLASS_E
-#define NN_EPOCH 1000000
-
-#define IN_NODES 10
-
-#define HIDDEN_NODES 12
-#define HIDDEN_LAYERS 5
-
-#define OUT_NODES 5
-
-#define LR 0.1
-#endif
 
 MEASURE_GLOBAL_VARIABLES()
 
@@ -266,7 +218,7 @@ static void ann_routine(){
     init_weights();
     for(i=0; i<NN_EPOCH;i++){
         
-        shuffle();
+        
         for(j=0; j<ARRAY_LENGTH; j++){
             forward_pass(j);
             
@@ -282,10 +234,10 @@ static void ann_routine(){
  * 
  * @param seed seed used to initialize random number generator  
  */
-void ann(int seed){
+void ann(){
     int i;
 
-    random_set_seed(seed);
+    
     
     init_train_data();
 

@@ -18,7 +18,7 @@
 
 MEASURE_GLOBAL_VARIABLES()
 
-static double array[ARRAY_LENGTH];
+static double array[BOGO_LENGTH];
 
 /**
  * @brief It randomly shuffle the array
@@ -26,8 +26,8 @@ static double array[ARRAY_LENGTH];
  */
 static void knuth_shuffle(){
     int i;
-    for(i=ARRAY_LENGTH-1;i>=0;i--){
-        int j= random_get()*ARRAY_LENGTH;
+    for(i=BOGO_LENGTH-1;i>=0;i--){
+        int j= random_get()*BOGO_LENGTH;
 
         double temp=array[i];
         array[i]=array[j];
@@ -43,7 +43,7 @@ static void knuth_shuffle(){
  */
 static int is_ordered(){
     int i;
-    for(i=0;i<ARRAY_LENGTH-1;i++){
+    for(i=0;i<BOGO_LENGTH-1;i++){
         if(array[i]>array[i+1]){
             return 0;
         }
@@ -66,10 +66,10 @@ static void bogo_sort_routine(){
  * 
  * @param seed seed used to initialize random number generator  
  */
-void bogo_sort(int seed){
+void bogo_sort(){
     int i;
-    random_set_seed(seed);
-    random_get_array(array,ARRAY_LENGTH);
+    
+    random_get_array(array,BOGO_LENGTH);
     
     MEASURE_START();
     for(i=0; i<ITERATIONS;i++){
@@ -78,10 +78,10 @@ void bogo_sort(int seed){
     MEASURE_STOP();
    
 
-    for(i=0;i<ARRAY_LENGTH-1;i++){
+    for(i=0;i<BOGO_LENGTH-1;i++){
         if(array[i]>array[i+1])
             break;
     }
-    CHECK_RESULT(i==ARRAY_LENGTH-1);
-
+    CHECK_RESULT(i==BOGO_LENGTH-1);
+    
 }

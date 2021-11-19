@@ -47,11 +47,11 @@ static int binary_search_routine(double n){
  * 
  * @param seed seed used to initialize random number generator  
  */
-void binary_search(int seed){
+void binary_search(){
     int i,n,res;
     
 
-    random_set_seed(seed);
+    
     random_get_sarray(array,ARRAY_LENGTH);
 
     n=random_get()*ARRAY_LENGTH;

@@ -18,7 +18,7 @@
 
 MEASURE_GLOBAL_VARIABLES()
 
-static double mat[ARRAY_LENGTH][ARRAY_LENGTH];
+static double mat[MATRIX_SIZE][MATRIX_SIZE];
 
 /**
  * @brief Actual implementation
@@ -29,8 +29,8 @@ static int matrix_nn_routine(){
     int cnt,i,j;
     
     cnt=0;
-    for(i=0; i<ARRAY_LENGTH;i++){
-        for(j=0; j<ARRAY_LENGTH;j++){
+    for(i=0; i<MATRIX_SIZE;i++){
+        for(j=0; j<MATRIX_SIZE;j++){
             if(mat[i][j] > 0) cnt++;
         }
     }
@@ -44,23 +44,23 @@ static int matrix_nn_routine(){
  * 
  * @param seed seed used to initialize random number generator  
  */
-void matrix_nn(int seed){
+void matrix_nn(){
     int i,j,res;
     /*Matrix initialization*/
-    random_set_seed(seed);
     
-    for(i=0; i<ARRAY_LENGTH;i++){
-        random_get_array(mat[i],ARRAY_LENGTH);
+    
+    for(i=0; i<MATRIX_SIZE;i++){
+        random_get_array(mat[i],MATRIX_SIZE);
     }
 
     MEASURE_START();
     for(i=0; i<ITERATIONS;i++){
-        matrix_nn_routine();
+        res=matrix_nn_routine();
     }
     MEASURE_STOP();
 
-    for(i=0; i<ARRAY_LENGTH;i++){
-        for(j=0; j<ARRAY_LENGTH;j++){
+    for(i=0; i<MATRIX_SIZE;i++){
+        for(j=0; j<MATRIX_SIZE;j++){
             if(mat[i][j] > 0) res--;
         }
     }

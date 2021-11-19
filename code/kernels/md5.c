@@ -358,9 +358,9 @@ static void MD5_memset (POINTER output, int value, unsigned int len)
  * 
  * @param seed seed used to initialize random number generator  
  */
-void md5(int seed){
+void md5(){
     int i;
-    random_set_seed(seed);
+    
     for(i=0;i<ARRAY_LENGTH;i++){
         bytes_in[i] = 0xFF & (int)(random_get()*ARRAY_LENGTH);
     }

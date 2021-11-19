@@ -44,9 +44,9 @@ static void bubble_sort_routine(){
  * 
  * @param seed seed used to initialize random number generator  
  */
-void bubble_sort(int seed){
+void bubble_sort(){
     int i;
-    random_set_seed(seed);
+    
     random_get_array(array,ARRAY_LENGTH);
     
     MEASURE_START();

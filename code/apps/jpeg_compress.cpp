@@ -14,7 +14,9 @@
 *   limitations under the License.
 *******************************************************************************/
 #include "user.h"
+extern "C" {
 #include "simple_random.h"
+}
 
 #include <cmath>
 #include <vector>
@@ -25,8 +27,6 @@
 #ifdef USER_JPEG_COMPRESS
 #include "data/jpeg_image.h"
 #else
-#define IMG_WIDTH ARRAY_LENGTH
-#define IMG_HEIGHT ARRAY_LENGTH
 static unsigned char mat_in[3][IMG_HEIGHT][IMG_WIDTH];
 #endif
 
@@ -527,9 +527,9 @@ static void jpeg_compress_routine(){
  * 
  * @param seed seed used to initialize random number generator  
  */
-extern "C" void jpeg_compress(int seed){
+extern "C" void jpeg_compress(){
 #ifndef USER_JPEG_COMPRESS
-    random_set_seed(seed);
+    
     for(int i=0;i<3;i++){
         for(int j=0;j<IMG_HEIGHT;j++){
             for(int z=0;z<IMG_WIDTH;z++){

@@ -55,10 +55,10 @@ static unsigned int crc_32_routine(){
  * 
  * @param seed seed used to initialize random number generator  
  */
-void crc_32(int seed){
+void crc_32(){
     
     int i;
-    random_set_seed(seed);
+    
     for(i=0;i<ARRAY_LENGTH;i++){
         bytes_in[i] = 0xFF & (int)(random_get()*ARRAY_LENGTH);
     }

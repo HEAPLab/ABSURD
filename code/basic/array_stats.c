@@ -92,11 +92,11 @@ static void array_stats_routine(){
  * 
  * @param seed seed used to initialize random number generator  
  */
-void array_stats(int seed){
+void array_stats(){
 
     int i;
     
-    random_set_seed(seed);
+    
 
     random_get_array(array_1,ARRAY_LENGTH);
     random_get_array(array_2,ARRAY_LENGTH);

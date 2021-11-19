@@ -51,10 +51,10 @@ static void dct_routine(){
  * 
  * @param seed seed used to initialize random number generator  
  */
-void dct(int seed){
+void dct(){
     int i;
     /*Matrix initialization*/
-    random_set_seed(seed);
+    
     random_get_array(array_in,ARRAY_LENGTH);
 
     MEASURE_START();

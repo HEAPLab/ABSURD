@@ -616,9 +616,9 @@ int tcas_bench(double *so, double soz, double *vo, double voz, double *si, doubl
 	return 0; //CLEAR
 }
 
-void tcas(int seed){
+void tcas(){
 
-    random_set_seed(seed);
+    
     
 
 	double so[2], vo[2], si[2], vi[2];

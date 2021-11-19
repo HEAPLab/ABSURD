@@ -53,11 +53,11 @@ static double bsqrt_routine(int s){
  * 
  * @param seed seed used to initialize random number generator  
  */
-void bsqrt(int seed){
+void bsqrt(){
 
     int i,s;
     double res;
-    random_set_seed(seed);
+    
     
 
     s = random_get()*ARRAY_LENGTH;

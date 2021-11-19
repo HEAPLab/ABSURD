@@ -17,9 +17,6 @@
 #include "simple_random.h"
 #ifdef USER_DILATE
 #include "data/dilate_image.h"
-#else
-#define IMG_HEIGHT ARRAY_LENGTH
-#define IMG_WIDTH ARRAY_LENGTH
 #endif
 
 #define KERNEL_SIZE 3
@@ -91,11 +88,11 @@ static void dilate_routine(){
  * 
  * @param seed seed used to initialize random number generator  
  */
-void dilate(int seed){
+void dilate(){
     int i;
 
     #ifndef USER_DILATE
-    random_set_seed(seed);
+    
     for (i = 0; i < IMG_HEIGHT; i++){
         random_get_barray(mat_in[i],IMG_WIDTH);
     }

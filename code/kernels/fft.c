@@ -112,10 +112,10 @@ static void fft_routine(){
  * 
  * @param seed seed used to initialize random number generator  
  */
-void fft(int seed){
+void fft(){
     int i;
     /*Matrix initialization*/
-    random_set_seed(seed);
+    
     for(i=0; i<FFT_LENGTH;i++){
         complex x;
         x.re=random_get();

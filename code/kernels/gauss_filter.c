@@ -20,9 +20,6 @@
 
 #ifdef USER_GAUSS_FILTER
 #include "data/gauss_filter_image.h"
-#else
-#define IMG_HEIGHT ARRAY_LENGTH
-#define IMG_WIDTH ARRAY_LENGTH
 #endif
 
 
@@ -115,11 +112,11 @@ static void gauss_filter_routine(){
  * 
  * @param seed seed used to initialize random number generator  
  */
-void gauss_filter(int seed){
+void gauss_filter(){
     int i;
     #ifndef USER_GAUSS_FILTER
     int j;
-    random_set_seed(seed);
+    
     for (i = 0; i < IMG_HEIGHT; i++){
         for (j = 0; j < IMG_WIDTH; j++){
             mat_in[i][j]=random_get()*256;

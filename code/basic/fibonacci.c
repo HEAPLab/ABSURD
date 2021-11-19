@@ -16,8 +16,18 @@
 #include "simple_random.h"
 #include "user.h"
 
-#define MAX_FIBONACCI 92 /*Last fibonacci's term that can be stored in long int */
-#define RESULT 102334155L
+
+#ifdef CLASS_A
+#define N 10L
+#elif CLASS_B
+#define N 15L
+#elif CLASS_C
+#define N 20L        
+#elif CLASS_D
+#define N 30L
+#else
+#define N 40L
+#endif
 MEASURE_GLOBAL_VARIABLES()
 
 /**
@@ -38,16 +48,17 @@ static long int fibonacci_routine(long int n){
  * 
  * @param seed seed used to initialize random number generator  
  */
-void fibonacci(int seed){
+void fibonacci(){
     int i;
-    long int res;
+    long int res,n;
 
+    n=(long int) N * random_get();
+    
     MEASURE_START();
     for(i=0; i<ITERATIONS;i++){
-        fibonacci_routine(40L);
+        res=fibonacci_routine(n);
     }
     
     MEASURE_STOP();
 
-    CHECK_RESULT(res==RESULT);
 }

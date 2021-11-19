@@ -109,9 +109,9 @@ static void binary_tree_sort_routine(){
  * 
  * @param seed seed used to initialize random number generator  
  */
-void binary_tree_sort(int seed){
+void binary_tree_sort(){
     int i;
-    random_set_seed(seed);
+    
     random_get_array(array,ARRAY_LENGTH);
 
     MEASURE_START();
@@ -121,8 +121,9 @@ void binary_tree_sort(int seed){
     MEASURE_STOP();
 
     for(i=0;i<ARRAY_LENGTH-1;i++){
-        if(array[i]>array[i+1])
+        if(ordered[i]>ordered[i+1])
             break;
     }
+    
     CHECK_RESULT(i==ARRAY_LENGTH-1);
 }

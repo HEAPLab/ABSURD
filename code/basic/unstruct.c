@@ -51,10 +51,10 @@ static int unstruct_routine(int n){
  * 
  * @param seed 
  */
-void unstruct(int seed){
+void unstruct(){
 
     int i,n,res;
-    random_set_seed(seed);
+    
 
     n=random_get()*ARRAY_LENGTH+1;
     

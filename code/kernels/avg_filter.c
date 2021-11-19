@@ -17,9 +17,6 @@
 #include "simple_random.h"
 #ifdef USER_AVG_FILTER
 #include "data/avg_filter_image.h"
-#else
-#define IMG_HEIGHT ARRAY_LENGTH
-#define IMG_WIDTH ARRAY_LENGTH
 #endif
 
 #define KERNEL_SIZE 3
@@ -84,10 +81,10 @@ static void avg_filter_routine(){
  * 
  * @param seed seed used to initialize random number generator  
  */
-void avg_filter(int seed){
+void avg_filter(){
     int i,j;
     #ifndef USER_AVG_FILTER
-    random_set_seed(seed);
+    
     for (i = 0; i < IMG_HEIGHT; i++){
         for (j = 0; j < IMG_WIDTH; j++){
             mat_in[i][j]=random_get()*256;

@@ -21,9 +21,6 @@
 
 #ifdef USER_IMAGE_CANNY
 #include "data/canny_image.h"
-#else
-#define IMG_HEIGHT ARRAY_LENGTH
-#define IMG_WIDTH ARRAY_LENGTH
 #endif
 
 #ifndef M_PI
@@ -323,12 +320,12 @@ static void canny_routine(){
  * 
  * @param seed seed used to initialize random number generator  
  */
-void canny(int seed){
+void canny(){
     int i;
     #ifndef USER_IMAGE_CANNY
     int j;
 
-    random_set_seed(seed);
+    
     for (i = 0; i < IMG_HEIGHT; i++){
         for (j = 0; j < IMG_WIDTH; j++){
             mat_in[i][j]=random_get()*256;
