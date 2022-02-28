@@ -104,7 +104,7 @@ foreach(PATH ${KERNELS_SRC})
     target_include_directories(${BENCH_NAME} PRIVATE ../include)
 endforeach()
 
-target_link_libraries(tcas m)
+target_link_libraries(acas m)
 target_link_libraries(canny m)
 target_link_libraries(ann m)
 
