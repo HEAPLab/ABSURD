@@ -52,8 +52,6 @@ static unsigned int crc_32_routine(){
 /**
  * @brief It computes CRC32 of a random byte array. The execution is repeated as many times
  * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
- * 
- * @param seed seed used to initialize random number generator  
  */
 void crc_32(){
     

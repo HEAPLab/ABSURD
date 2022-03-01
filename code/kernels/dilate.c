@@ -85,8 +85,6 @@ static void dilate_routine(){
 /**
  * @brief It performs Morphological dilation on a random binary matrix . The execution is repeated as many times
  * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
- * 
- * @param seed seed used to initialize random number generator  
  */
 void dilate(){
     int i;

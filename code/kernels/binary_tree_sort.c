@@ -106,8 +106,6 @@ static void binary_tree_sort_routine(){
 /**
  * @brief It performs binary tree sort on a random array . The execution is repeated as many times
  * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
- * 
- * @param seed seed used to initialize random number generator  
  */
 void binary_tree_sort(){
     int i;

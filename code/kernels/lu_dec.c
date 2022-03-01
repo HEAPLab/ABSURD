@@ -64,8 +64,6 @@ static void lu_dec_routine(){
 /**
  * @brief It performs LU decomposition using Doolittle algorithm on a random square matrix . The execution is repeated as many times
  * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
- * 
- * @param seed seed used to initialize random number generator  
  */
 void lu_dec(){
     int i,j;

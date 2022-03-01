@@ -48,8 +48,6 @@ static void fir_avg_routine(){
 /**
  * @brief It applies a moving average filter to an input signal. The execution is repeated as many times
  * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
- * 
- * @param seed seed used to initialize random number generator  
  */
 void fir_avg(){
     int i;

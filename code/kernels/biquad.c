@@ -61,8 +61,6 @@ static void biquad_routine(double a0, double a1, double a2, double b0, double b1
 /**
  * @brief It applies a biquad lowpass filter to an input signal. The execution is repeated as many times
  * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
- * 
- * @param seed seed used to initialize random number generator  
  */
 void biquad(){
     double alpha,w0,Q=0.5,f0=120,a0,a1,a2,b0,b1,b2;

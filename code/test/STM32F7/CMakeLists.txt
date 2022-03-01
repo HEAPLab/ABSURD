@@ -280,6 +280,6 @@ COMMAND arm-none-eabi-objcopy -O ihex ${BENCH_NAME}_stm32 ${BENCH_NAME}_stm32.he
 COMMAND arm-none-eabi-objcopy -O binary ${BENCH_NAME}_stm32 ${BENCH_NAME}_stm32.bin)
 endforeach()
 
-target_link_libraries(tcas_stm32 m)
+target_link_libraries(acas_stm32 m)
 target_link_libraries(canny_stm32 m)
 target_link_libraries(ann_stm32 m)

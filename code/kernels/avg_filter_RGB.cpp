@@ -83,8 +83,6 @@ static void avg_filter_RGB_routine(int channel){
 
 /**
  * @brief It performs average filtering on a random RGB image exploiting multiple threads.
- * 
- * @param seed seed used to initialize random number generator  
  */
 void avg_filter_RGB(){
 
