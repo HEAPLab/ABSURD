@@ -78,9 +78,10 @@ target_link_libraries(fir_avg m)
 target_link_libraries(dct m)
 target_link_libraries(gauss_filter m)
 
+SET(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} " -O0 -std=c++11 -pthread")
+
 if(MULTI_THREAD)
     find_package (Threads)
-    SET(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} " -O0 -std=c++11 -pthread")
 
     file(GLOB KERNELS_SRC_MT ../kernels/*.cpp)
     foreach(PATH ${KERNELS_SRC_MT})
@@ -107,6 +108,17 @@ endforeach()
 target_link_libraries(acas m)
 target_link_libraries(canny m)
 target_link_libraries(ann m)
+
+
+file(GLOB SYNTHETIC_SRC ../synthetic/*.cpp)
+foreach(PATH ${SYNTHETIC_SRC})
+    get_filename_component(BENCH_NAME ${PATH} NAME_WE)
+    message("Configuring ${BENCH_NAME}...")
+    configure_file( main.c.in mains/main_${BENCH_NAME}.c )
+    add_executable(${BENCH_NAME} mains/main_${BENCH_NAME}.c ${PATH})
+    target_include_directories(${BENCH_NAME} PRIVATE ../include)
+endforeach()
+
 
 IF(NUCLEO_F746ZG AND (CLASS_A OR CLASS_B))
     add_subdirectory(STM32F7)
