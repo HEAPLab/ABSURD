@@ -15,12 +15,12 @@
 *******************************************************************************/
 #include "user.h"
 #include "simple_random.h"
-
+#include "stdio.h"
 #define RESULT  1.15445
 
 MEASURE_GLOBAL_VARIABLES()
 
-static double abs(double x){
+static double dabs(double x){
     if(x<0) x=-x;
     return x;
 }
@@ -55,28 +55,22 @@ static double mc_integral_routine(double a, double b, int n){
 /**
  * @brief It computes integral of a function difficult to integrate analytically, exploiting Monte Carlo method. The execution is repeated as many times
  * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
- * 
- * @param seed seed used to initialize random number generator  
  */
 void mc_integral(){
 
     double res;
     int i,s;
+    
+    s=random_get()*ARRAY_LENGTH;
 
-    
-    
-
-    s = random_get()*ARRAY_LENGTH;
-    
-    
     MEASURE_START();
     
     for(i=0; i<ITERATIONS;i++){
      
-      res=mc_integral_routine(-1,2,s);
+      res=mc_integral_routine(-1,2,100*ARRAY_LENGTH*s);
 
     }
     MEASURE_STOP(); 
-
-    CHECK_RESULT(abs(res-RESULT)<0.01);
+    
+    CHECK_RESULT(dabs(res-RESULT)<0.1);
 }

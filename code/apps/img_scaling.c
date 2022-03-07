@@ -84,8 +84,6 @@ static void img_scaling_routine(){
 /**
  * @brief It performs image scaling on a random RGB image using bicubic interpolation. The execution is repeated as many times
  * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
- * 
- * @param seed seed used to initialize random number generator  
  */
 void img_scaling(){
     int i;
