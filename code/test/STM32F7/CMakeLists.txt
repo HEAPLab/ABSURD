@@ -19,6 +19,7 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
 SET(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS "")
 SET(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS "")
+SET(CMAKE_CXX_FLAGS "")
 
 enable_language(ASM)
 
@@ -32,6 +33,7 @@ set(BINUTILS_PATH "/usr/bin/gcc-arm-none-eabi-10-2020-q4-major/bin")
 set(CMAKE_C_COMPILER ${TOOLCHAIN_PREFIX}gcc)
 set(CMAKE_ASM_COMPILER ${CMAKE_C_COMPILER})
 set(CMAKE_CXX_COMPILER ${TOOLCHAIN_PREFIX}g++)
+SET(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} " -O0 -std=c++11")
 
 set(CMAKE_OBJCOPY ${ARM_TOOLCHAIN_DIR}/${TOOLCHAIN_PREFIX}objcopy CACHE INTERNAL "objcopy tool")
 set(CMAKE_SIZE_UTIL ${ARM_TOOLCHAIN_DIR}/${TOOLCHAIN_PREFIX}size CACHE INTERNAL "size tool")
@@ -83,7 +85,7 @@ foreach(PATH ${BASIC_SRC})
         -fstack-usage
         -MMD
         -MP
-        -Wall
+        -Werror
         --specs=nano.specs
         -c
         -O0
@@ -163,7 +165,7 @@ foreach(PATH ${KERNELS_SRC})
         -fstack-usage
         -MMD
         -MP
-        -Wall
+        -Werror
         --specs=nano.specs
         -c
         -O0
@@ -246,7 +248,7 @@ target_compile_definitions(${BENCH_NAME}_stm32 PRIVATE
     -fstack-usage
     -MMD
     -MP
-    -Wall
+    -Werror
     --specs=nano.specs
     -c
     -O0
@@ -283,3 +285,231 @@ endforeach()
 target_link_libraries(acas_stm32 m)
 target_link_libraries(canny_stm32 m)
 target_link_libraries(ann_stm32 m)
+
+file(GLOB KERNELS_SRC ../../apps/*.cpp)
+foreach(PATH ${KERNELS_SRC})
+get_filename_component(BENCH_NAME ${PATH} NAME_WE)
+message("Configuring STM32 ${BENCH_NAME}...")
+configure_file( Core/Src/stm32_main.c.in mains/main_${BENCH_NAME}.c )
+file(GLOB CORE_SRC ${CMAKE_SOURCE_DIR}/STM32F7/Core/Src/*.c)
+file(GLOB CORE_INC ${CMAKE_SOURCE_DIR}/STM32F7/Core/Inc/*.h)
+file(GLOB CORE_STR ${CMAKE_SOURCE_DIR}/STM32F7/Core/Startup/*.S)
+file(GLOB HAL_SRC ${CMAKE_SOURCE_DIR}/STM32F7/Drivers/STM32F7xx_HAL_Driver/Src/*.c)
+set_property(SOURCE ${CORE_STR} PROPERTY LANGUAGE C)
+
+set(CUBEMX_FILES ${CORE_SRC} ${CORE_INC} ${CORE_STR} ${HAL_SRC})
+
+
+add_executable(${BENCH_NAME}_stm32 mains/main_${BENCH_NAME}.c ${PATH} ${CUBEMX_FILES} ${RANDOM_SRC}) 
+target_compile_definitions(${BENCH_NAME}_stm32 PUBLIC -DNUCLEO_F746ZG)
+target_include_directories(${BENCH_NAME}_stm32 PRIVATE 
+                        "../../include"
+                        "${CMAKE_SOURCE_DIR}/STM32F7/Core/Inc"
+                        "${CMAKE_SOURCE_DIR}/STM32F7/Drivers/STM32F7xx_HAL_Driver/Inc"
+                        "${CMAKE_SOURCE_DIR}/STM32F7/Drivers/CMSIS/Device/ST/STM32F7xx/Include"
+                        "${CMAKE_SOURCE_DIR}/STM32F7/Drivers/CMSIS/Include")
+CHECK_INCLUDE_FILE("stm32f7xx_hal.h" x)
+CHECK_INCLUDE_FILE("main.h" z)
+CHECK_INCLUDE_FILE("user.h" y)
+message("Include:${x} ${y} ${z} ${CMAKE_SOURCE_DIR}/STM32F7/Drivers/STM32F7xx_HAL_Driver/Inc")
+target_compile_definitions(${BENCH_NAME}_stm32 PRIVATE
+    -DUSE_HAL_DRIVER
+    -DSTM32F746xx
+    )
+    target_compile_options(${BENCH_NAME}_stm32 PRIVATE
+    -mcpu=cortex-m7
+    
+    -mthumb
+    -mfpu=fpv5-sp-d16
+    -mfloat-abi=hard
+    
+    -fdata-sections
+    -ffunction-sections
+    -fstack-usage
+    -MMD
+    -MP
+    -Werror
+    --specs=nano.specs
+    -c
+    -O0
+    )
+
+target_link_options(${BENCH_NAME}_stm32 PRIVATE
+    -T${CMAKE_SOURCE_DIR}/STM32F7/STM32F746ZGTX_FLASH.ld --specs=nosys.specs 
+    -mcpu=cortex-m7
+    -mthumb
+    -mfpu=fpv5-sp-d16
+    -mfloat-abi=hard
+    -specs=nano.specs
+    -static
+    -lc -lm 
+
+
+    
+    -Wl,-Map=wcet_template.map,--cref
+    
+    
+    )
+    # Print executable size
+add_custom_command(TARGET ${BENCH_NAME}_stm32
+POST_BUILD
+COMMAND arm-none-eabi-size ${BENCH_NAME}_stm32)
+
+# Create hex file
+add_custom_command(TARGET ${BENCH_NAME}_stm32
+POST_BUILD
+COMMAND arm-none-eabi-objcopy -O ihex ${BENCH_NAME}_stm32 ${BENCH_NAME}_stm32.hex
+COMMAND arm-none-eabi-objcopy -O binary ${BENCH_NAME}_stm32 ${BENCH_NAME}_stm32.bin)
+endforeach()
+
+file(GLOB KERNELS_SRC ../../kernels/*[a-z].cpp)
+foreach(PATH ${KERNELS_SRC})
+get_filename_component(BENCH_NAME ${PATH} NAME_WE)
+message("Configuring STM32 ${BENCH_NAME}...")
+configure_file( Core/Src/stm32_main.c.in mains/main_${BENCH_NAME}.c )
+file(GLOB CORE_SRC ${CMAKE_SOURCE_DIR}/STM32F7/Core/Src/*.c)
+file(GLOB CORE_INC ${CMAKE_SOURCE_DIR}/STM32F7/Core/Inc/*.h)
+file(GLOB CORE_STR ${CMAKE_SOURCE_DIR}/STM32F7/Core/Startup/*.S)
+file(GLOB HAL_SRC ${CMAKE_SOURCE_DIR}/STM32F7/Drivers/STM32F7xx_HAL_Driver/Src/*.c)
+set_property(SOURCE ${CORE_STR} PROPERTY LANGUAGE C)
+
+set(CUBEMX_FILES ${CORE_SRC} ${CORE_INC} ${CORE_STR} ${HAL_SRC})
+
+
+add_executable(${BENCH_NAME}_stm32 mains/main_${BENCH_NAME}.c ${PATH} ${CUBEMX_FILES} ${RANDOM_SRC}) 
+target_compile_definitions(${BENCH_NAME}_stm32 PUBLIC -DNUCLEO_F746ZG)
+target_include_directories(${BENCH_NAME}_stm32 PRIVATE 
+                        "../../include"
+                        "${CMAKE_SOURCE_DIR}/STM32F7/Core/Inc"
+                        "${CMAKE_SOURCE_DIR}/STM32F7/Drivers/STM32F7xx_HAL_Driver/Inc"
+                        "${CMAKE_SOURCE_DIR}/STM32F7/Drivers/CMSIS/Device/ST/STM32F7xx/Include"
+                        "${CMAKE_SOURCE_DIR}/STM32F7/Drivers/CMSIS/Include")
+CHECK_INCLUDE_FILE("stm32f7xx_hal.h" x)
+CHECK_INCLUDE_FILE("main.h" z)
+CHECK_INCLUDE_FILE("user.h" y)
+message("Include:${x} ${y} ${z} ${CMAKE_SOURCE_DIR}/STM32F7/Drivers/STM32F7xx_HAL_Driver/Inc")
+target_compile_definitions(${BENCH_NAME}_stm32 PRIVATE
+    -DUSE_HAL_DRIVER
+    -DSTM32F746xx
+    )
+    target_compile_options(${BENCH_NAME}_stm32 PRIVATE
+    -mcpu=cortex-m7
+    
+    -mthumb
+    -mfpu=fpv5-sp-d16
+    -mfloat-abi=hard
+    
+    -fdata-sections
+    -ffunction-sections
+    -fstack-usage
+    -MMD
+    -MP
+    -Werror
+    --specs=nano.specs
+    -c
+    -O0
+    )
+
+target_link_options(${BENCH_NAME}_stm32 PRIVATE
+    -T${CMAKE_SOURCE_DIR}/STM32F7/STM32F746ZGTX_FLASH.ld --specs=nosys.specs 
+    -mcpu=cortex-m7
+    -mthumb
+    -mfpu=fpv5-sp-d16
+    -mfloat-abi=hard
+    -specs=nano.specs
+    -static
+    -lc -lm 
+
+
+    
+    -Wl,-Map=wcet_template.map,--cref
+    
+    
+    )
+    # Print executable size
+add_custom_command(TARGET ${BENCH_NAME}_stm32
+POST_BUILD
+COMMAND arm-none-eabi-size ${BENCH_NAME}_stm32)
+
+# Create hex file
+add_custom_command(TARGET ${BENCH_NAME}_stm32
+POST_BUILD
+COMMAND arm-none-eabi-objcopy -O ihex ${BENCH_NAME}_stm32 ${BENCH_NAME}_stm32.hex
+COMMAND arm-none-eabi-objcopy -O binary ${BENCH_NAME}_stm32 ${BENCH_NAME}_stm32.bin)
+endforeach()
+
+file(GLOB KERNELS_SRC ../../synthetic/*.cpp)
+foreach(PATH ${KERNELS_SRC})
+get_filename_component(BENCH_NAME ${PATH} NAME_WE)
+message("Configuring STM32 ${BENCH_NAME}...")
+configure_file( Core/Src/stm32_main.c.in mains/main_${BENCH_NAME}.c )
+file(GLOB CORE_SRC ${CMAKE_SOURCE_DIR}/STM32F7/Core/Src/*.c)
+file(GLOB CORE_INC ${CMAKE_SOURCE_DIR}/STM32F7/Core/Inc/*.h)
+file(GLOB CORE_STR ${CMAKE_SOURCE_DIR}/STM32F7/Core/Startup/*.S)
+file(GLOB HAL_SRC ${CMAKE_SOURCE_DIR}/STM32F7/Drivers/STM32F7xx_HAL_Driver/Src/*.c)
+set_property(SOURCE ${CORE_STR} PROPERTY LANGUAGE C)
+
+set(CUBEMX_FILES ${CORE_SRC} ${CORE_INC} ${CORE_STR} ${HAL_SRC})
+
+
+add_executable(${BENCH_NAME}_stm32 mains/main_${BENCH_NAME}.c ${PATH} ${CUBEMX_FILES}) 
+target_compile_definitions(${BENCH_NAME}_stm32 PUBLIC -DNUCLEO_F746ZG)
+target_include_directories(${BENCH_NAME}_stm32 PRIVATE 
+                        "../../include"
+                        "${CMAKE_SOURCE_DIR}/STM32F7/Core/Inc"
+                        "${CMAKE_SOURCE_DIR}/STM32F7/Drivers/STM32F7xx_HAL_Driver/Inc"
+                        "${CMAKE_SOURCE_DIR}/STM32F7/Drivers/CMSIS/Device/ST/STM32F7xx/Include"
+                        "${CMAKE_SOURCE_DIR}/STM32F7/Drivers/CMSIS/Include")
+CHECK_INCLUDE_FILE("stm32f7xx_hal.h" x)
+CHECK_INCLUDE_FILE("main.h" z)
+CHECK_INCLUDE_FILE("user.h" y)
+message("Include:${x} ${y} ${z} ${CMAKE_SOURCE_DIR}/STM32F7/Drivers/STM32F7xx_HAL_Driver/Inc")
+target_compile_definitions(${BENCH_NAME}_stm32 PRIVATE
+    -DUSE_HAL_DRIVER
+    -DSTM32F746xx
+    )
+    target_compile_options(${BENCH_NAME}_stm32 PRIVATE
+    -mcpu=cortex-m7
+    
+    -mthumb
+    -mfpu=fpv5-sp-d16
+    -mfloat-abi=hard
+    
+    -fdata-sections
+    -ffunction-sections
+    -fstack-usage
+    -MMD
+    -MP
+    -Werror
+    --specs=nano.specs
+    -c
+    -O0
+    )
+
+target_link_options(${BENCH_NAME}_stm32 PRIVATE
+    -T${CMAKE_SOURCE_DIR}/STM32F7/STM32F746ZGTX_FLASH.ld --specs=nosys.specs 
+    -mcpu=cortex-m7
+    -mthumb
+    -mfpu=fpv5-sp-d16
+    -mfloat-abi=hard
+    -specs=nano.specs
+    -static
+    -lc -lm 
+
+
+    
+    -Wl,-Map=wcet_template.map,--cref
+    
+    
+    )
+    # Print executable size
+add_custom_command(TARGET ${BENCH_NAME}_stm32
+POST_BUILD
+COMMAND arm-none-eabi-size ${BENCH_NAME}_stm32)
+
+# Create hex file
+add_custom_command(TARGET ${BENCH_NAME}_stm32
+POST_BUILD
+COMMAND arm-none-eabi-objcopy -O ihex ${BENCH_NAME}_stm32 ${BENCH_NAME}_stm32.hex
+COMMAND arm-none-eabi-objcopy -O binary ${BENCH_NAME}_stm32 ${BENCH_NAME}_stm32.bin)
+endforeach()
