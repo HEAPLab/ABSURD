@@ -22,7 +22,9 @@ extern "C" {
 #include <vector>
 #include <list>
 
-
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 
 #ifdef USER_JPEG_COMPRESS
 #include "data/jpeg_image.h"
@@ -522,8 +524,7 @@ static void jpeg_compress_routine(){
 }
 
 /**
- * @brief It performs jpeg compression on a random RGB image. The execution is repeated as many times
- * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
+ * @brief It performs jpeg compression on a random RGB image. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 extern "C" void jpeg_compress(){
 #ifndef USER_JPEG_COMPRESS
@@ -542,9 +543,9 @@ extern "C" void jpeg_compress(){
     
 
     MEASURE_START();
-    for(int i=0; i<ITERATIONS;i++){
-        jpeg_compress_routine();
-    }
+    
+    jpeg_compress_routine();
+    
     MEASURE_STOP();
 
 

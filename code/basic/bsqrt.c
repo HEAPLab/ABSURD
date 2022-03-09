@@ -48,7 +48,7 @@ static double bsqrt_routine(int s){
 }
 
 /**
- * @brief It computes square root of a random double using Babylonian algorithm . The execution is repeated as many times
+ * @brief It computes square root of a random double using Babylonian algorithm. The execution is repeated as many times
  * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void bsqrt(){
@@ -62,13 +62,12 @@ void bsqrt(){
 
 
     MEASURE_START();
-    
-    for(i=0; i<1;i++){
+    for(i=0; i<ITERATIONS;i++){
         res=bsqrt_routine(s);
     }
     MEASURE_STOP();
  
     
-    CHECK_RESULT((res!=-1 && s>=0) && dabs(res*res-s)<0.01);
+    CHECK_RESULT((res!=-1 && s>=0) && dabs(res*res-s)<CLASS_PRECISION);
     
 }

@@ -39,8 +39,7 @@ static void bubble_sort_routine(){
 }
 
 /**
- * @brief It performs bubble sort on a random array . The execution is repeated as many times
- * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
+ * @brief It performs bubble sort on a random array . The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void bubble_sort(){
     int i;
@@ -48,9 +47,9 @@ void bubble_sort(){
     random_get_array(array,ARRAY_LENGTH);
     
     MEASURE_START();
-    for(i=0; i<ITERATIONS;i++){
-        bubble_sort_routine();
-    }
+    
+    bubble_sort_routine();
+    
     MEASURE_STOP();
 
     for(i=0;i<ARRAY_LENGTH-1;i++){

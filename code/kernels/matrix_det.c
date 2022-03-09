@@ -77,8 +77,7 @@ static double matrix_det_routine(){
 }
 
 /**
- * @brief It computes determinant of  a random square matrix exploiting LU decomposition . The execution is repeated as many times
- * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
+ * @brief It computes determinant of  a random square matrix exploiting LU decomposition . The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void matrix_det(){
     int i;
@@ -90,9 +89,9 @@ void matrix_det(){
     }
 
     MEASURE_START();
-    for(i=0; i<ITERATIONS;i++){
-        matrix_det_routine();
-    }
+    
+    matrix_det_routine();
+    
     MEASURE_STOP();
 
 

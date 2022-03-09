@@ -104,15 +104,15 @@ void avg_filter_RGB(){
     }
 
     MEASURE_START();
-    for(int i=0; i<ITERATIONS;i++){
-        std::thread r(avg_filter_RGB_routine,0);
-        std::thread g(avg_filter_RGB_routine,1);
-        std::thread b(avg_filter_RGB_routine,2);
+    
+    std::thread r(avg_filter_RGB_routine,0);
+    std::thread g(avg_filter_RGB_routine,1);
+    std::thread b(avg_filter_RGB_routine,2);
 
-        r.join();
-        g.join();
-        b.join();
-    }
+    r.join();
+    g.join();
+    b.join();
+    
     MEASURE_STOP();
 
 }

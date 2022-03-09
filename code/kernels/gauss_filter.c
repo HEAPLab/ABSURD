@@ -107,8 +107,7 @@ static void gauss_filter_routine(){
 }
 
 /**
- * @brief It performs gaussian filtering on a random grayscale image . The execution is repeated as many times
- * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
+ * @brief It performs gaussian filtering on a random grayscale image . The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void gauss_filter(){
     int i;
@@ -125,9 +124,9 @@ void gauss_filter(){
     gaussian_kernel_init();
     
     MEASURE_START();
-    for(i=0; i<ITERATIONS;i++){
-        gauss_filter_routine();
-    }
+    
+    gauss_filter_routine();
+    
     MEASURE_STOP();
 
 }

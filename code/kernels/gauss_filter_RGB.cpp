@@ -107,8 +107,7 @@ static void gauss_filter_RGB_routine(int channel){
 }
 
 /**
- * @brief It performs gaussian filtering on a random grayscale image . The execution is repeated as many times
- * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
+ * @brief It performs gaussian filtering on a random grayscale image . The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void gauss_filter_RGB(){
     #ifndef USER_GAUSS_FILTER_RGB
@@ -125,15 +124,15 @@ void gauss_filter_RGB(){
     gaussian_kernel_init();
     
     MEASURE_START();
-    for(int i=0; i<ITERATIONS;i++){
-        std::thread r(gauss_filter_RGB_routine,0);
-        std::thread g(gauss_filter_RGB_routine,1);
-        std::thread b(gauss_filter_RGB_routine,2);
+    
+    std::thread r(gauss_filter_RGB_routine,0);
+    std::thread g(gauss_filter_RGB_routine,1);
+    std::thread b(gauss_filter_RGB_routine,2);
 
-        r.join();
-        g.join();
-        b.join();
-    }
+    r.join();
+    g.join();
+    b.join();
+    
     MEASURE_STOP();
 
 }

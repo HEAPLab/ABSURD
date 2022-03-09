@@ -48,31 +48,6 @@ static double temp_out[HIDDEN_LAYERS][HIDDEN_NODES];
 static double delta_out[OUT_NODES];
 static double delta_hidden[HIDDEN_LAYERS][HIDDEN_NODES];
 
-static void shuffle(){
-    int i;
-     /*shuffle data*/
-    for(i=ARRAY_LENGTH-1;i>=0;i--){
-        int x,j;
-
-        j= random_get()*ARRAY_LENGTH;
-
-        for(x=0;x<IN_NODES;x++){
-            double val;
-            val=train_in[i][x];
-            train_in[i][x]=train_in[j][x];
-            train_in[j][x]=val;
-        }
-    
-        for(x=0;x<OUT_NODES;x++){
-            double val;
-            val=train_out[i][x];
-            train_out[i][x]=train_out[j][x];
-            train_out[j][x]=val;
-        }
-        
-    }
-}
-
 static double sigmoid(double x){
     return 1/(1+exp(-x));
 }
@@ -146,7 +121,6 @@ static void forward_pass(int train_idx){
     }
     for(y=0;y<OUT_NODES;y++){
         double activation;
-        int x;
 
         activation=out_bias[y];
         for(h=0;h<HIDDEN_NODES;h++){
@@ -229,19 +203,15 @@ static void ann_routine(){
 }
 
 /**
- * @brief It trains a neural network on a random dataset. The execution is repeated as many times
- * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
+ * @brief It trains a neural network on a random dataset. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void ann(){
-    int i;
 
-    
-    
     init_train_data();
 
     MEASURE_START()
-    for(i=0; i<ITERATIONS;i++){
-        ann_routine();    
-    }
+    
+    ann_routine();    
+    
     MEASURE_STOP()
 }

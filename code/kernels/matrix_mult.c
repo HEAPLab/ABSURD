@@ -41,8 +41,7 @@ static void matrix_mult_routine(){
 }
 
 /**
- * @brief It performs matrices multiplication between two random matrices . The execution is repeated as many times
- * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
+ * @brief It performs matrices multiplication between two random matrices . The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void matrix_mult(){
     int i;
@@ -54,9 +53,9 @@ void matrix_mult(){
     }
 
     MEASURE_START();
-    for(i=0; i<ITERATIONS;i++){
-        matrix_mult_routine();
-    }
+    
+    matrix_mult_routine();
+    
     MEASURE_STOP();
 
 

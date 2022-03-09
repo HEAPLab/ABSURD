@@ -62,8 +62,7 @@ static void lu_dec_routine(){
 }
 
 /**
- * @brief It performs LU decomposition using Doolittle algorithm on a random square matrix . The execution is repeated as many times
- * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
+ * @brief It performs LU decomposition using Doolittle algorithm on a random square matrix . The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void lu_dec(){
     int i,j;
@@ -83,9 +82,9 @@ void lu_dec(){
     
 
     MEASURE_START();
-    for(i=0; i<ITERATIONS;i++){
-        lu_dec_routine();
-    }
+
+    lu_dec_routine();
+    
     MEASURE_STOP();
 
 }

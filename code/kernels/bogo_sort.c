@@ -61,8 +61,7 @@ static void bogo_sort_routine(){
 }
 
 /**
- * @brief It performs bogo sort on a random array . The execution is repeated as many times
- * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
+ * @brief It performs bogo sort on a random array . The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void bogo_sort(){
     int i;
@@ -70,9 +69,9 @@ void bogo_sort(){
     random_get_array(array,BOGO_LENGTH);
     
     MEASURE_START();
-    for(i=0; i<ITERATIONS;i++){
-        bogo_sort_routine();
-    }
+    
+    bogo_sort_routine();
+    
     MEASURE_STOP();
    
 

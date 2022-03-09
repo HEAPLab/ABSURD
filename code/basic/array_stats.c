@@ -87,8 +87,7 @@ static void array_stats_routine(){
 }
 
 /**
- * @brief It computes some basic statistics on two random arrays . The execution is repeated as many times
- * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
+ * @brief It computes some basic statistics on two random arrays . The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void array_stats(){
 
@@ -102,10 +101,8 @@ void array_stats(){
     
     
     MEASURE_START();
-    
-    for(i=0; i<ITERATIONS;i++){
-        array_stats_routine();
-    }
+
+    array_stats_routine();
     MEASURE_STOP();
 
 }

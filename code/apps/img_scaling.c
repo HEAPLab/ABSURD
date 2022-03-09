@@ -82,8 +82,7 @@ static void img_scaling_routine(){
 }
 
 /**
- * @brief It performs image scaling on a random RGB image using bicubic interpolation. The execution is repeated as many times
- * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
+ * @brief It performs image scaling on a random RGB image using bicubic interpolation. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void img_scaling(){
     int i;
@@ -99,9 +98,9 @@ void img_scaling(){
     
 
     MEASURE_START();
-    for(i=0; i<ITERATIONS;i++){
-        img_scaling_routine();
-    }
+    
+    img_scaling_routine();
+    
     MEASURE_STOP();
 
 }

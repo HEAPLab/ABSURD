@@ -50,8 +50,7 @@ static unsigned int crc_32_routine(){
 }
 
 /**
- * @brief It computes CRC32 of a random byte array. The execution is repeated as many times
- * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
+ * @brief It computes CRC32 of a random byte array. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void crc_32(){
     
@@ -63,9 +62,9 @@ void crc_32(){
 
  
     MEASURE_START();
-    for(i=0; i<ITERATIONS;i++){
-        crc_32_routine();
-    }
+    
+    crc_32_routine();
+    
     MEASURE_STOP();
 
     

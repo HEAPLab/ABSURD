@@ -31,7 +31,7 @@ void dist_exp(){
 
     std::mt19937 gen(seed);
 
-    std::exponential_distribution<> distrib(1./ARRAY_LENGTH);
+    std::exponential_distribution<> distrib(1./(ITERATIONS*2));
     int nr = distrib(gen);
     float res = 0;
 

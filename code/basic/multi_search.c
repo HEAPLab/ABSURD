@@ -38,8 +38,7 @@ static int multi_search_routine(double n){
 }
 
 /**
- * @brief It searches a random number in a random  matrix . The execution is repeated as many times
- * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
+ * @brief It searches a random number in a random  matrix . The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void multi_search(){
      int i,x,y,res;
@@ -54,9 +53,9 @@ void multi_search(){
     y=random_get()*MATRIX_SIZE;
 
     MEASURE_START();
-    for(i=0; i<ITERATIONS;i++){
-        res=multi_search_routine(matrix[x][y]);
-    }
+    
+    res=multi_search_routine(matrix[x][y]);
+    
     MEASURE_STOP();
 
     CHECK_RESULT(res);

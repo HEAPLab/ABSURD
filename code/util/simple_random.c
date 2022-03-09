@@ -91,7 +91,7 @@ static void quick_sort(double array[],int low,int high){
     
 }
 void random_get_sarray(double a[], int len){
-    int i,min;
+    int i;
 
     for(i = 0;i < len; i++){
         a[i] = random_get();

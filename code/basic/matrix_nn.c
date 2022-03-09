@@ -39,8 +39,7 @@ static int matrix_nn_routine(){
 }
 
 /**
- * @brief It counts the non negative numbers in a random square matrix . The execution is repeated as many times
- * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
+ * @brief It counts the non negative numbers in a random square matrix . The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void matrix_nn(){
     int i,j,res;
@@ -52,9 +51,9 @@ void matrix_nn(){
     }
 
     MEASURE_START();
-    for(i=0; i<ITERATIONS;i++){
-        res=matrix_nn_routine();
-    }
+    
+    res=matrix_nn_routine();
+    
     MEASURE_STOP();
 
     for(i=0; i<MATRIX_SIZE;i++){

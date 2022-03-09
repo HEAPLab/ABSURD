@@ -125,8 +125,7 @@ static void knn_routine(int k,double data_points[][5], int data_len, std::vector
 }
 
 /**
- * @brief It computes complex roots of a random quadratic equation . The execution is repeated as many times
- * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
+ * @brief It computes complex roots of a random quadratic equation . The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 extern "C" void knn(){
     std::vector<DataPoint> observations;
@@ -136,9 +135,8 @@ extern "C" void knn(){
     }
     MEASURE_START();
     
-    for(int i=0; i<ITERATIONS;i++){
-        knn_routine(5,iris_dataset,IRIS_DATASET_LEN,observations);
-    }
+    knn_routine(5,iris_dataset,IRIS_DATASET_LEN,observations);
+    
     MEASURE_STOP();
 
     

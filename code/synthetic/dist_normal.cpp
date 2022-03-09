@@ -16,7 +16,7 @@
 #include "user.h"
 
 #include <random>
-
+#include <iostream>
 extern "C" void dist_normal();
 
 UINT32_T seed;
@@ -34,7 +34,7 @@ void dist_normal(){
     std::normal_distribution<> distrib(ARRAY_LENGTH, ARRAY_LENGTH/10.);
     int nr = distrib(gen);
     float res = 0;
-
+    
     MEASURE_START();
     
     for(int i=0; i<nr; i++){
@@ -42,7 +42,6 @@ void dist_normal(){
     }
 
     MEASURE_STOP();
- 
     
     CHECK_RESULT(res == nr);
     

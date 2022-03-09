@@ -107,8 +107,7 @@ static void fft_routine(){
 }
 
 /**
- * @brief It computes FFT of a random array exploiting Cooley–Tukey algorithm. The execution is repeated as many times
- * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
+ * @brief It computes FFT of a random array exploiting Cooley–Tukey algorithm. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void fft(){
     int i;
@@ -123,9 +122,9 @@ void fft(){
     }
 
     MEASURE_START();
-    for(i=0; i<ITERATIONS;i++){
-        fft_routine();
-    }
+    
+    fft_routine();
+    
     MEASURE_STOP();
 
 

@@ -83,8 +83,7 @@ static void dilate_routine(){
 }
 
 /**
- * @brief It performs Morphological dilation on a random binary matrix . The execution is repeated as many times
- * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
+ * @brief It performs Morphological dilation on a random binary matrix . The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void dilate(){
     int i;
@@ -97,9 +96,9 @@ void dilate(){
     #endif
     
     MEASURE_START();
-    for(i=0; i<ITERATIONS;i++){
-        dilate_routine();
-    }
+    
+    dilate_routine();
+    
     MEASURE_STOP();
     
 }

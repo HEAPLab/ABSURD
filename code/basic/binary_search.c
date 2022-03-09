@@ -42,7 +42,7 @@ static int binary_search_routine(double n){
 }
 
 /**
- * @brief It performs binary search of a random number on a random array . The execution is repeated as many times
+ * @brief It performs binary search of a random number on a random array. The execution is repeated as many times
  * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void binary_search(){

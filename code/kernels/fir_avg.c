@@ -46,8 +46,7 @@ static void fir_avg_routine(){
 }
 
 /**
- * @brief It applies a moving average filter to an input signal. The execution is repeated as many times
- * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
+ * @brief It applies a moving average filter to an input signal. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void fir_avg(){
     int i;
@@ -63,9 +62,9 @@ void fir_avg(){
 
     
     MEASURE_START();
-    for(i=0; i<ITERATIONS;i++){
-        fir_avg_routine();
-    }
+    
+    fir_avg_routine();
+    
     MEASURE_STOP();
 
 }

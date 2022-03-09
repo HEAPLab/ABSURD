@@ -315,8 +315,7 @@ static void canny_routine(){
 
 }
 /**
- * @brief It performs canny algorithm on a random grayscale image . The execution is repeated as many times
- * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
+ * @brief It performs canny algorithm on a random grayscale image . The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void canny(){
     int i;
@@ -332,9 +331,9 @@ void canny(){
     #endif
     
     MEASURE_START();
-    for(i=0; i<ITERATIONS;i++){
-        canny_routine();
-    }
+    
+    canny_routine();
+    
     MEASURE_STOP();
 
 }

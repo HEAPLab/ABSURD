@@ -76,8 +76,7 @@ static void avg_filter_routine(){
 }
 
 /**
- * @brief It performs average filtering on a random grayscale image . The execution is repeated as many times
- * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
+ * @brief It performs average filtering on a random grayscale image . The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void avg_filter(){
     int i,j;
@@ -97,9 +96,9 @@ void avg_filter(){
     }
 
     MEASURE_START();
-    for(i=0; i<ITERATIONS;i++){
-        avg_filter_routine();
-    }
+    
+    avg_filter_routine();
+    
     MEASURE_STOP();
 
 }

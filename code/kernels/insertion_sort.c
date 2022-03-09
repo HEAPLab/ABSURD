@@ -39,8 +39,7 @@ static void insertion_sort_routine(){
 }
 
 /**
- * @brief It performs insertion sort on a random array . The execution is repeated as many times
- * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
+ * @brief It performs insertion sort on a random array . The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void insertion_sort(){
     int i;
@@ -48,9 +47,9 @@ void insertion_sort(){
     random_get_array(array,ARRAY_LENGTH);
 
     MEASURE_START();
-    for(i=0; i<ITERATIONS;i++){
-        insertion_sort_routine();
-    }
+    
+    insertion_sort_routine();
+    
     MEASURE_STOP();
     
     for(i=0;i<ARRAY_LENGTH-1;i++){

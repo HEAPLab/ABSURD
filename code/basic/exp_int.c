@@ -62,12 +62,11 @@ static double exp_int_routine(double x, int n){
 }
 
 /**
- * @brief It computes the value of the exponential integral function for a random number . The execution is repeated as many times
- * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
+ * @brief It computes the value of the exponential integral function for a random number. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void exp_int(){
-    int i,n;
-    double x,res;
+    int n;
+    double res;
     
     
     do{
@@ -79,11 +78,10 @@ void exp_int(){
 
     MEASURE_START();
     
-    for(i=0; i<1;i++){
-        res=exp_int_routine(0.7,n);
-    }
+    res=exp_int_routine(0.7,n);
+   
     MEASURE_STOP();
    
-    CHECK_RESULT(dabs(res-RESULT)<0.01);
+    CHECK_RESULT(dabs(res-RESULT)<CLASS_PRECISION);
     
 }

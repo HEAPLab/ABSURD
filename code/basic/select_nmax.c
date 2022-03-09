@@ -50,8 +50,7 @@ static double select_nmax_routine(double a[], int pos){
 }
 
 /**
- * @brief It searches for the random n-th greater element in a random array . The execution is repeated as many times
- * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
+ * @brief It searches for the random n-th greater element in a random array . The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void select_nmax(){
     int pos,i,check;
@@ -63,10 +62,7 @@ void select_nmax(){
     pos=ARRAY_LENGTH * random_get(); 
     MEASURE_START();
     
-    for(i=0; i<ITERATIONS;i++){
-        res=select_nmax_routine(array,pos);
-    }
-
+    res=select_nmax_routine(array,pos);
     
     MEASURE_STOP();
     check=0;

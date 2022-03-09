@@ -53,24 +53,17 @@ static double mc_integral_routine(double a, double b, int n){
 }
 
 /**
- * @brief It computes integral of a function difficult to integrate analytically, exploiting Monte Carlo method. The execution is repeated as many times
- * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
+ * @brief It computes integral of a function difficult to integrate analytically, exploiting Monte Carlo method. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void mc_integral(){
 
     double res;
-    int i,s;
-    
-    s=random_get()*ARRAY_LENGTH;
+    int i;
 
     MEASURE_START();
-    
-    for(i=0; i<ITERATIONS;i++){
-     
-      res=mc_integral_routine(-1,2,100*ARRAY_LENGTH*s);
 
-    }
+    res=mc_integral_routine(-1,2,ITERATIONS);
     MEASURE_STOP(); 
     
-    CHECK_RESULT(dabs(res-RESULT)<0.1);
+    CHECK_RESULT(dabs(res-RESULT)<CLASS_PRECISION);
 }

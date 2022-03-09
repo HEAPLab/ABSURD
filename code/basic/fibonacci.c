@@ -43,8 +43,7 @@ static long int fibonacci_routine(long int n){
 }
 
 /**
- * @brief It computes a random term of the Fibonacci's sequence . The execution is repeated as many times
- * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
+ * @brief It computes a random term of the Fibonacci's sequence . The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void fibonacci(){
     int i;
@@ -53,9 +52,8 @@ void fibonacci(){
     n=(long int) N * random_get();
     
     MEASURE_START();
-    for(i=0; i<ITERATIONS;i++){
-        res=fibonacci_routine(n);
-    }
+    
+    res=fibonacci_routine(n);
     
     MEASURE_STOP();
 

@@ -353,8 +353,7 @@ static void MD5_memset (POINTER output, int value, unsigned int len)
 
 
 /**
- * @brief It computes the md5 of a random bytes sequence. The execution is repeated as many times
- * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
+ * @brief It computes the md5 of a random bytes sequence. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void md5(){
     int i;
@@ -365,11 +364,11 @@ void md5(){
     MD_CTX context;
 
     MEASURE_START();
-    for(i=0; i<ITERATIONS;i++){
-        MDInit (&context);
-        MDUpdate (&context, bytes_in, ARRAY_LENGTH);
-        MDFinal (digest, &context);
-    }
+    
+    MDInit (&context);
+    MDUpdate (&context, bytes_in, ARRAY_LENGTH);
+    MDFinal (digest, &context);
+    
     MEASURE_STOP();
 
 }

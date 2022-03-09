@@ -99,7 +99,7 @@ static int eq_root_routine(double a, double b, double c){
 }
 
 /**
- * @brief It computes complex roots of a random quadratic equation . The execution is repeated as many times
+ * @brief It computes complex roots of a random quadratic equation. The execution is repeated as many times
  * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void eq_root(){
@@ -116,8 +116,7 @@ void eq_root(){
 
   
     MEASURE_START();
-    
-    for(i=0; i<ITERATIONS;i++){
+    for (i=0;i<ITERATIONS;i++){
         res=eq_root_routine(a,b,c);
     }
     MEASURE_STOP();
@@ -128,7 +127,7 @@ void eq_root(){
     }
     else if(res==1){
         double x=roots[0].re;
-        CHECK_RESULT(a==0.0 && fabs(b*x+c)<1e-10);
+        CHECK_RESULT(a==0.0 && fabs(b*x+c)<CLASS_PRECISION);
     }
     else if(res==-1){
         CHECK_RESULT(a==0 && b==0 && c!=0);
@@ -153,7 +152,7 @@ void eq_root(){
         eq=complex_sum(eq,b_cmp);
         eq=complex_sum(eq,c_cmp);
         
-        CHECK_RESULT(fabs(eq.re)<1e-10 && fabs(eq.im)<1e-10);
+        CHECK_RESULT(fabs(eq.re)<CLASS_PRECISION && fabs(eq.im)<CLASS_PRECISION);
 
         a_cmp.re=a;
         a_cmp.im=0;
@@ -173,7 +172,7 @@ void eq_root(){
         eq=complex_sum(eq,b_cmp);
         eq=complex_sum(eq,c_cmp);
 
-        CHECK_RESULT(fabs(eq.re)<1e-10 && fabs(eq.im)<1e-10);
+        CHECK_RESULT(fabs(eq.re)<1e-10 && fabs(eq.im)<CLASS_PRECISION);
     }
     
 

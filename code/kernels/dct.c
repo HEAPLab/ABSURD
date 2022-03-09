@@ -46,8 +46,7 @@ static void dct_routine(){
 }
 
 /**
- * @brief It computes DCT of a random array. The execution is repeated as many times
- * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
+ * @brief It computes DCT of a random array. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void dct(){
     int i;
@@ -56,9 +55,9 @@ void dct(){
     random_get_array(array_in,ARRAY_LENGTH);
 
     MEASURE_START();
-    for(i=0; i<ITERATIONS;i++){
-        dct_routine();
-    }
+    
+    dct_routine();
+    
     MEASURE_STOP();
 
 

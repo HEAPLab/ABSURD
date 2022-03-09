@@ -119,8 +119,7 @@ static int matrix_inv_routine(){
 }
 
 /**
- * @brief It computes, if possible, the inverse of a random square matrix. The execution is repeated as many times
- * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
+ * @brief It computes, if possible, the inverse of a random square matrix. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void matrix_inv(){
     int i;
@@ -133,9 +132,9 @@ void matrix_inv(){
 
 
     MEASURE_START();
-    for(i=0; i<ITERATIONS;i++){
-        matrix_inv_routine();
-    }
+    
+    matrix_inv_routine();
+    
     MEASURE_STOP();
 
 

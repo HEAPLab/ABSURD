@@ -58,8 +58,7 @@ static void quick_sort_routine(int low,int high){
 }
 
 /**
- * @brief It performs quick sort on a random array . The execution is repeated as many times
- * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
+ * @brief It performs quick sort on a random array . The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void quick_sort(){
     int i;
@@ -68,9 +67,9 @@ void quick_sort(){
     random_get_array(array,ARRAY_LENGTH);
 
     MEASURE_START();
-    for(i=0; i<ITERATIONS;i++){
-        quick_sort_routine(0,ARRAY_LENGTH-1);
-    }
+    
+    quick_sort_routine(0,ARRAY_LENGTH-1);
+    
     MEASURE_STOP();
 
     for(i=0;i<ARRAY_LENGTH-1;i++){

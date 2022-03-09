@@ -31,7 +31,7 @@ void dist_uniform(){
 
     std::mt19937 gen(seed);
 
-    std::uniform_int_distribution<> distrib(1, ARRAY_LENGTH);
+    std::uniform_int_distribution<> distrib(1, ITERATIONS);
     int nr = distrib(gen);
     int res = 0;
 
@@ -42,7 +42,6 @@ void dist_uniform(){
     }
 
     MEASURE_STOP();
- 
     
     CHECK_RESULT(res == nr);
     
