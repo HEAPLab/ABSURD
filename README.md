@@ -1,3 +1,3 @@
-# HEAP WCET Benchmarks
+# ABSURD: Another Benchmark Suite for Real-Time Embedded Systems
 
 TODO...
