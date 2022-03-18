@@ -1,0 +1,8 @@
+Estimated distribution
+----------------------
+Location (\mu): 47.3391
+Scale (\sg):    2.7762
+Shape (\xi):    -0.136586
+
+WCOT:          57
+WCET @ 10^-9:  66.4659
