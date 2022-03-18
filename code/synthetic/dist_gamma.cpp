@@ -33,7 +33,7 @@ void dist_gamma(){
 
     std::gamma_distribution<> distrib(ARRAY_LENGTH, 1);
     int nr = distrib(gen);
-    float res = 0;
+    int res = 0;
 
     MEASURE_START();
     
