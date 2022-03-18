@@ -13,11 +13,12 @@ features and goals:
 * Written in C or C++ 
 * Do not need any external library
 * The use of the C or C++ standard library is limited to the necessary cases
-* Inputs are never hard-coded and can be provided by the user or randomly
-  generated
+* Input sizes and values are never hard-coded and can be provided by the user or
+  randomly generated
 * Cover a wide range of systems, from a small microcontroller to a modern
   multi-core processor
-
+* When possible, provide an automatic check for the generated output to verify the
+  correct execution of the benchmark
 
 ### List of benchmarks
 Check the list of benchmarks with their features
