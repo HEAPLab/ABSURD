@@ -44,6 +44,8 @@ if(WITH_ANSI)
     message("Compiling using ANSI C standard")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0  -ansi  -pedantic")
     add_definitions(-DWITH_ANSI)
+else()
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0")
 endif(WITH_ANSI)
 
 set(RANDOM_SRC "../util/simple_random.c")

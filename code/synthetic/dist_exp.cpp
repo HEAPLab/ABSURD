@@ -33,7 +33,7 @@ void dist_exp(){
 
     std::exponential_distribution<> distrib(1./(ITERATIONS*2));
     int nr = distrib(gen);
-    float res = 0;
+    int res = 0;
 
     MEASURE_START();
     

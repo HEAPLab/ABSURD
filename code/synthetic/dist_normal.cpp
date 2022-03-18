@@ -33,7 +33,7 @@ void dist_normal(){
 
     std::normal_distribution<> distrib(ARRAY_LENGTH, ARRAY_LENGTH/10.);
     int nr = distrib(gen);
-    float res = 0;
+    int res = 0;
     
     MEASURE_START();
     
