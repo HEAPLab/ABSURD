@@ -16,11 +16,8 @@
 #ifndef USER_H_
 #define USER_H_
 
-/*#define CLASS_A*/
-
 /** Set this to 0 to disable the outer loop on benchmarks (it will considerably reduce the execution time) **/
 #define USE_ITERATIONS_LOOP 1
-
 
 #include "dev_classes.h"
 
@@ -38,11 +35,6 @@
 /*#define USER_IMAGE_SCALING*/
 /*#define USER_JPEG_COMPRESS*/
 
-
-
-
-
-
 #define UINT32_T unsigned int
 
 /** User-needed libraries (e.g., for measurements) **/
@@ -55,7 +47,7 @@
 
 /** User-needed constants (e.g., for measurements) **/
 #define BILLION 1000000000L
-
+#define SEED 123U
 
 #ifndef WITH_ANSI
 #ifdef NUCLEO_F746ZG

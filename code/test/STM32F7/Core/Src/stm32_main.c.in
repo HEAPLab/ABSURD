@@ -31,7 +31,7 @@
 /* USER CODE BEGIN PTD */
 #define BENCH_NAME ${BENCH_NAME}
 #define BENCH_NAME_STR "${BENCH_NAME}"
-#define SEED 123U
+
 
 extern void BENCH_NAME(UINT32_T seed);
 #ifndef WITH_ANSI

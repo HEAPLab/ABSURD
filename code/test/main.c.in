@@ -24,7 +24,6 @@
 #define BENCH_NAME ${BENCH_NAME}
 #define BENCH_NAME_STR "${BENCH_NAME}"
 
-#define SEED 123U
 
 extern void BENCH_NAME();
 #ifndef WITH_ANSI
