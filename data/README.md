@@ -4,6 +4,7 @@ This folder contains the datasets of execution times of the benchmarks run on tw
 
 In particular:
 * All the execution times are available under the `exec_times/` directory, split per platform and per class.
+ * All the measurement units are in microseconds (with nanosecond resolution for Odroid-H2)
 
 * The directory `stat/` contains the pWCET (Generalized Pareto Distributions) estimated by the
   [chronovise](https://github.com/federeghe/chronovise) tool. Note that some of the generated pWCET may be

@@ -45,6 +45,12 @@ the code and the dataset is periodically performed (via Github tags) and
 published on different platforms (such as zenodo.org). You can find the
 resulting datasets and other information in the `data` directory.
 
+### Generator
+No need the actual data but just want some synthetic data for your simulation?
+You can use the ABSURD generator, which generates random execution times
+based on the real dataset. Check the `generator` directory for further
+information.
+
 ## License
 All the software and datasets are released under the Apache License. Please
 check the [LICENSE](LICENSE) file.
