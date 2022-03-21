@@ -6,7 +6,9 @@ In particular:
 * All the execution times are available under the `exec_times/` directory, split per platform and per class.
  * All the measurement units are in microseconds (with nanosecond resolution for Odroid-H2)
 
-* The directory `stat/` contains the pWCET (Generalized Pareto Distributions) estimated by the
+* The directory `stat/` contains the basic statistical information (average, minimum observed execution time, 
+  maximum observed execution time, standard deviation, coefficient of variation)
+* The directory `pwcet/` contains the pWCET (Generalized Pareto Distributions) estimated by the
   [chronovise](https://github.com/federeghe/chronovise) tool. Note that some of the generated pWCET may be
   incorrect and even several orders of magnitude larger than the Worst-Case Observed Time. Other pWCET
   estimations failed and are not available. The objective of this file is not to perform a proper complete
