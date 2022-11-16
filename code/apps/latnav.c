@@ -132,7 +132,7 @@ void latnav() {
         pid_roll.backpropagation = actual_roll_rate - desired_roll_rate; 
 
         
-        desired_ailerons = run_pid(&pid_roll, curr_roll - actual_roll); 
+        desired_ailerons = run_pid(&pid_roll, curr_roll_rate - actual_roll_rate); 
         actual_ailerons = ailerons_limiter(desired_roll_rate);
         pid_roll.backpropagation = actual_ailerons - desired_ailerons; 
 
