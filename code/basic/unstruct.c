@@ -19,7 +19,7 @@
 MEASURE_GLOBAL_VARIABLES()
 
 /**
- * @brief 
+ * @brief An unstructured example using a do-while inside a switch
  * 
  * @param n 
  * @return int 

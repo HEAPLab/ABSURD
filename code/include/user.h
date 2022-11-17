@@ -105,4 +105,4 @@
 #define CHECK_RESULT(x) assert(x);
 #endif
 
-#endif //USER_H_
+#endif

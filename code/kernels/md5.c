@@ -128,10 +128,8 @@ static unsigned char PADDING[64] = {
 
 
 static unsigned char digest[16];
-static char bytes_in[ARRAY_LENGTH];
+static unsigned char bytes_in[ARRAY_LENGTH];
 MEASURE_GLOBAL_VARIABLES()
-
-static void MDPrint PROTO_LIST ((unsigned char [16]));
 
 /* MD5 initialization. Begins an MD5 operation, writing a new context.
  */
@@ -357,11 +355,11 @@ static void MD5_memset (POINTER output, int value, unsigned int len)
  */
 void md5(){
     int i;
+    MD_CTX context;
     
     for(i=0;i<ARRAY_LENGTH;i++){
         bytes_in[i] = 0xFF & (int)(random_get()*ARRAY_LENGTH);
     }
-    MD_CTX context;
 
     MEASURE_START();
     

@@ -88,7 +88,7 @@ static void fft_routine(){
         even_sum.im=0;
 
         for(n=0;n<FFT_LENGTH;n=n+2){
-            complex n_term = complex_sum(array_in[n],complex_exp((-2*M_PI*n*k)/FFT_LENGTH));
+            complex n_term = complex_mult(array_in[n],complex_exp((-2*M_PI*n*k)/FFT_LENGTH));
 
             complex_sum(even_sum,n_term);
         }
@@ -97,7 +97,7 @@ static void fft_routine(){
         odd_sum.re=0;
         odd_sum.im=0;
         for(n=1;n<FFT_LENGTH;n=n+2){
-            complex n_term = complex_sum(array_in[n],complex_exp((-2*M_PI*n*k)/FFT_LENGTH));
+            complex n_term = complex_mult(array_in[n],complex_exp((-2*M_PI*n*k)/FFT_LENGTH));
 
             complex_sum(odd_sum,n_term);
         }

@@ -58,7 +58,6 @@ static double mc_integral_routine(double a, double b, int n){
 void mc_integral(){
 
     double res;
-    int i;
 
     MEASURE_START();
 

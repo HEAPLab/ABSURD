@@ -91,18 +91,13 @@ static void array_stats_routine(){
  */
 void array_stats(){
 
-    int i;
-    
-    
-
     random_get_array(array_1,ARRAY_LENGTH);
     random_get_array(array_2,ARRAY_LENGTH);
-
-    
     
     MEASURE_START();
 
     array_stats_routine();
+
     MEASURE_STOP();
 
 }

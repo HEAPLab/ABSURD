@@ -49,7 +49,6 @@ static void dct_routine(){
  * @brief It computes DCT of a random array. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void dct(){
-    int i;
     /*Matrix initialization*/
     
     random_get_array(array_in,ARRAY_LENGTH);

@@ -174,7 +174,7 @@ static int estimate_intruder_alt(const plane_t *own_aircraft, const plane_t *int
     return intruder->baroalt - (own_aircraft->baroalt - own_aircraft->radioalt);
 }
 
-static float time_to_go_CPA(const plane_t *own_aircraft, plane_t *intruder, float dmod) {
+static float time_to_go_CPA(plane_t *intruder, float dmod) {
     float slant_range = intruder->slant_range;
     float closure_speed = 0;
 
@@ -284,7 +284,7 @@ static float hdmf_accuracy_check(plane_t *intruder, float Re) {
     return threshold;   /* Accuracy ok */
 }
 
-static float hmdf_predict_bearing_distance(const plane_t *own_aircraft, plane_t *intruder) {
+static float hmdf_predict_bearing_distance(plane_t *intruder) {
     const float sigma_theta = 0.0087;
     const float Q = 0.01;
     const float T = intruder->delta_update_time;
@@ -471,7 +471,7 @@ static unsigned char hmdf_test(const plane_t *own_aircraft, plane_t *intruder, i
 
     /* STEP 3 - Compute the projected range HMD */
     R_HMD = sqrt(Rs * Rs - (Rs*Vs*Rs*Vs) / SAFE_DEN((Rs * As + Vs*Vs)));
-    B_HMD = hmdf_predict_bearing_distance(own_aircraft, intruder);
+    B_HMD = hmdf_predict_bearing_distance(intruder);
 
     smaller_HMD = (R_HMD > B_HMD) ? B_HMD : R_HMD;
 
@@ -498,7 +498,7 @@ static result_t test_ra(const plane_t *own_aircraft, plane_t *intruder, int idx_
     }
 
     /* Range test is performed with RA values if the target has no valid altitude */
-    *ttg_cpa = time_to_go_CPA(own_aircraft, intruder, DMOD[TAB_RA][idx_table]);
+    *ttg_cpa = time_to_go_CPA(intruder, DMOD[TAB_RA][idx_table]);
 
     /* Execute the HDMF filter. NOTE: we have to run this even if there are blocking */
     /* conditions afterwards because it updates the internal state of the filter */
@@ -531,7 +531,7 @@ static result_t test_ta(const plane_t *own_aircraft, plane_t *intruder, int idx_
     alt_reporting = !(intruder->flags & FLAG_NO_VALID_ALTITUDE);
 
     /* Range test is performed with RA values if the target has no valid altitude */
-    ttg_cpa = time_to_go_CPA(own_aircraft, intruder, DMOD[alt_reporting ? TAB_TA : TAB_RA][idx_table]);
+    ttg_cpa = time_to_go_CPA(intruder, DMOD[alt_reporting ? TAB_TA : TAB_RA][idx_table]);
 
     if (ttg_cpa >= TAU[TAB_TA][idx_table]) {
         return CLEAR;
@@ -940,22 +940,22 @@ static void random_set(plane_t *acf) {
 }
 
 void acas(){
-
+    int i;
 	plane_t own_acf;
 	plane_t intruders[NR_PLANES];
 
 	initialize_acf(&own_acf);
 
-	for(int i=0; i<NR_PLANES; i++) {
+	for(i=0; i<NR_PLANES; i++) {
 		initialize_acf(&intruders[i]);
 		random_set(&intruders[i]);
 	}
 
 
     MEASURE_START();
-    for(int i=0; i<ITERATIONS;i++) {
+    for(i=0; i<ITERATIONS;i++) {
 		random_set(&own_acf);
-		for(int i=0; i<NR_PLANES; i++) {
+		for(i=0; i<NR_PLANES; i++) {
 			random_set(&intruders[i]);
 		}
         acas_bench(&own_acf, intruders, NR_PLANES);

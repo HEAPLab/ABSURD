@@ -46,7 +46,6 @@ static long int fibonacci_routine(long int n){
  * @brief It computes a random term of the Fibonacci's sequence . The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void fibonacci(){
-    int i;
     long int res,n;
 
     n=(long int) N * random_get();
@@ -56,5 +55,7 @@ void fibonacci(){
     res=fibonacci_routine(n);
     
     MEASURE_STOP();
+
+    (void)res;  /* Unused */
 
 }

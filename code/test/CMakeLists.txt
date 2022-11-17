@@ -40,9 +40,11 @@ else()
     add_definitions(-DCLASS_E)
 endif()
 
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -pedantic -Wno-implicit-fallthrough -Werror")
+
 if(WITH_ANSI)
     message("Compiling using ANSI C standard")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0  -ansi  -pedantic")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -ansi")
     add_definitions(-DWITH_ANSI)
 else()
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0")
