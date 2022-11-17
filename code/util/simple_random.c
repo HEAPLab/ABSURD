@@ -34,8 +34,7 @@ void random_set_seed(UINT32_T seed)
     z4 = 127+seed;
 }
 
-double random_get(void)
-{
+UINT32_T random_get_int(void) {
     UINT32_T b;
     b  = ((z1 << 6) ^ z1) >> 13;
     z1 = ((z1 & 4294967294U) << 18) ^ b;
@@ -45,7 +44,13 @@ double random_get(void)
     z3 = ((z3 & 4294967280U) << 7) ^ b;
     b  = ((z4 << 3) ^ z4) >> 12;
     z4 = ((z4 & 4294967168U) << 13) ^ b;
-    return (z1 ^ z2 ^ z3 ^ z4) * 2.3283064365386963e-10;
+    return (z1 ^ z2 ^ z3 ^ z4);
+}
+
+double random_get(void)
+{
+
+    return random_get_int() * 2.3283064365386963e-10;
 }
 
 void random_get_array(double a[], int len){
@@ -99,6 +104,13 @@ void random_get_sarray(double a[], int len){
     
     quick_sort(a,0,len-1);
     
+}
+
+void random_get_iarray(UINT32_T a[], int len){
+    int i;
+    for(i = 0;i < len; i++){
+        a[i] = random_get_int();  
+    }
 }
 
 void random_get_barray(int a[], int len){

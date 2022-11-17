@@ -32,6 +32,8 @@ void random_get_array(double a[], int len);
 
 void random_get_sarray(double a[], int len);
 
+void random_get_iarray(UINT32_T a[], int len);
+
 void random_get_barray(int a[], int len);
 
 #endif
