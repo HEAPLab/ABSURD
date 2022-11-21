@@ -102,6 +102,11 @@
 
 #endif
 
+#define ANN_LOOP_BOUND(iters)
+#define ANN_VAR(min,max)
+#define ANN_VAR_NOBOUNDS()
+#define ANN_ARRAY(min,max)
+#define ANN_ARRAY_NOBOUNDS() 
 #define CHECK_RESULT(x) assert(x);
 #endif
 

@@ -28,8 +28,10 @@ static double array[ARRAY_LENGTH];
  */
 static int binary_search_routine(double n){
 
-    int l_pos=0,r_pos=ARRAY_LENGTH-1;
+    ANN_VAR(0,ARRAY_LENGTH) int l_pos=0;
+    ANN_VAR(0,ARRAY_LENGTH) int r_pos=ARRAY_LENGTH-1;
 
+    ANN_LOOP_BOUND(ARRAY_LENGTH)
     while(l_pos<= r_pos){
         
         int pos=(l_pos+r_pos)/2;
@@ -46,9 +48,9 @@ static int binary_search_routine(double n){
  * as the value of ITERATIONS costant. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void binary_search(){
-    int i,n,res;
-    
-
+    ANN_VAR(0,ARRAY_LENGTH) int i;
+    ANN_VAR_NOBOUNDS() int n;
+    ANN_VAR_NOBOUNDS() int res;
     
     random_get_sarray(array,ARRAY_LENGTH);
 
@@ -56,6 +58,7 @@ void binary_search(){
     
     MEASURE_START();
     
+    ANN_LOOP_BOUND(ITERATIONS)
     for(i=0; i<ITERATIONS;i++){
         res=binary_search_routine(array[n]);
     }

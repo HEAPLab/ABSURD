@@ -20,15 +20,16 @@
 
 MEASURE_GLOBAL_VARIABLES()
 
-static double array_1[ARRAY_LENGTH];
-static double array_2[ARRAY_LENGTH];
+ANN_ARRAY_NOBOUNDS() static double array_1[ARRAY_LENGTH];
+ANN_ARRAY_NOBOUNDS() static double array_2[ARRAY_LENGTH];
 
 
 static double sum(double a[]){
-    double s=0;
-    int i;
+    ANN_VAR_NOBOUNDS() double s=0;
+    ANN_VAR(0,ARRAY_LENGTH) int i;
 
-    for(i=0;i<ARRAY_LENGTH;i++){
+    ANN_LOOP_BOUND(ARRAY_LENGTH)
+    for(i=0;i<ARRAY_LENGTH;i++) {
         s += a[i];
     }
     return s;
@@ -42,9 +43,11 @@ static double var(double a[]){
     double m=mean(a), v=0;
     int i;
 
+    ANN_LOOP_BOUND(ARRAY_LENGTH)
     for(i=0; i<ARRAY_LENGTH;i++){
         v += (a[i]-m)*(a[i]-m);
     }
+
     return v/ARRAY_LENGTH;
 }
 
@@ -53,9 +56,12 @@ static double std(double a[]){
 }
 
 static double corr(double a[],double b[]){
-    double mean_a=mean(a),mean_b=mean(b),temp=0;
-    int i;
+    ANN_VAR_NOBOUNDS() double mean_a=mean(a);
+    ANN_VAR_NOBOUNDS() double mean_b=mean(b);
+    ANN_VAR_NOBOUNDS() double temp=0;
+    ANN_VAR(0,ARRAY_LENGTH) int i;
 
+    ANN_LOOP_BOUND(ARRAY_LENGTH)
     for(i=0; i<ARRAY_LENGTH;i++){
         temp+=((a[i]-mean_a)*(b[i]-mean_b))/ARRAY_LENGTH;
     }
