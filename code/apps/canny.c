@@ -36,26 +36,26 @@ MEASURE_GLOBAL_VARIABLES()
 
 
 #ifndef USER_IMAGE_CANNY
-static unsigned char mat_in[IMG_HEIGHT][IMG_WIDTH];
-static unsigned char mat_out[IMG_HEIGHT][IMG_WIDTH];
+ANN_VAR_NOBOUNDS() static unsigned char mat_in[IMG_HEIGHT][IMG_WIDTH];
+ANN_VAR_NOBOUNDS() static unsigned char mat_out[IMG_HEIGHT][IMG_WIDTH];
 #endif
-static unsigned char mat_blured[IMG_HEIGHT][IMG_WIDTH];
-static double grad_orientation[IMG_HEIGHT][IMG_WIDTH];
-static unsigned char mat_edges[IMG_HEIGHT][IMG_WIDTH];
+ANN_VAR_NOBOUNDS() static unsigned char mat_blured[IMG_HEIGHT][IMG_WIDTH];
+ANN_VAR_NOBOUNDS() static double grad_orientation[IMG_HEIGHT][IMG_WIDTH];
+ANN_VAR_NOBOUNDS() static unsigned char mat_edges[IMG_HEIGHT][IMG_WIDTH];
 
-static unsigned char top_bottom[IMG_HEIGHT][IMG_WIDTH];
-static unsigned char bottom_top[IMG_HEIGHT][IMG_WIDTH];
-static unsigned char left_right[IMG_HEIGHT][IMG_WIDTH];
-static unsigned char right_left[IMG_HEIGHT][IMG_WIDTH];
+ANN_VAR_NOBOUNDS() static unsigned char top_bottom[IMG_HEIGHT][IMG_WIDTH];
+ANN_VAR_NOBOUNDS() static unsigned char bottom_top[IMG_HEIGHT][IMG_WIDTH];
+ANN_VAR_NOBOUNDS() static unsigned char left_right[IMG_HEIGHT][IMG_WIDTH];
+ANN_VAR_NOBOUNDS() static unsigned char right_left[IMG_HEIGHT][IMG_WIDTH];
 
 /* KERNEL_SIZExKERNEL_SIZE gaussian filter with origin in (1,1) */
-static double kernel_gauss[KERNEL_SIZE][KERNEL_SIZE];
+ANN_VAR_NOBOUNDS() static double kernel_gauss[KERNEL_SIZE][KERNEL_SIZE];
 
 /* Sobel operators */
-static double sobel_x[3][3]={{-1,0,1},
+ANN_VAR_NOBOUNDS() static double sobel_x[3][3]={{-1,0,1},
                           {-2,0,2},
                           {-1,0,1}};
-static double sobel_y[3][3]={{-1,-2,-1},
+ANN_VAR_NOBOUNDS() static double sobel_y[3][3]={{-1,-2,-1},
                           {0,0,0},
                           {1,2,1}};
 
@@ -64,14 +64,16 @@ static double sobel_y[3][3]={{-1,-2,-1},
  * 
  */
 static void gaussian_kernel_init(){
-    int i;
-    double sum;
+    ANN_VAR(0,KERNEL_SIZE) int i;
+    ANN_VAR_NOBOUNDS() double sum;
     
     sum=0;
+    ANN_LOOP_BOUND(KERNEL_SIZE)
     for (i = 0; i < KERNEL_SIZE; i++) {
-        int j;
+        ANN_VAR(0,KERNEL_SIZE) int j;
+        ANN_LOOP_BOUND(KERNEL_SIZE)
         for (j = 0; j < KERNEL_SIZE; j++) {
-            double x,y;
+            ANN_VAR_NOBOUNDS() double x,y;
             x = i - (KERNEL_SIZE - 1) / 2.0;
             y = j - (KERNEL_SIZE - 1) / 2.0;
             kernel_gauss[i][j] =  exp(((pow(x, 2) + pow(y, 2)) / ((2 * pow(SIGMA, 2)))) * (-1));
@@ -79,8 +81,10 @@ static void gaussian_kernel_init(){
         }
     }
 
+    ANN_LOOP_BOUND(KERNEL_SIZE)
     for (i = 0; i < KERNEL_SIZE; i++) {
-        int j;
+        ANN_VAR(0,KERNEL_SIZE) int j;
+        ANN_LOOP_BOUND(KERNEL_SIZE)
         for (j = 0; j < KERNEL_SIZE; j++) {
             kernel_gauss[i][j] /= sum;
         }
@@ -97,8 +101,11 @@ static void gaussian_kernel_init(){
  * @return int 
  */
 static int convolution2D_3x3(unsigned char src[IMG_HEIGHT][IMG_WIDTH], int p_x, int p_y,double k[3][3]){
-    int k_r,offset_x,offset_y,i;
-    double temp;
+    ANN_VAR(0,KERNEL_SIZE) int k_r;
+    ANN_VAR(0,IMG_HEIGHT) int offset_x;
+    ANN_VAR(0,IMG_WIDTH) int offset_y;
+    ANN_VAR(0,IMG_HEIGHT) int i;
+    ANN_VAR_NOBOUNDS() double temp;
     k_r=1;
     /*kernel can be superimposed? if not we are on borders, then we keep the values unchanged*/
     if(p_x-k_r<0 || p_y-k_r<0 || p_x+k_r>=IMG_HEIGHT || p_y+k_r>=IMG_WIDTH){
@@ -109,8 +116,9 @@ static int convolution2D_3x3(unsigned char src[IMG_HEIGHT][IMG_WIDTH], int p_x, 
     offset_y=p_y-k_r;
 
     temp=0;
+    ANN_LOOP_BOUND(IMG_WIDTH)
     for(i=p_x-k_r;i<=p_x+k_r;i++){
-        int j;
+        ANN_VAR(0,IMG_WIDTH) int j;
         for(j=p_y-k_r;j<=p_y+k_r;j++){
             temp+=k[i-offset_x][j-offset_y] * src[i][j];
         }
@@ -126,8 +134,11 @@ static int convolution2D_3x3(unsigned char src[IMG_HEIGHT][IMG_WIDTH], int p_x, 
  * @return int 
  */
 static int convolution2D_5x5(unsigned char src[IMG_HEIGHT][IMG_WIDTH], int p_x, int p_y,double k[5][5]){
-    int k_r,offset_x,offset_y,i;
-    double temp;
+    ANN_VAR(0,KERNEL_SIZE) int k_r;
+    ANN_VAR(0,IMG_HEIGHT) int offset_x;
+    ANN_VAR(0,IMG_WIDTH) int offset_y;
+    ANN_VAR(0,IMG_HEIGHT) int i;
+    ANN_VAR_NOBOUNDS() double temp;
     k_r=2;
     /*kernel can be superimposed? if not we are on borders, then we keep the values unchanged*/
     if(p_x-k_r<0 || p_y-k_r<0 || p_x+k_r>=IMG_HEIGHT || p_y+k_r>=IMG_WIDTH){
@@ -138,8 +149,10 @@ static int convolution2D_5x5(unsigned char src[IMG_HEIGHT][IMG_WIDTH], int p_x, 
     offset_y=p_y-k_r;
 
     temp=0;
+    ANN_LOOP_BOUND(IMG_HEIGHT)
     for(i=p_x-k_r;i<=p_x+k_r;i++){
-        int j;
+        ANN_VAR(0,IMG_WIDTH) int j;
+        ANN_LOOP_BOUND(IMG_WIDTH)
         for(j=p_y-k_r;j<=p_y+k_r;j++){
             temp+=k[i-offset_x][j-offset_y] * src[i][j];
         }
@@ -151,11 +164,14 @@ static int convolution2D_5x5(unsigned char src[IMG_HEIGHT][IMG_WIDTH], int p_x, 
  * 
  */
 static void sobel(){
-    int i;
-    for(i=0;i<IMG_HEIGHT;i++){
-       int j;
-       for(j=0;j<IMG_WIDTH;j++){
-            int mag_x,mag_y,mag;
+    ANN_VAR(0,IMG_HEIGHT) int i;
+    ANN_LOOP_BOUND(IMG_HEIGHT)
+    for(i=0;i<IMG_HEIGHT;i++) {
+       ANN_VAR(0,IMG_WIDTH) int j;
+       ANN_LOOP_BOUND(IMG_WIDTH)
+       for(j=0;j<IMG_WIDTH;j++) {
+            ANN_VAR_NOBOUNDS() int mag_x;
+            ANN_VAR_NOBOUNDS() int mag_y,mag;
             
             mag_x=convolution2D_3x3(mat_blured,i,j,sobel_x);
             mag_y=convolution2D_3x3(mat_blured,i,j,sobel_y);
@@ -174,12 +190,15 @@ static void sobel(){
  * 
  */
 static void gauss_filter(){
-   int i,j;
+    ANN_VAR(0,IMG_HEIGHT) int i;
+    ANN_VAR(0,IMG_WIDTH)  int j;
 
-   for(i=0;i<IMG_HEIGHT;i++){
-       for(j=0;j<IMG_WIDTH;j++){
-           mat_blured[i][j]=convolution2D_5x5(mat_in,i,j,kernel_gauss);
-       }
+    ANN_LOOP_BOUND(IMG_HEIGHT)
+    for(i=0;i<IMG_HEIGHT;i++) {
+        ANN_LOOP_BOUND(IMG_WIDTH)
+        for(j=0;j<IMG_WIDTH;j++) {
+            mat_blured[i][j]=convolution2D_5x5(mat_in,i,j,kernel_gauss);
+        }
     }
     
 }
@@ -188,10 +207,17 @@ static void gauss_filter(){
  * 
  */
 static void nms(){
-    int i,j;
+    ANN_VAR(0,IMG_HEIGHT) int i;
+    ANN_VAR(0,IMG_WIDTH)  int j;
+
+    ANN_LOOP_BOUND(IMG_HEIGHT-1)
     for(i=1;i<IMG_HEIGHT;i++){
+        ANN_LOOP_BOUND(IMG_WIDTH-1)
        for(j=1;j<IMG_WIDTH;j++){
-           double direction,curr_p,next_p,prev_p;
+           ANN_VAR_NOBOUNDS() double direction;
+           ANN_VAR_NOBOUNDS() double curr_p;
+           ANN_VAR_NOBOUNDS() double next_p;
+           ANN_VAR_NOBOUNDS() double prev_p;
 
            direction=grad_orientation[i][j];
            curr_p=mat_edges[i][j];
@@ -227,13 +253,16 @@ static void nms(){
  * @param y y coordinate
  * @return unsigned char 
  */
-static unsigned char check_neighbours(int x, int y){
-    int i,j;
+static unsigned char check_neighbours(int x, int y) {
+    ANN_VAR(0,IMG_HEIGHT) int i;
+    ANN_VAR(0,IMG_WIDTH)  int j;
 
-    for(i=x;x-1>0 && i<IMG_HEIGHT;i++){
-       for(j=y;y-1>0 &&j<IMG_WIDTH;j++){
+    ANN_LOOP_BOUND(IMG_HEIGHT-1)
+    for(i=x;x-1>0 && i<IMG_HEIGHT;i++) {
+        ANN_LOOP_BOUND(IMG_WIDTH-1)
+        for(j=y;y-1>0 &&j<IMG_WIDTH;j++) {
            if(mat_out[i][j]==255) return 255;
-       }
+        }
     }
     return 0;
 }
@@ -244,35 +273,40 @@ static unsigned char check_neighbours(int x, int y){
  * @param high_thresh high threshold
  */
 static void hyst_tresh(int low_thresh, int high_thresh){
-    int i,j;
+    ANN_VAR(0,IMG_HEIGHT) int i;
+    ANN_VAR(0,IMG_WIDTH)  int j;
 
+    ANN_LOOP_BOUND(IMG_HEIGHT)
     for(i=0;i<IMG_HEIGHT;i++){
-       for(j=0;j<IMG_WIDTH;j++){
-           int elem;
-           
-           elem= mat_out[i][j];
-           if(elem>=high_thresh) top_bottom[i][j]=255;
-           else if (elem<=low_thresh) top_bottom[i][j]=0;
-           else top_bottom[i][j]=check_neighbours(i,j);
+        ANN_LOOP_BOUND(IMG_WIDTH)
+        for(j=0;j<IMG_WIDTH;j++){
+            ANN_VAR_NOBOUNDS() int elem;
+
+            elem= mat_out[i][j];
+            if(elem>=high_thresh) top_bottom[i][j]=255;
+            else if (elem<=low_thresh) top_bottom[i][j]=0;
+            else top_bottom[i][j]=check_neighbours(i,j);
         }
     }
     
-    
-    for(i=IMG_HEIGHT-1;i>=0;i--){
-       for(j=IMG_WIDTH-1;j>=0;j--){
-           int elem;
-           
-           elem= mat_out[i][j];
-           if(elem>=high_thresh) bottom_top[i][j]=255;
-           else if (elem<=low_thresh) bottom_top[i][j]=0;
-           else bottom_top[i][j]=check_neighbours(i,j);
+    ANN_LOOP_BOUND(IMG_HEIGHT)
+    for(i=IMG_HEIGHT-1;i>=0;i--) {
+        ANN_LOOP_BOUND(IMG_WIDTH)
+        for(j=IMG_WIDTH-1;j>=0;j--) {
+            ANN_VAR_NOBOUNDS() int elem;
+
+            elem= mat_out[i][j];
+            if(elem>=high_thresh) bottom_top[i][j]=255;
+            else if (elem<=low_thresh) bottom_top[i][j]=0;
+            else bottom_top[i][j]=check_neighbours(i,j);
         }
     }
    
-    
+    ANN_LOOP_BOUND(IMG_HEIGHT)
     for(i=0;i<IMG_HEIGHT;i++){
-       for(j=IMG_WIDTH-1;j>=0;j--){
-           int elem;
+        ANN_LOOP_BOUND(IMG_WIDTH)
+        for(j=IMG_WIDTH-1;j>=0;j--){
+           ANN_VAR_NOBOUNDS() int elem;
            
            elem= mat_out[i][j];
            if(elem>=high_thresh) right_left[i][j]=255;
@@ -280,10 +314,12 @@ static void hyst_tresh(int low_thresh, int high_thresh){
            else right_left[i][j]=check_neighbours(i,j);
         }
     }
-    
-    for(i=IMG_HEIGHT-1;i>=0;i--){
-       for(j=0;j<IMG_WIDTH;j++){
-           int elem;
+
+    ANN_LOOP_BOUND(IMG_HEIGHT)
+    for(i=IMG_HEIGHT-1;i>=0;i--) {
+        ANN_LOOP_BOUND(IMG_WIDTH)
+        for(j=0;j<IMG_WIDTH;j++) {
+           ANN_VAR_NOBOUNDS() int elem;
            
            elem= mat_out[i][j];
            if(elem>=high_thresh) left_right[i][j]=255;
@@ -292,14 +328,17 @@ static void hyst_tresh(int low_thresh, int high_thresh){
         }
     }
 
+    ANN_LOOP_BOUND(IMG_HEIGHT)
     for(i=0;i<IMG_HEIGHT;i++){
-       for(j=0;j<IMG_WIDTH;j++){
-            int sum;
+        ANN_LOOP_BOUND(IMG_WIDTH)
+        for(j=0;j<IMG_WIDTH;j++){
+            ANN_VAR_NOBOUNDS() int sum;
 
             sum=top_bottom[i][j]+bottom_top[i][j]+left_right[i][j]+right_left[i][j];
             CLAMP(sum,0,255)
             mat_out[i][j]=sum;
-    }}
+        }
+    }
 }
 /**
  * @brief Actual Canny algorithm implementation
@@ -318,12 +357,13 @@ static void canny_routine(){
  * @brief It performs canny algorithm on a random grayscale image . The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void canny(){
-    int i;
     #ifndef USER_IMAGE_CANNY
-    int j;
+    ANN_VAR(0,IMG_HEIGHT) int i;
+    ANN_VAR(0,IMG_WIDTH)  int j;
 
-    
+    ANN_LOOP_BOUND(IMG_HEIGHT)
     for (i = 0; i < IMG_HEIGHT; i++){
+        ANN_LOOP_BOUND(IMG_WIDTH)
         for (j = 0; j < IMG_WIDTH; j++){
             mat_in[i][j]=random_get()*256;
         }
