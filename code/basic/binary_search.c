@@ -18,7 +18,7 @@
 
 MEASURE_GLOBAL_VARIABLES()
 
-static double array[ARRAY_LENGTH];
+ANN_VAR_NOBOUNDS() static double array[ARRAY_LENGTH];
 
 /**
  * @brief Actual binary search implementation

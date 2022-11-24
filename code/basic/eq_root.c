@@ -35,7 +35,7 @@ static complex roots[2];
  * @return complex sum of a and b
  */
 static complex complex_sum(complex a, complex b){
-    complex res;
+    ANN_VAR_NOBOUNDS() complex res;
     res.re=a.re + b.re;
     res.im=a.im + b.im;
     return res;
@@ -49,7 +49,7 @@ static complex complex_sum(complex a, complex b){
  * @return complex mult of a and b
  */
 static complex complex_mult(complex a, complex b){
-    complex res;
+    ANN_VAR_NOBOUNDS() complex res;
     res.re=(a.re * b.re) - (a.im*b.im);
     res.im=(a.im*b.re) + (a.re*b.im);
     return res;
@@ -65,7 +65,7 @@ static complex complex_mult(complex a, complex b){
  */
 static int eq_root_routine(double a, double b, double c){
 
-    double delta;
+    ANN_VAR_NOBOUNDS() double delta;
 
 	if (a==0){
 		if(b==0){
@@ -104,9 +104,15 @@ static int eq_root_routine(double a, double b, double c){
  */
 void eq_root(){
 
-    double a,b,c;
-    complex eq,a_cmp,b_cmp,c_cmp;
-    int i,res;
+    ANN_VAR_NOBOUNDS() double a;
+    ANN_VAR_NOBOUNDS() double b;
+    ANN_VAR_NOBOUNDS() double c;
+    ANN_VAR_NOBOUNDS() complex eq;
+    ANN_VAR_NOBOUNDS() complex a_cmp;
+    ANN_VAR_NOBOUNDS() complex b_cmp;
+    ANN_VAR_NOBOUNDS() complex c_cmp;
+    ANN_VAR(0,ITERATIONS) int i;
+    ANN_VAR_NOBOUNDS() int res;
 
     
     
@@ -116,6 +122,7 @@ void eq_root(){
 
   
     MEASURE_START();
+    ANN_LOOP_BOUND(ITERATIONS)
     for (i=0;i<ITERATIONS;i++){
         res=eq_root_routine(a,b,c);
     }
@@ -126,7 +133,8 @@ void eq_root(){
         CHECK_RESULT(a==0 && b==0 && c==0);
     }
     else if(res==1){
-        double x=roots[0].re;
+        ANN_VAR_NOBOUNDS() double x;
+        x=roots[0].re;
         CHECK_RESULT(a==0.0 && fabs(b*x+c)<CLASS_PRECISION);
     }
     else if(res==-1){

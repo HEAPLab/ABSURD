@@ -18,6 +18,7 @@
 
 MEASURE_GLOBAL_VARIABLES()
 
+ANN_VAR_NOBOUNDS()
 static double mat[MATRIX_SIZE][MATRIX_SIZE];
 
 /**
@@ -26,10 +27,14 @@ static double mat[MATRIX_SIZE][MATRIX_SIZE];
  * @return int number of non negative numbers
  */
 static int matrix_nn_routine(){
-    int cnt,i,j;
+    ANN_VAR(0,MATRIX_SIZE) int cnt;
+    ANN_VAR(0,MATRIX_SIZE) int i;
+    ANN_VAR(0,MATRIX_SIZE) int j;
     
     cnt=0;
+    ANN_LOOP_BOUND(MATRIX_SIZE)
     for(i=0; i<MATRIX_SIZE;i++){
+        ANN_LOOP_BOUND(MATRIX_SIZE)
         for(j=0; j<MATRIX_SIZE;j++){
             if(mat[i][j] > 0) cnt++;
         }
@@ -42,10 +47,12 @@ static int matrix_nn_routine(){
  * @brief It counts the non negative numbers in a random square matrix . The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void matrix_nn(){
-    int i,j,res;
+    ANN_VAR(0,MATRIX_SIZE) int i;
+    ANN_VAR(0,MATRIX_SIZE) int j;
+    ANN_VAR(0,MATRIX_SIZE) int res;
     /*Matrix initialization*/
     
-    
+    ANN_LOOP_BOUND(MATRIX_SIZE)
     for(i=0; i<MATRIX_SIZE;i++){
         random_get_array(mat[i],MATRIX_SIZE);
     }
@@ -56,7 +63,9 @@ void matrix_nn(){
     
     MEASURE_STOP();
 
+    ANN_LOOP_BOUND(MATRIX_SIZE)
     for(i=0; i<MATRIX_SIZE;i++){
+        ANN_LOOP_BOUND(MATRIX_SIZE)
         for(j=0; j<MATRIX_SIZE;j++){
             if(mat[i][j] > 0) res--;
         }

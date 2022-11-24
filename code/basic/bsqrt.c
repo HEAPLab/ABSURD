@@ -33,7 +33,8 @@ static double dabs(double x){
  * @return double square root of s
  */
 static double bsqrt_routine(int s){
-   double x,y;
+   ANN_VAR_NOBOUNDS() double x;
+   ANN_VAR_NOBOUNDS() double y;
    if(s<0){
        return -1;
    }
@@ -53,8 +54,9 @@ static double bsqrt_routine(int s){
  */
 void bsqrt(){
 
-    int i,s;
-    double res;
+    ANN_VAR(0,ITERATIONS) int i;
+    ANN_VAR_NOBOUNDS() int s;
+    ANN_VAR_NOBOUNDS() double res;
     
     
 

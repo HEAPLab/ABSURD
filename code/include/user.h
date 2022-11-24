@@ -107,6 +107,7 @@
 #define ANN_VAR_NOBOUNDS()
 #define ANN_ARRAY(min,max)
 #define ANN_ARRAY_NOBOUNDS() 
+#define ANN_RECURSION(rec_nr) 
 #define CHECK_RESULT(x) assert(x);
 #endif
 

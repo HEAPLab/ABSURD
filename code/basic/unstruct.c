@@ -26,11 +26,13 @@ MEASURE_GLOBAL_VARIABLES()
  */
 static int unstruct_routine(int n){
 
-    int i=0;
+    ANN_VAR(0,ARRAY_LENGTH) int i=0;
 
     switch (n%10)
     {
-    case 0: do{     i++;
+    case 0: 
+    ANN_LOOP_BOUND(ARRAY_LENGTH)
+    do{     i++;
     case 9:         i++;
     case 8:         i++;
     case 7:         i++;
@@ -59,6 +61,7 @@ void unstruct(){
     n=random_get()*ARRAY_LENGTH+1;
     
     MEASURE_START();
+    ANN_LOOP_BOUND(ARRAY_LENGTH)
     for(i=0; i<ITERATIONS;i++){
         res=unstruct_routine(n);
     }

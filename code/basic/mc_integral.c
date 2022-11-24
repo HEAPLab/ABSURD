@@ -42,10 +42,13 @@ static double f(double x){
  * @return double integral estimate
  */
 static double mc_integral_routine(double a, double b, int n){
-    double sum=0;
-    int i;
+    ANN_VAR_NOBOUNDS() double sum=0;
+    ANN_VAR(0,ITERATIONS) int i;
+    
+    ANN_LOOP_BOUND(ITERATIONS)
     for(i=0;i<n;i++){
-        /*uniformly sampled point*/ 
+        /*uniformly sampled point*/
+        ANN_VAR_NOBOUNDS()
         double ran_x=a+(b-a)*random_get();
         sum += f(ran_x);
     }
@@ -57,6 +60,7 @@ static double mc_integral_routine(double a, double b, int n){
  */
 void mc_integral(){
 
+    ANN_VAR_NOBOUNDS()
     double res;
 
     MEASURE_START();

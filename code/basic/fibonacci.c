@@ -36,6 +36,7 @@ MEASURE_GLOBAL_VARIABLES()
  * @param n term to be computed
  * @return nth term of Fibonacci sequence
  */
+ANN_RECURSION(N)
 static long int fibonacci_routine(long int n){
     if(n == 0) return 0;
     else if(n == 1) return 1;
@@ -46,7 +47,8 @@ static long int fibonacci_routine(long int n){
  * @brief It computes a random term of the Fibonacci's sequence . The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void fibonacci(){
-    long int res,n;
+    ANN_VAR_NOBOUNDS() long int res;
+    ANN_VAR_NOBOUNDS() long int n;
 
     n=(long int) N * random_get();
     

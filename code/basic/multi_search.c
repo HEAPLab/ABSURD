@@ -18,7 +18,7 @@
 
 MEASURE_GLOBAL_VARIABLES()
 
-static double matrix[MATRIX_SIZE][MATRIX_SIZE];
+ANN_VAR_NOBOUNDS() static double matrix[MATRIX_SIZE][MATRIX_SIZE];
 
 /**
  * @brief It scans the matrix for the desired element
@@ -27,8 +27,12 @@ static double matrix[MATRIX_SIZE][MATRIX_SIZE];
  * @return int 1 if found, 0 otherwise
  */
 static int multi_search_routine(double n){
-    int i,j;
+    ANN_VAR(0,MATRIX_SIZE) int i;
+    ANN_VAR(0,MATRIX_SIZE) int j;
+    
+    ANN_LOOP_BOUND(MATRIX_SIZE)
     for(i=0; i<MATRIX_SIZE;i++){
+        ANN_LOOP_BOUND(MATRIX_SIZE)
         for(j=0; j<MATRIX_SIZE;j++){
             if(matrix[i][j] == n) return 1;
         }
@@ -41,10 +45,14 @@ static int multi_search_routine(double n){
  * @brief It searches a random number in a random  matrix . The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void multi_search(){
-     int i,x,y,res;
+     ANN_VAR(0,MATRIX_SIZE) int i;
+     ANN_VAR_NOBOUNDS() int x;
+     ANN_VAR_NOBOUNDS() int y;
+     ANN_VAR_NOBOUNDS() int res;
+
+
     /*Matrix initialization*/
-    
-   
+    ANN_LOOP_BOUND(MATRIX_SIZE)
     for(i=0; i<MATRIX_SIZE;i++){
         random_get_array(matrix[i],MATRIX_SIZE);
     }

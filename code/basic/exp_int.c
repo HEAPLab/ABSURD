@@ -23,7 +23,7 @@
 MEASURE_GLOBAL_VARIABLES()
 
 
-
+ANN_RECURSION(ARRAY_LENGTH)
 static double fact(int n){
     if(n==0){
         return 1;
@@ -51,9 +51,10 @@ static double dabs(double n){
  */
 static double exp_int_routine(double x, int n){
     
-    double term_1=0;
+    ANN_VAR_NOBOUNDS() double term_1=0;
 
-    int i;
+    ANN_VAR(5,ARRAY_LENGTH) int i;
+    ANN_LOOP_BOUND(ARRAY_LENGTH)
     for(i=1;i<=n;i++){
         term_1 += pow(x,i)/(fact(i)*i);
     }
@@ -65,16 +66,10 @@ static double exp_int_routine(double x, int n){
  * @brief It computes the value of the exponential integral function for a random number. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void exp_int(){
-    int n;
-    double res;
+    ANN_VAR(5,ARRAY_LENGTH) int n;
+    ANN_VAR_NOBOUNDS() double res;
     
-    
-    do{
-        n= (int)(random_get()*ARRAY_LENGTH);
-    }while (n<=5);
-
-    
-
+    n= (int)(5+random_get()*(ARRAY_LENGTH-5));
 
     MEASURE_START();
     

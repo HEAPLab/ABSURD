@@ -18,7 +18,7 @@
 
 MEASURE_GLOBAL_VARIABLES()
 
-static double array[ARRAY_LENGTH];
+ANN_VAR_NOBOUNDS() static double array[ARRAY_LENGTH];
 
 /**
  * @brief 
@@ -28,15 +28,19 @@ static double array[ARRAY_LENGTH];
  * @return double 
  */
 static double select_nmax_routine(double a[], int pos){
-    double nmax = 0;
-    int i,j;
+    ANN_VAR_NOBOUNDS() double nmax = 0;
+    ANN_VAR(0,ARRAY_LENGTH) int i;
+    ANN_VAR(0,ARRAY_LENGTH) int j;
+    ANN_LOOP_BOUND(ARRAY_LENGTH)
     for(j = 0; j < ARRAY_LENGTH; j++){
             if(a[j] > nmax){
                 nmax = a[j];
             } 
     }
-    for(i=0;i<pos-1;i++){   
-        double max=0; 
+    ANN_LOOP_BOUND(ARRAY_LENGTH)
+    for(i=0;i<pos-1;i++){
+        double max=0;
+        ANN_LOOP_BOUND(ARRAY_LENGTH)
         for(j = 0; j < ARRAY_LENGTH; j++){
             if(a[j] > max && a[j]<nmax){
                 max = a[j];
@@ -53,8 +57,10 @@ static double select_nmax_routine(double a[], int pos){
  * @brief It searches for the random n-th greater element in a random array . The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void select_nmax(){
-    int pos,i,check;
-    double res;
+    ANN_VAR(0,ARRAY_LENGTH) int pos;
+    ANN_VAR(0,ARRAY_LENGTH) int i;
+    ANN_VAR(0,ARRAY_LENGTH) int check;
+    ANN_VAR_NOBOUNDS() double res;
     /*Array initialization*/
     
     random_get_array(array,ARRAY_LENGTH);
