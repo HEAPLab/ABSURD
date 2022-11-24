@@ -25,10 +25,14 @@ static double array[ARRAY_LENGTH];
  * 
  */
 static void bubble_sort_routine(){
-    int i,j;
-    for(i=0;i<ARRAY_LENGTH-1;i++){
-        for(j=0;j<ARRAY_LENGTH-i-1;j++){
-            if(array[j]>array[j+1]){
+    ANN_VAR(0,ARRAY_LENGTH-1) int i;
+    ANN_VAR(0,ARRAY_LENGTH-1) int j;
+    
+    ANN_LOOP_BOUND(ARRAY_LENGTH-1)
+    for(i=0;i<ARRAY_LENGTH-1;i++) {
+        ANN_LOOP_BOUND(ARRAY_LENGTH-1)
+        for(j=0;j<ARRAY_LENGTH-i-1;j++) {
+            if(array[j]>array[j+1]) {
                 double temp=array[j];
                 array[j]=array[j+1];
                 array[j+1]=temp;
@@ -42,7 +46,7 @@ static void bubble_sort_routine(){
  * @brief It performs bubble sort on a random array . The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void bubble_sort(){
-    int i;
+    ANN_VAR(0,ARRAY_LENGTH-1) int i;
     
     random_get_array(array,ARRAY_LENGTH);
     
@@ -52,6 +56,7 @@ void bubble_sort(){
     
     MEASURE_STOP();
 
+    ANN_LOOP_BOUND(ARRAY_LENGTH-1)
     for(i=0;i<ARRAY_LENGTH-1;i++){
         if(array[i]>array[i+1])
             break;

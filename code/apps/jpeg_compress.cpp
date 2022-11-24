@@ -29,7 +29,7 @@ extern "C" {
 #ifdef USER_JPEG_COMPRESS
 #include "data/jpeg_image.h"
 #else
-static unsigned char mat_in[3][IMG_HEIGHT][IMG_WIDTH];
+ANN_VAR_NOBOUNDS() static unsigned char mat_in[3][IMG_HEIGHT][IMG_WIDTH];
 #endif
 
 MEASURE_GLOBAL_VARIABLES()
@@ -42,30 +42,35 @@ class Matrix3D {
     public:
         Matrix3D();
         Matrix3D(int width,int height):
-        height(height),width(width){
+        height(height),width(width) {
             data = new T **[3];
-                for(int i=0;i<3;i++){
-                   data[i]=new T*[height];
-                    for(int j=0;j<height;j++){
-                        data[i][j]=new T[width];
-                    }
-                    
+            ANN_LOOP_BOUND(3)
+            for(int i=0;i<3;i++){
+                data[i]=new T*[height];
+                ANN_LOOP_BOUND(IMG_HEIGHT)
+                for(int j=0;j<height;j++){
+                    data[i][j]=new T[width];
                 }
+                
+            }
         };
 
         Matrix3D(T data_in[3][IMG_HEIGHT][IMG_WIDTH]):
         height(IMG_HEIGHT),width(IMG_WIDTH){
             data = new T **[3];
-                for(int i=0;i<3;i++){
-                   data[i]=new T*[height];
-                    for(int j=0;j<height;j++){
-                        data[i][j]=new T[width];
-                        for(int z=0;z<width;z++){
-                            data[i][j][z]=data_in[i][j][z];
-                        }
+            ANN_LOOP_BOUND(3)
+            for(int i=0;i<3;i++){
+                data[i]=new T*[height];
+                ANN_LOOP_BOUND(IMG_HEIGHT)
+                for(int j=0;j<height;j++){
+                    data[i][j]=new T[width];
+                    ANN_LOOP_BOUND(IMG_WIDTH)
+                    for(int z=0;z<width;z++){
+                        data[i][j][z]=data_in[i][j][z];
                     }
-                    
                 }
+                
+            }
         };
         void resize(int new_width,int new_height){
             auto new_data=new T **[3];

@@ -18,23 +18,22 @@
 
 MEASURE_GLOBAL_VARIABLES()
 
-static double array[BOGO_LENGTH];
+ANN_VAR_NOBOUNDS() static double array[BOGO_LENGTH];
 
 /**
  * @brief It randomly shuffle the array
  * 
  */
 static void knuth_shuffle(){
-    int i;
+    ANN_VAR(0,BOGO_LENGTH-1) int i;
+    ANN_LOOP_BOUND(BOGO_LENGTH)
     for(i=BOGO_LENGTH-1;i>=0;i--){
         int j= random_get()*BOGO_LENGTH;
 
         double temp=array[i];
         array[i]=array[j];
         array[j]=temp;
-        
     }
-
 }
 /**
  * @brief It checks if the array is ordered
@@ -42,7 +41,8 @@ static void knuth_shuffle(){
  * @return int 1 if the array is ordered, 0 otherwise
  */
 static int is_ordered(){
-    int i;
+    ANN_VAR(0,BOGO_LENGTH-1) int i;
+    ANN_LOOP_BOUND(BOGO_LENGTH-1)
     for(i=0;i<BOGO_LENGTH-1;i++){
         if(array[i]>array[i+1]){
             return 0;
@@ -55,6 +55,7 @@ static int is_ordered(){
  * 
  */
 static void bogo_sort_routine(){
+    /* This loop cannot be annotated */
     while (!is_ordered()){
         knuth_shuffle();
     }
@@ -64,7 +65,7 @@ static void bogo_sort_routine(){
  * @brief It performs bogo sort on a random array . The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void bogo_sort(){
-    int i;
+    ANN_VAR(0,BOGO_LENGTH-1) int i;
     
     random_get_array(array,BOGO_LENGTH);
     
@@ -74,7 +75,7 @@ void bogo_sort(){
     
     MEASURE_STOP();
    
-
+    ANN_LOOP_BOUND(BOGO_LENGTH-1)
     for(i=0;i<BOGO_LENGTH-1;i++){
         if(array[i]>array[i+1])
             break;

@@ -25,9 +25,9 @@
 MEASURE_GLOBAL_VARIABLES()
 
 
-static double array_in[ARRAY_LENGTH];
-static double array_out[ARRAY_LENGTH];
-static double weights[5];
+ANN_VAR_NOBOUNDS() static double array_in[ARRAY_LENGTH];
+ANN_VAR_NOBOUNDS() static double array_out[ARRAY_LENGTH];
+ANN_VAR_NOBOUNDS() static double weights[5];
 
 
 /**
@@ -35,10 +35,13 @@ static double weights[5];
  * 
  */
 static void fir_avg_routine(){
-    int i,j;
-    for(i=0;i<ARRAY_LENGTH-5;i++){
-        double accum=0;
-        for(j=0;j<5;j++){
+    ANN_VAR(0,ARRAY_LENGTH-5) int i;
+    ANN_VAR(0,5) int j;
+    ANN_LOOP_BOUND(ARRAY_LENGTH-5)
+    for(i=0;i<ARRAY_LENGTH-5;i++) {
+        ANN_VAR_NOBOUNDS() double accum=0;
+        ANN_LOOP_BOUND(5)
+        for(j=0;j<5;j++) {
             accum+=weights[j]*array_in[i+j];
         }
         array_out[i]=accum/5;
@@ -49,17 +52,17 @@ static void fir_avg_routine(){
  * @brief It applies a moving average filter to an input signal. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void fir_avg(){
-    int i;
-    /*Signal initialization*/
+    ANN_VAR(0,ARRAY_LENGTH) int i;
     
+    /*Signal initialization*/
+    ANN_LOOP_BOUND(ARRAY_LENGTH)
     for(i=0;i<ARRAY_LENGTH;i++){
-        double dt=0.0001;
+        const double dt=0.0001;
         array_in[i]=sin(2*M_PI*120*dt*i)+random_get();
     }
 
     /*weight initialization*/
     random_get_array(weights,5);
-
     
     MEASURE_START();
     

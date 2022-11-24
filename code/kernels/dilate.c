@@ -26,12 +26,12 @@ MEASURE_GLOBAL_VARIABLES()
 
 
 #ifndef USER_DILATE
-static int mat_in[IMG_HEIGHT][IMG_WIDTH];
-static int mat_out[IMG_HEIGHT][IMG_WIDTH];
+ANN_VAR_NOBOUNDS() static int mat_in[IMG_HEIGHT][IMG_WIDTH];
+ANN_VAR_NOBOUNDS() static int mat_out[IMG_HEIGHT][IMG_WIDTH];
 #endif
 
 /* 3x3 structuring elements with origin in (1,1) */
-static int kernel[KERNEL_SIZE][KERNEL_SIZE]={
+ANN_VAR_NOBOUNDS() static int kernel[KERNEL_SIZE][KERNEL_SIZE]={
     {1,1,1},
     {1,1,1},
     {1,1,1}
@@ -45,7 +45,16 @@ static int kernel[KERNEL_SIZE][KERNEL_SIZE]={
  * @return int result of 2d convolution of kernel centred in mat_in[p_x][p_y]
  */
 static int convolution2D(int p_x, int p_y){
-    int i,j,k_x,k_y,s_xl,s_xr,s_yl,s_yr;
+    ANN_VAR(0,IMG_HEIGHT) int i;
+    ANN_VAR(0,IMG_WIDTH)  int j;
+
+    ANN_VAR(0,KERNEL_SIZE/2) int k_x;
+    ANN_VAR(0,KERNEL_SIZE/2) int k_y;
+    ANN_VAR(0,IMG_HEIGHT) int s_xl;
+    ANN_VAR(0,IMG_HEIGHT) int s_xr;
+    ANN_VAR(0,IMG_WIDTH)  int s_yl;
+    ANN_VAR(0,IMG_WIDTH)  int s_yr;
+    
     /*Kernel origin coordinates*/
     k_x=KERNEL_SIZE/2;
     k_y=KERNEL_SIZE/2;
@@ -57,8 +66,9 @@ static int convolution2D(int p_x, int p_y){
     s_yl=p_y-k_y<0? 0: p_y-k_y; 
     s_yr=p_y+k_y>=IMG_WIDTH? IMG_WIDTH-1 : p_y+k_y;
 
-    
+    ANN_LOOP_BOUND(IMG_HEIGHT)
     for(i=s_xl;i<=s_xr;i++){
+        ANN_LOOP_BOUND(IMG_WIDTH)
         for(j=s_yl;j<=s_yr;j++){
             if(kernel[i-s_xl][j-s_yl] && mat_in[i][j]){
                 return 1;
@@ -73,9 +83,13 @@ static int convolution2D(int p_x, int p_y){
  * 
  */
 static void dilate_routine(){
-    int i,j;
-    for(i=0;i<IMG_HEIGHT;i++){
-        for(j=0;j<IMG_WIDTH;j++){
+    ANN_VAR(0,IMG_HEIGHT) int i;
+    ANN_VAR(0,IMG_WIDTH)  int j;
+    
+    ANN_LOOP_BOUND(IMG_HEIGHT)
+    for(i=0;i<IMG_HEIGHT;i++) {
+        ANN_LOOP_BOUND(IMG_WIDTH)
+        for(j=0;j<IMG_WIDTH;j++) {
             mat_out[i][j]=convolution2D(i,j);
         }
     }
@@ -86,10 +100,10 @@ static void dilate_routine(){
  * @brief It performs Morphological dilation on a random binary matrix . The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void dilate(){
-    int i;
+    ANN_VAR(0,IMG_HEIGHT) int i;
 
     #ifndef USER_DILATE
-    
+    ANN_LOOP_BOUND(IMG_HEIGHT)
     for (i = 0; i < IMG_HEIGHT; i++){
         random_get_barray(mat_in[i],IMG_WIDTH);
     }

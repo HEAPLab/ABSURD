@@ -30,11 +30,11 @@ extern "C" {
 MEASURE_GLOBAL_VARIABLES()
 
 #ifndef USER_AVG_FILTER_RGB
-static unsigned char mat_in[3][IMG_HEIGHT][IMG_WIDTH];
-static unsigned char mat_out[3][IMG_HEIGHT][IMG_WIDTH];
+ANN_VAR_NOBOUNDS() static unsigned char mat_in[3][IMG_HEIGHT][IMG_WIDTH];
+ANN_VAR_NOBOUNDS() static unsigned char mat_out[3][IMG_HEIGHT][IMG_WIDTH];
 #endif
 /* KERNEL_SIZExKERNEL_SIZE box filter with origin in (1,1) */
-static double kernel[KERNEL_SIZE][KERNEL_SIZE];
+ANN_VAR_NOBOUNDS() static double kernel[KERNEL_SIZE][KERNEL_SIZE];
 
 
 extern "C" void avg_filter_RGB();
@@ -50,18 +50,20 @@ extern "C" void avg_filter_RGB();
  */
 static int convolution2D(int channel,int p_x, int p_y){
     //Kernel radius 
-    int k_r=KERNEL_SIZE/2;
+    ANN_VAR(0,KERNEL_SIZE/2) int k_r=KERNEL_SIZE/2;
 
     //kernel can be superimposed? if not we are on borders, then we keep the values unchanged
     if(p_x-k_r<0 || p_y-k_r<0 || p_x+k_r>=IMG_HEIGHT || p_y+k_r>=IMG_WIDTH){
         return mat_in[channel][p_x][p_y];
     }
     //offset between kernel's indexes and array's ones 
-    int offset_x=p_x-k_r;
-    int offset_y=p_y-k_r;
+    ANN_VAR(0,IMG_HEIGHT) int offset_x=p_x-k_r;
+    ANN_VAR(0,IMG_WIDTH)  int offset_y=p_y-k_r;
 
-    double temp=0;
+    ANN_VAR_NOBOUNDS() double temp=0;
+    ANN_LOOP_BOUND(IMG_HEIGHT+2)
     for(int i=p_x-k_r;i<=p_x+k_r;i++){
+        ANN_LOOP_BOUND(IMG_WIDTH+2)
         for(int j=p_y-k_r;j<=p_y+k_r;j++){
             temp+=kernel[i-offset_x][j-offset_y] * mat_in[channel][i][j];
         }
@@ -73,23 +75,27 @@ static int convolution2D(int channel,int p_x, int p_y){
  * @param channel image channel to be elaborated
  */
 static void avg_filter_RGB_routine(int channel){
-   for(int i=0;i<IMG_HEIGHT;i++){
-       for(int j=0;j<IMG_WIDTH;j++){
-           mat_out[channel][i][j]=convolution2D(channel,i,j);
-       }
+    ANN_LOOP_BOUND(IMG_HEIGHT)
+    for(int i=0;i<IMG_HEIGHT;i++){
+        ANN_LOOP_BOUND(IMG_WIDTH)
+        for(int j=0;j<IMG_WIDTH;j++){
+            mat_out[channel][i][j]=convolution2D(channel,i,j);
+        }
     }
-    
+
 }
 
 /**
  * @brief It performs average filtering on a random RGB image exploiting multiple threads.
  */
 void avg_filter_RGB(){
-
     
     #ifndef USER_AVG_FILTER_RGB
+    ANN_LOOP_BOUND(IMG_CH)
     for(int c=0;c<IMG_CH;c++){
+        ANN_LOOP_BOUND(IMG_HEIGHT)
         for (int i = 0; i < IMG_HEIGHT; i++){
+            ANN_LOOP_BOUND(IMG_WIDTH)
             for (int j = 0; j < IMG_WIDTH; j++){
                 mat_in[c][i][j]=random_get()*256;
             }
@@ -97,7 +103,9 @@ void avg_filter_RGB(){
     }
     #endif
     //kernel initialization
+    ANN_LOOP_BOUND(KERNEL_SIZE)
     for (int i = 0; i < KERNEL_SIZE; i++){
+        ANN_LOOP_BOUND(KERNEL_SIZE)
         for (int j = 0; j < KERNEL_SIZE; j++){
             kernel[i][j]=1/(KERNEL_SIZE*KERNEL_SIZE);
         }

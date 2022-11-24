@@ -18,14 +18,18 @@
 
 MEASURE_GLOBAL_VARIABLES()
 
-static double array[ARRAY_LENGTH];
+ANN_VAR_NOBOUNDS() static double array[ARRAY_LENGTH];
 
 static int partition(int low,int high){
-    int i,j;
-    double pivot,temp;
+    ANN_VAR(0,ARRAY_LENGTH) int i;
+    ANN_VAR(0,ARRAY_LENGTH) int j;
+    ANN_VAR_NOBOUNDS() double pivot;
+    ANN_VAR_NOBOUNDS() double temp;
     
     pivot = array[high];
     i=low;
+    
+    ANN_LOOP_BOUND(ARRAY_LENGTH)
     for(j=low;j<=high;j++){
         if(array[j]<pivot){
             temp=array[j];
@@ -49,7 +53,7 @@ static int partition(int low,int high){
 static void quick_sort_routine(int low,int high){
 
     if(low<high){
-        int pivot;
+        ANN_VAR(0,ARRAY_LENGTH) int pivot;
         pivot=partition(low,high);
         quick_sort_routine(low, pivot-1);
         quick_sort_routine(pivot+1,high);
@@ -61,7 +65,7 @@ static void quick_sort_routine(int low,int high){
  * @brief It performs quick sort on a random array . The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void quick_sort(){
-    int i;
+    ANN_VAR(0,ARRAY_LENGTH) int i;
 
     
     random_get_array(array,ARRAY_LENGTH);
@@ -72,6 +76,7 @@ void quick_sort(){
     
     MEASURE_STOP();
 
+    ANN_LOOP_BOUND(ARRAY_LENGTH)
     for(i=0;i<ARRAY_LENGTH-1;i++){
         if(array[i]>array[i+1])
             break;

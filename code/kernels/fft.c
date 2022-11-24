@@ -28,8 +28,8 @@ typedef struct{
     double re,im;
 } complex;
 
-static complex array_in[FFT_LENGTH];
-static complex array_out[FFT_LENGTH];
+ANN_VAR_NOBOUNDS() static complex array_in[FFT_LENGTH];
+ANN_VAR_NOBOUNDS() static complex array_out[FFT_LENGTH];
 
 /**
  * @brief It performs sum between two complex numbers
@@ -77,17 +77,19 @@ static complex complex_exp(double x){
  * @return Fourier transform for input array
  */
 static void fft_routine(){
-    int k;
+    ANN_VAR(0,FFT_LENGTH) int k;
 
-    for(k=0;k<FFT_LENGTH;k++){
+    ANN_LOOP_BOUND(FFT_LENGTH)
+    for(k=0;k<FFT_LENGTH;k++) {
         /*X_k=[sum{0,N/2-1} x_2n * e^(i*(-2*pi*2n*k)/N)] + [sum{0,N/2-1} x_(2n+1) * e^(i*(-2*pi*(2n+1)*k)/N)]*/
-        int n;
+        ANN_VAR(0,FFT_LENGTH) int n;
         complex even_sum,odd_sum;
 
         even_sum.re=0;
         even_sum.im=0;
 
-        for(n=0;n<FFT_LENGTH;n=n+2){
+        ANN_LOOP_BOUND(FFT_LENGTH)
+        for(n=0;n<FFT_LENGTH;n=n+2) {
             complex n_term = complex_mult(array_in[n],complex_exp((-2*M_PI*n*k)/FFT_LENGTH));
 
             complex_sum(even_sum,n_term);
@@ -96,7 +98,8 @@ static void fft_routine(){
         
         odd_sum.re=0;
         odd_sum.im=0;
-        for(n=1;n<FFT_LENGTH;n=n+2){
+        ANN_LOOP_BOUND(FFT_LENGTH-1)
+        for(n=1;n<FFT_LENGTH;n=n+2) {
             complex n_term = complex_mult(array_in[n],complex_exp((-2*M_PI*n*k)/FFT_LENGTH));
 
             complex_sum(odd_sum,n_term);
@@ -110,9 +113,10 @@ static void fft_routine(){
  * @brief It computes FFT of a random array exploiting Cooley–Tukey algorithm. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void fft(){
-    int i;
+    ANN_VAR(0,FFT_LENGTH) int i;
     /*Matrix initialization*/
     
+    ANN_LOOP_BOUND(FFT_LENGTH)
     for(i=0; i<FFT_LENGTH;i++){
         complex x;
         x.re=random_get();

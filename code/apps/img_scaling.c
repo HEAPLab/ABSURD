@@ -33,7 +33,10 @@ static unsigned char mat_out[SCALING_FACTOR*IMG_HEIGHT][SCALING_FACTOR*IMG_WIDTH
 #endif
 
 static double hermit_poly(double p_0, double p_1, double p_2, double p_3, double x){
-    double a,b,c,d;
+    ANN_VAR_NOBOUNDS() double a;
+    ANN_VAR_NOBOUNDS() double b;
+    ANN_VAR_NOBOUNDS() double c;
+    ANN_VAR_NOBOUNDS() double d;
 
     a = -p_0/2 + (3 *p_1)/2 - (3 *p_2)/2 + p_3/2;
     b = p_0 - (5 *p_1)/2 + 2*p_2 - p_3/2;
@@ -48,7 +51,11 @@ static unsigned int get_pixel(int x, int y){
     return mat_in[x][y];
 }
 static double bicubic_interpolation(int x,int y, double dx, double dy){
-    double col0,col1,col2,col3,res;
+    ANN_VAR_NOBOUNDS() double col0;
+    ANN_VAR_NOBOUNDS() double col1;
+    ANN_VAR_NOBOUNDS() double col2;
+    ANN_VAR_NOBOUNDS() double col3;
+    ANN_VAR_NOBOUNDS() double res;
     col0=hermit_poly(get_pixel(x-1,y-1),get_pixel(x,y-1),get_pixel(x+1,y-1),get_pixel(x+2,y-1),dx);
     col1=hermit_poly(get_pixel(x-1,y),get_pixel(x,y),get_pixel(x+1,y),get_pixel(x+2,y),dx);
     col2=hermit_poly(get_pixel(x-1,y+1),get_pixel(x,y+1),get_pixel(x+1,y+1),get_pixel(x+2,y+1),dx);
@@ -64,11 +71,17 @@ static double bicubic_interpolation(int x,int y, double dx, double dy){
  * 
  */
 static void img_scaling_routine(){
-    int i,j;
+    ANN_VAR(0,SCALING_FACTOR*IMG_HEIGHT) int i;
+    ANN_VAR(0,SCALING_FACTOR*IMG_WIDTH)  int j;
+    
+    ANN_LOOP_BOUND(SCALING_FACTOR*IMG_HEIGHT)
     for(i=0;i<SCALING_FACTOR*IMG_HEIGHT;i++){
-       for(j=0;j<SCALING_FACTOR*IMG_WIDTH;j++){
-           int x,y;
-           double dx,dy;
+        ANN_LOOP_BOUND(SCALING_FACTOR*IMG_WIDTH)
+        for(j=0;j<SCALING_FACTOR*IMG_WIDTH;j++){
+           ANN_VAR_NOBOUNDS() int x;
+           ANN_VAR_NOBOUNDS() int y;
+           ANN_VAR_NOBOUNDS() double dx;
+           ANN_VAR_NOBOUNDS() double dy;
 
            x = i/SCALING_FACTOR;
            y = j/SCALING_FACTOR;
@@ -76,7 +89,7 @@ static void img_scaling_routine(){
            dy=j/SCALING_FACTOR-y;
 
            mat_out[i][j]=bicubic_interpolation(x,y,dx,dy);
-       }
+        }
    }
     
 }
@@ -85,11 +98,13 @@ static void img_scaling_routine(){
  * @brief It performs image scaling on a random RGB image using bicubic interpolation. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void img_scaling(){
-    int i;
     #ifndef USER_IMAGE_SCALING
-    int j;
+    ANN_VAR(0,IMG_HEIGHT) int i;
+    ANN_VAR(0,IMG_WIDTH)  int j;
     
+    ANN_LOOP_BOUND(IMG_HEIGHT)
     for (i = 0; i < IMG_HEIGHT; i++){
+        ANN_LOOP_BOUND(IMG_WIDTH)
         for (j = 0; j < IMG_WIDTH; j++){
             mat_in[i][j]=random_get()*256;
         }

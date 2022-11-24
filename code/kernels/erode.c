@@ -26,12 +26,12 @@ MEASURE_GLOBAL_VARIABLES()
 
 
 #ifndef USER_ERODE
-static int mat_in[IMG_HEIGHT][IMG_WIDTH];
-static int mat_out[IMG_HEIGHT][IMG_WIDTH];
+ANN_VAR_NOBOUNDS() static int mat_in[IMG_HEIGHT][IMG_WIDTH];
+ANN_VAR_NOBOUNDS() static int mat_out[IMG_HEIGHT][IMG_WIDTH];
 #endif
 
 /* 3x3 structuring elements with origin in (1,1) */
-static int kernel[KERNEL_SIZE][KERNEL_SIZE]={
+ANN_VAR_NOBOUNDS() static int kernel[KERNEL_SIZE][KERNEL_SIZE]={
     {1,1,1},
     {1,1,1},
     {1,1,1}
@@ -44,8 +44,12 @@ static int kernel[KERNEL_SIZE][KERNEL_SIZE]={
  * @param p_y center point y coordinate
  * @return int result of 2d convolution of kernel centred in mat_in[p_x][p_y]
  */
-static int convolution2D(int p_x, int p_y){
-    int i,j,k_r,offset_x,offset_y;
+static int convolution2D(  int p_x, int p_y){
+    ANN_VAR(0,IMG_HEIGHT)  int i;
+    ANN_VAR(0,IMG_WIDTH)   int j;
+    ANN_VAR(0,KERNEL_SIZE) int k_r;
+    ANN_VAR(0,IMG_HEIGHT)  int offset_x;
+    ANN_VAR(0,IMG_WIDTH)   int offset_y;
     /*Kernel radius*/ 
     k_r=KERNEL_SIZE/2;
 
@@ -57,9 +61,11 @@ static int convolution2D(int p_x, int p_y){
     offset_x=p_x-k_r;
     offset_y=p_y-k_r;
 
-    for(i=p_x-k_r;i<=p_x+k_r;i++){
-        for(j=p_y-k_r;j<=p_y+k_r;j++){
-            if(!(kernel[i-offset_x][j-offset_y] && mat_in[i][j])){
+    ANN_LOOP_BOUND(IMG_HEIGHT)
+    for(i=p_x-k_r;i<=p_x+k_r;i++) {
+        ANN_LOOP_BOUND(IMG_WIDTH)
+        for(j=p_y-k_r;j<=p_y+k_r;j++) {
+            if(!(kernel[i-offset_x][j-offset_y] && mat_in[i][j])) {
                 return 0;
             }
         }
@@ -72,8 +78,12 @@ static int convolution2D(int p_x, int p_y){
  * 
  */
 static void erode_routine(){
-    int i,j;
+    ANN_VAR(0,IMG_HEIGHT) int i;
+    ANN_VAR(0,IMG_WIDTH)  int j;
+    
+    ANN_LOOP_BOUND(IMG_HEIGHT)
     for(i=0;i<IMG_HEIGHT;i++){
+        ANN_LOOP_BOUND(IMG_WIDTH)
         for(j=0;j<IMG_WIDTH;j++){
             mat_out[i][j]=convolution2D(i,j);
         }
@@ -85,10 +95,11 @@ static void erode_routine(){
  * @brief It performs Morphological erosion on a random binary matrix . The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void erode(){
-    int i;
+    ANN_VAR(0,IMG_HEIGHT) int i;
     #ifndef USER_ERODE
     
-    for (i = 0; i < IMG_HEIGHT; i++){
+    ANN_LOOP_BOUND(IMG_HEIGHT)
+    for (i=0; i < IMG_HEIGHT; i++){
         random_get_barray(mat_in[i],IMG_WIDTH);
     }
     #endif

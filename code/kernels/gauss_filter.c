@@ -30,30 +30,34 @@
 MEASURE_GLOBAL_VARIABLES()
 
 #ifndef USER_GAUSS_FILTER
-static unsigned char mat_in[IMG_HEIGHT][IMG_WIDTH];
-static unsigned char mat_out[IMG_HEIGHT][IMG_WIDTH];
+ANN_VAR_NOBOUNDS() static unsigned char mat_in[IMG_HEIGHT][IMG_WIDTH];
+ANN_VAR_NOBOUNDS() static unsigned char mat_out[IMG_HEIGHT][IMG_WIDTH];
 #endif
 
 /* KERNEL_SIZExKERNEL_SIZE gaussian filter with origin in (1,1) */
-static double kernel[KERNEL_SIZE][KERNEL_SIZE];
+ANN_VAR_NOBOUNDS() static double kernel[KERNEL_SIZE][KERNEL_SIZE];
 
 /**
  * @brief It generates a KERNEL_SIZE x KERNEL_SIZE gaussian kernel
  * 
  */
-static void gaussian_kernel_init(){
-    int i,j;
-    double sum=0;
+static void gaussian_kernel_init() {
+    ANN_VAR(0,KERNEL_SIZE) int i;
+    ANN_VAR(0,KERNEL_SIZE) int j;
+    ANN_VAR_NOBOUNDS() double sum=0;
+    ANN_LOOP_BOUND(KERNEL_SIZE)
     for (i = 0; i < KERNEL_SIZE; i++) {
+        ANN_LOOP_BOUND(KERNEL_SIZE)
         for (j = 0; j < KERNEL_SIZE; j++) {
-            double x = i - (KERNEL_SIZE - 1) / 2.0;
-            double y = j - (KERNEL_SIZE - 1) / 2.0;
+            ANN_VAR_NOBOUNDS() double x = i - (KERNEL_SIZE - 1) / 2.0;
+            ANN_VAR_NOBOUNDS() double y = j - (KERNEL_SIZE - 1) / 2.0;
             kernel[i][j] =  exp(((pow(x, 2) + pow(y, 2)) / ((2 * pow(SIGMA, 2)))) * (-1));
             sum += kernel[i][j];
         }
     }
-
+    ANN_LOOP_BOUND(KERNEL_SIZE)
     for (i = 0; i < KERNEL_SIZE; i++) {
+        ANN_LOOP_BOUND(KERNEL_SIZE)
         for (j = 0; j < KERNEL_SIZE; j++) {
             kernel[i][j] /= sum;
         }
@@ -69,8 +73,13 @@ static void gaussian_kernel_init(){
  * @return int result of 2d convolution of kernel centred in mat_in[p_x][p_y]
  */
 static int convolution2D(int p_x, int p_y){
-    int k_r,offset_x,offset_y,i,j;
-    double temp;
+    ANN_VAR(0,KERNEL_SIZE) int k_r;
+    ANN_VAR(0,IMG_HEIGHT) int offset_x;
+    ANN_VAR(0,IMG_WIDTH) int offset_y;
+    ANN_VAR(0,IMG_HEIGHT) int i;
+    ANN_VAR(0,IMG_WIDTH) int j;
+
+    ANN_VAR_NOBOUNDS() double temp;
 
     /*Kernel radius*/ 
     k_r=KERNEL_SIZE/2;
@@ -84,7 +93,10 @@ static int convolution2D(int p_x, int p_y){
     offset_y=p_y-k_r;
 
     temp=0;
+
+    ANN_LOOP_BOUND(IMG_HEIGHT)
     for(i=p_x-k_r;i<=p_x+k_r;i++){
+        ANN_LOOP_BOUND(IMG_WIDTH)
         for(j=p_y-k_r;j<=p_y+k_r;j++){
             temp+=kernel[i-offset_x][j-offset_y] * mat_in[i][j];
         }
@@ -98,7 +110,9 @@ static int convolution2D(int p_x, int p_y){
  */
 static void gauss_filter_routine(){
     int i,j;
+    ANN_LOOP_BOUND(IMG_HEIGHT)
     for(i=0;i<IMG_HEIGHT;i++){
+        ANN_LOOP_BOUND(IMG_WIDTH)
         for(j=0;j<IMG_WIDTH;j++){
             mat_out[i][j]=convolution2D(i,j);
         }
@@ -113,9 +127,11 @@ void gauss_filter(){
     int i;
     #ifndef USER_GAUSS_FILTER
     int j;
-    
-    for (i = 0; i < IMG_HEIGHT; i++){
-        for (j = 0; j < IMG_WIDTH; j++){
+
+    ANN_LOOP_BOUND(IMG_HEIGHT)
+    for (i = 0; i < IMG_HEIGHT; i++) {
+        ANN_LOOP_BOUND(IMG_WIDTH)
+        for (j = 0; j < IMG_WIDTH; j++) {
             mat_in[i][j]=random_get()*256;
         }
     }

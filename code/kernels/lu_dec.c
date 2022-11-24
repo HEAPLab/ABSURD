@@ -18,18 +18,20 @@
 
 MEASURE_GLOBAL_VARIABLES()
 
-static double mat[MATRIX_SIZE][MATRIX_SIZE];
-static double l[MATRIX_SIZE][MATRIX_SIZE];
-static double u[MATRIX_SIZE][MATRIX_SIZE];
+ANN_VAR_NOBOUNDS() static double mat[MATRIX_SIZE][MATRIX_SIZE];
+ANN_VAR_NOBOUNDS() static double l[MATRIX_SIZE][MATRIX_SIZE];
+ANN_VAR_NOBOUNDS() static double u[MATRIX_SIZE][MATRIX_SIZE];
 
 /**
  * @brief Actual LU decomposition implementation
  * 
  */
 static void lu_dec_routine(){
-    int i,j;
+    ANN_VAR(0,ARRAY_LENGTH) int i;
+    ANN_VAR(0,ARRAY_LENGTH) int j;
     for(i=0;i<MATRIX_SIZE;i++){
         /*compute u mat i row*/
+        ANN_LOOP_BOUND(MATRIX_SIZE)
         for(j=i;j<MATRIX_SIZE;j++){
             double sum = 0;
             int k;
@@ -39,16 +41,17 @@ static void lu_dec_routine(){
             u[i][j]=mat[i][j] - sum;
         }  
         
-
         /*compute l mat j column*/
+        ANN_LOOP_BOUND(MATRIX_SIZE)
         for(j=i;j<MATRIX_SIZE;j++){
             if(i==j){
                 l[j][i] = 1; 
             }
             else
             {
-                double sum = 0;
-                int k;
+                ANN_VAR_NOBOUNDS() double sum = 0;
+                ANN_VAR(0,MATRIX_SIZE) int k;
+                ANN_LOOP_BOUND(MATRIX_SIZE)
                 for (k = 0; k < i; k++){
                     sum += l[j][k] * u[k][i];
                 }
@@ -65,15 +68,18 @@ static void lu_dec_routine(){
  * @brief It performs LU decomposition using Doolittle algorithm on a random square matrix . The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void lu_dec(){
-    int i,j;
+    ANN_VAR(0,ARRAY_LENGTH) int i;
+    ANN_VAR(0,ARRAY_LENGTH) int j;
     
     /*Matrix initialization*/
-    
+    ANN_LOOP_BOUND(MATRIX_SIZE)
     for(i=0; i<MATRIX_SIZE;i++){
         random_get_array(mat[i],MATRIX_SIZE);
     }
 
+    ANN_LOOP_BOUND(MATRIX_SIZE)
     for(i=0; i<MATRIX_SIZE;i++){
+        ANN_LOOP_BOUND(MATRIX_SIZE)
         for(j=0; j<MATRIX_SIZE;j++){
             l[i][j]=0;
             u[i][j]=0;

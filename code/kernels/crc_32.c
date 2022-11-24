@@ -19,7 +19,7 @@
 
 MEASURE_GLOBAL_VARIABLES()
 
-static unsigned char bytes_in[ARRAY_LENGTH];
+ANN_VAR_NOBOUNDS() static unsigned char bytes_in[ARRAY_LENGTH];
 
 
 
@@ -33,9 +33,11 @@ static unsigned int crc_32_routine(){
     unsigned int crc32 = 0xFFFFFFFF;
     int i;
 
+    ANN_LOOP_BOUND(ARRAY_LENGTH)
     for(i=0;i<ARRAY_LENGTH;i++){
         int j;
         crc32 ^= bytes_in[i];
+        ANN_LOOP_BOUND(8)
         for(j=0;j<8;j++){
             if(crc32 & 1){
                crc32 = (crc32 >> 1) ^ 0xEDB88320;
@@ -54,8 +56,9 @@ static unsigned int crc_32_routine(){
  */
 void crc_32(){
     
-    int i;
+    ANN_VAR(0,ARRAY_LENGTH) int i;
     
+    ANN_LOOP_BOUND(ARRAY_LENGTH)
     for(i=0;i<ARRAY_LENGTH;i++){
         bytes_in[i] = 0xFF & (int)(random_get()*ARRAY_LENGTH);
     }
@@ -66,8 +69,5 @@ void crc_32(){
     crc_32_routine();
     
     MEASURE_STOP();
-
-    
-
 
 }

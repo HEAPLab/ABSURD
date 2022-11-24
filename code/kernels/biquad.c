@@ -25,8 +25,8 @@
 MEASURE_GLOBAL_VARIABLES()
 
 
-static double array_in[ARRAY_LENGTH];
-static double array_out[ARRAY_LENGTH];
+ANN_VAR_NOBOUNDS() static double array_in[ARRAY_LENGTH];
+ANN_VAR_NOBOUNDS() static double array_out[ARRAY_LENGTH];
 
 
 
@@ -41,7 +41,7 @@ static double array_out[ARRAY_LENGTH];
  * @param b2 Digital biquad filter b2 param
  */
 static void biquad_routine(double a0, double a1, double a2, double b0, double b1, double b2){
-    int i;
+    ANN_VAR(2,ARRAY_LENGTH) int i;
 
     /*Params normalization*/
     a1/=a0;
@@ -53,6 +53,7 @@ static void biquad_routine(double a0, double a1, double a2, double b0, double b1
     array_out[0]=b0*array_in[0];
     array_out[1]=b0*array_in[1]+b1*array_in[0]-a1*array_out[0];
 
+    ANN_LOOP_BOUND(ARRAY_LENGTH-2)
     for(i=2;i<ARRAY_LENGTH;i++){
         array_out[i]=b0*array_in[i]+b1*array_in[i-1]+b2*array_in[i-2]-a1*array_out[i-1]-a2*array_out[i-2];
     }
@@ -62,11 +63,20 @@ static void biquad_routine(double a0, double a1, double a2, double b0, double b1
  * @brief It applies a biquad lowpass filter to an input signal. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void biquad(){
-    double alpha,w0,Q=0.5,f0=120,a0,a1,a2,b0,b1,b2;
-    int i;
+    ANN_VAR_NOBOUNDS() double alpha;
+    ANN_VAR_NOBOUNDS() double w0;
+    ANN_VAR_NOBOUNDS() double Q=0.5;
+    ANN_VAR_NOBOUNDS() double f0=120;
+    ANN_VAR_NOBOUNDS() double a0;
+    ANN_VAR_NOBOUNDS() double a1;
+    ANN_VAR_NOBOUNDS() double a2;
+    ANN_VAR_NOBOUNDS() double b0;
+    ANN_VAR_NOBOUNDS() double b1;
+    ANN_VAR_NOBOUNDS() double b2;
+    ANN_VAR(0,ARRAY_LENGTH) int i;
 
     /*Signal initialization*/
-    
+    ANN_LOOP_BOUND(ARRAY_LENGTH)
     for(i=0;i<ARRAY_LENGTH;i++){
         array_in[i]=cos(2*M_PI*120*0.001*i)+random_get();
     }

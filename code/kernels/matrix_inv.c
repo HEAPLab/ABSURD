@@ -19,24 +19,27 @@
 MEASURE_GLOBAL_VARIABLES()
 
 
-static double mat[MATRIX_SIZE][MATRIX_SIZE];
-static double l[MATRIX_SIZE][MATRIX_SIZE];
-static double u[MATRIX_SIZE][MATRIX_SIZE];
-static double tmp[MATRIX_SIZE];
-static double inv[MATRIX_SIZE][MATRIX_SIZE];
+ANN_VAR_NOBOUNDS() static double mat[MATRIX_SIZE][MATRIX_SIZE];
+ANN_VAR_NOBOUNDS() static double l[MATRIX_SIZE][MATRIX_SIZE];
+ANN_VAR_NOBOUNDS() static double u[MATRIX_SIZE][MATRIX_SIZE];
+ANN_VAR_NOBOUNDS() static double tmp[MATRIX_SIZE];
+ANN_VAR_NOBOUNDS() static double inv[MATRIX_SIZE][MATRIX_SIZE];
 /**
  * @brief It performs LU decomposition of mat matrix
  * 
  */
-static void lu_decomposition(){
-    int i;
-    for(i=0;i<MATRIX_SIZE;i++){
+static void lu_decomposition() {
+    ANN_VAR(0,MATRIX_SIZE) int i;
+    ANN_LOOP_BOUND(MATRIX_SIZE)
+    for(i=0;i<MATRIX_SIZE;i++) {
         /*compute u matrix i row*/
-        int j;
-        for(j=i;j<MATRIX_SIZE;j++){
-            double sum = 0;
-            int k;
-            for (k = 0; k < i; k++){
+        ANN_VAR(0,MATRIX_SIZE) int j;
+        ANN_LOOP_BOUND(MATRIX_SIZE)
+        for(j=i;j<MATRIX_SIZE;j++) {
+            ANN_VAR_NOBOUNDS() double sum = 0;
+            ANN_VAR(0,MATRIX_SIZE) int k;
+            ANN_LOOP_BOUND(MATRIX_SIZE)
+            for (k = 0; k < i; k++) {
                 sum += (l[i][k] * u[k][j]);
             }
             u[i][j]=mat[i][j] - sum;
@@ -44,15 +47,17 @@ static void lu_decomposition(){
         
 
         /*compute l matrix j column*/
-        for(j=i;j<MATRIX_SIZE;j++){
+        ANN_LOOP_BOUND(MATRIX_SIZE)
+        for(j=i;j<MATRIX_SIZE;j++) {
             if(i==j){
                 l[j][i] = 1; 
             }
             else
             {
-                double sum = 0;
-                int k;
-                for (k = 0; k < i; k++){
+                ANN_VAR_NOBOUNDS() double sum = 0;
+                ANN_VAR(0,MATRIX_SIZE)int k;
+                ANN_LOOP_BOUND(MATRIX_SIZE)
+                for (k = 0; k < i; k++) {
                     sum += l[j][k] * u[k][i];
                 }
                 
@@ -69,11 +74,12 @@ static void lu_decomposition(){
  * @return double mat determinant
  */
 static double matrix_det(){
-    int i;
-    double det;
+    ANN_VAR(0,MATRIX_SIZE)int i;
+    ANN_VAR_NOBOUNDS() double det;
     
     det=1;
-    for(i=0;i<MATRIX_SIZE;i++){
+    ANN_LOOP_BOUND(MATRIX_SIZE)
+    for(i=0;i<MATRIX_SIZE;i++) {
         det *= l[i][i]*u[i][i];
     }
     return det;
@@ -85,7 +91,7 @@ static double matrix_det(){
  * @return int 1 if inverse exists, 0 otherwise
  */
 static int matrix_inv_routine(){
-    int j;
+    ANN_VAR(0,MATRIX_SIZE)int j;
     lu_decomposition();
     
     if(matrix_det() == 0){
@@ -93,22 +99,27 @@ static int matrix_inv_routine(){
     }
   
     /*forward-backward pass foreach column*/
-    for(j=0;j<MATRIX_SIZE;j++){
+    ANN_LOOP_BOUND(MATRIX_SIZE)
+    for(j=0;j<MATRIX_SIZE;j++) {
         /*first j rows equals to 0*/
-        int i;
+        ANN_VAR(0,MATRIX_SIZE) int i;
         for(i=0;i<j;i++) tmp[i]=0;
         tmp[j]=1;
-        for(i=j+1;i<MATRIX_SIZE;i++){
-            double sum=0;
-            int k;
+        ANN_LOOP_BOUND(MATRIX_SIZE)
+        for(i=j+1;i<MATRIX_SIZE;i++) {
+            ANN_VAR_NOBOUNDS() double sum=0;
+            ANN_VAR(0,MATRIX_SIZE) int k;
+            ANN_LOOP_BOUND(MATRIX_SIZE)
             for(k=0;k<i;k++) sum+=l[i][k]*tmp[k];
             tmp[i]=-sum;
         }
 
         /*backward pass*/
-        for(i=MATRIX_SIZE-1;i>=0;i--){
-            double sum=0;
-            int k;
+        ANN_LOOP_BOUND(MATRIX_SIZE)
+        for(i=MATRIX_SIZE-1;i>=0;i--) {
+            ANN_VAR_NOBOUNDS() double sum=0;
+            ANN_VAR(0,MATRIX_SIZE) int k;
+            ANN_LOOP_BOUND(MATRIX_SIZE)
             for(k=i+1;k<MATRIX_SIZE;k++) sum+=u[i][k]*inv[k][j];
             inv[i][j]=(-sum+tmp[i])/u[i][i];
         }
@@ -122,9 +133,10 @@ static int matrix_inv_routine(){
  * @brief It computes, if possible, the inverse of a random square matrix. The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void matrix_inv(){
-    int i;
+    ANN_VAR(0,MATRIX_SIZE)int i;
     /*Matrix initialization*/
     
+    ANN_LOOP_BOUND(MATRIX_SIZE)
     for(i=0; i<MATRIX_SIZE;i++){
         random_get_array(mat[i],MATRIX_SIZE);
     }

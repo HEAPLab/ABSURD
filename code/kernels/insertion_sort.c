@@ -18,17 +18,18 @@
 
 MEASURE_GLOBAL_VARIABLES()
 
-static double array[ARRAY_LENGTH];
+ANN_VAR_NOBOUNDS() static double array[ARRAY_LENGTH];
 /**
  * @brief Actual insertion sort implementation
  * 
  */
 static void insertion_sort_routine(){
-    int i;
+    ANN_VAR(1,ARRAY_LENGTH) int i;
     for(i=1; i<ARRAY_LENGTH; i++){
-        int j=i-1;
-        double temp=array[i];
+        ANN_VAR(0,ARRAY_LENGTH) int j=i-1;
+        ANN_VAR_NOBOUNDS() double temp=array[i];
 
+        ANN_LOOP_BOUND(ARRAY_LENGTH)
         while(j>=0 && array[j]>temp){
             array[j+1]=array[j];
             j--;
@@ -42,7 +43,7 @@ static void insertion_sort_routine(){
  * @brief It performs insertion sort on a random array . The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void insertion_sort(){
-    int i;
+    ANN_VAR(0,ARRAY_LENGTH) int i;
     
     random_get_array(array,ARRAY_LENGTH);
 
@@ -52,6 +53,7 @@ void insertion_sort(){
     
     MEASURE_STOP();
     
+    ANN_LOOP_BOUND(ARRAY_LENGTH-1)
     for(i=0;i<ARRAY_LENGTH-1;i++){
         if(array[i]>array[i+1])
             break;

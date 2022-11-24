@@ -18,21 +18,24 @@
 
 MEASURE_GLOBAL_VARIABLES()
 
-static double mat_1[MATRIX_SIZE][MATRIX_SIZE];
-static double mat_2[MATRIX_SIZE][MATRIX_SIZE];
-static double res[MATRIX_SIZE][MATRIX_SIZE];
+ANN_VAR_NOBOUNDS() static double mat_1[MATRIX_SIZE][MATRIX_SIZE];
+ANN_VAR_NOBOUNDS() static double mat_2[MATRIX_SIZE][MATRIX_SIZE];
+ANN_VAR_NOBOUNDS() static double res[MATRIX_SIZE][MATRIX_SIZE];
 
 /**
  * @brief Actual matrices multiplication implementation
  * 
  */
-static void matrix_mult_routine(){
-    int i,j;
-    for(i=0;i<MATRIX_SIZE;i++){
-        for(j=0;j<MATRIX_SIZE;j++){
-            double sum=0;
-            int k;
-            for(k=0;k<MATRIX_SIZE;k++){
+static void matrix_mult_routine() {
+    ANN_VAR(0,MATRIX_SIZE) int i;
+    ANN_VAR(0,MATRIX_SIZE) int j;
+    ANN_LOOP_BOUND(MATRIX_SIZE)
+    for(i=0;i<MATRIX_SIZE;i++) {
+        for(j=0;j<MATRIX_SIZE;j++) {
+            ANN_VAR_NOBOUNDS() double sum=0;
+            ANN_VAR(0,MATRIX_SIZE) int k;
+            ANN_LOOP_BOUND(MATRIX_SIZE)
+            for(k=0;k<MATRIX_SIZE;k++) {
                 sum += mat_1[i][k]*mat_2[k][j];    
             }
             res[i][j]=sum;
@@ -44,9 +47,10 @@ static void matrix_mult_routine(){
  * @brief It performs matrices multiplication between two random matrices . The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void matrix_mult(){
-    int i;
+    ANN_VAR(0,MATRIX_SIZE) int i;
+
     /*Matrix initialization*/
-    
+    ANN_LOOP_BOUND(MATRIX_SIZE)
     for(i=0; i<MATRIX_SIZE;i++){
         random_get_array(mat_1[i],MATRIX_SIZE);
         random_get_array(mat_2[i],MATRIX_SIZE);

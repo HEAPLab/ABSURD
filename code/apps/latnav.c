@@ -41,7 +41,7 @@ typedef struct pid_controller_s {
 
 
 double run_pid(pid_controller_t* pid, double error) {
-    double output; 
+    ANN_VAR_NOBOUNDS() double output; 
     
     output = error * pid->p;
     pid->integral_sum += ((error * pid->i) + (pid->b * pid->backpropagation)) * TIME_STEP;
@@ -55,7 +55,8 @@ double run_pid(pid_controller_t* pid, double error) {
 }
 
 double roll_limiter(double desired_roll, double speed) {
-    double limit_perc,limit;
+    ANN_VAR(0.,1.) double limit_perc;
+    ANN_VAR(30.,67.) double limit;
 
     if (speed <= 140) {
         return CLAMP(desired_roll, -30, 30);
@@ -86,13 +87,14 @@ double ailerons_limiter(double aileron) {
 
 
 void latnav() {
-    pid_controller_t pid_roll_rate,pid_roll,pid_heading;
-    double curr_heading,curr_roll,curr_roll_rate;
-    int i;
+    ANN_VAR_NOBOUNDS() pid_controller_t pid_roll_rate;
+    ANN_VAR_NOBOUNDS() pid_controller_t pid_roll;
+    ANN_VAR_NOBOUNDS() pid_controller_t pid_heading;
+    ANN_VAR_NOBOUNDS() double curr_heading;
+    ANN_VAR_NOBOUNDS() double curr_roll;
+    ANN_VAR_NOBOUNDS() double curr_roll_rate;
+    ANN_VAR(0,ITERATIONS) int i;
 
-    
-
-    
     pid_roll_rate.p = random_get();
     pid_roll_rate.i = random_get();
     pid_roll_rate.d = random_get();
@@ -119,9 +121,15 @@ void latnav() {
     curr_roll_rate = random_get();
 
     MEASURE_START();
+    ANN_LOOP_BOUND(ITERATIONS)
     for(i=0; i<ITERATIONS; i++) {
     
-        double desired_roll,actual_roll,desired_roll_rate,actual_roll_rate,desired_ailerons,actual_ailerons;
+        ANN_VAR_NOBOUNDS() double desired_roll;
+        ANN_VAR_NOBOUNDS() double actual_roll;
+        ANN_VAR_NOBOUNDS() double desired_roll_rate;
+        ANN_VAR_NOBOUNDS() double actual_roll_rate;
+        ANN_VAR_NOBOUNDS() double desired_ailerons;
+        ANN_VAR_NOBOUNDS() double actual_ailerons;
         
         desired_roll = run_pid(&pid_heading, curr_heading-random_get()); 
         actual_roll = roll_limiter(desired_roll, 400);
@@ -130,7 +138,6 @@ void latnav() {
         desired_roll_rate = run_pid(&pid_roll, curr_roll - actual_roll); 
         actual_roll_rate = roll_rate_limiter(desired_roll_rate, curr_roll);
         pid_roll.backpropagation = actual_roll_rate - desired_roll_rate; 
-
         
         desired_ailerons = run_pid(&pid_roll, curr_roll_rate - actual_roll_rate); 
         actual_ailerons = ailerons_limiter(desired_roll_rate);

@@ -25,11 +25,11 @@ MEASURE_GLOBAL_VARIABLES()
 
 
 #ifndef USER_AVG_FILTER
-static unsigned char mat_in[IMG_HEIGHT][IMG_WIDTH];
-static unsigned char mat_out[IMG_HEIGHT][IMG_WIDTH];
+ANN_VAR_NOBOUNDS() static unsigned char mat_in[IMG_HEIGHT][IMG_WIDTH];
+ANN_VAR_NOBOUNDS() static unsigned char mat_out[IMG_HEIGHT][IMG_WIDTH];
 #endif
 /* KERNEL_SIZExKERNEL_SIZE box filter with origin in (1,1) */
-static double kernel[KERNEL_SIZE][KERNEL_SIZE];
+ANN_VAR_NOBOUNDS() static double kernel[KERNEL_SIZE][KERNEL_SIZE];
 
 
 /**
@@ -40,8 +40,12 @@ static double kernel[KERNEL_SIZE][KERNEL_SIZE];
  * @return int result of 2d convolution of kernel centred in mat_in[p_x][p_y]
  */
 static int convolution2D(int p_x, int p_y){
-    int k_r,offset_x,offset_y,i,j;
-    double temp;
+    ANN_VAR_NOBOUNDS() int k_r;
+    ANN_VAR_NOBOUNDS() int offset_x;
+    ANN_VAR_NOBOUNDS() int offset_y;
+    ANN_VAR(0,IMG_HEIGHT) int i;
+    ANN_VAR(0,IMG_WIDTH)  int j;
+    ANN_VAR_NOBOUNDS() double temp;
     /*Kernel radius*/ 
     k_r=KERNEL_SIZE/2;
     /*offset between kernel's indexes and array's ones*/ 
@@ -54,8 +58,10 @@ static int convolution2D(int p_x, int p_y){
     
 
     temp=0;
-    for(i=p_x-k_r;i<=p_x+k_r;i++){
-        for(j=p_y-k_r;j<=p_y+k_r;j++){
+    ANN_LOOP_BOUND(IMG_HEIGHT+2)
+    for(i=p_x-k_r;i<=p_x+k_r;i++) {
+        ANN_LOOP_BOUND(IMG_WIDTH+2)
+        for(j=p_y-k_r;j<=p_y+k_r;j++) {
             temp+=kernel[i-offset_x][j-offset_y] * mat_in[i][j];
         }
     }
@@ -66,8 +72,11 @@ static int convolution2D(int p_x, int p_y){
  * 
  */
 static void avg_filter_routine(){
-    int i,j;
+    ANN_VAR(0,IMG_HEIGHT) int i;
+    ANN_VAR(0,IMG_WIDTH)  int j;
+    ANN_LOOP_BOUND(IMG_HEIGHT)
     for(i=0;i<IMG_HEIGHT;i++){
+        ANN_LOOP_BOUND(IMG_WIDTH)
         for(j=0;j<IMG_WIDTH;j++){
            mat_out[i][j]=convolution2D(i,j);
        }
@@ -79,18 +88,24 @@ static void avg_filter_routine(){
  * @brief It performs average filtering on a random grayscale image . The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void avg_filter(){
-    int i,j;
+    ANN_VAR(0,IMG_HEIGHT) int i;
+    ANN_VAR(0,IMG_WIDTH)  int j;
+    
     #ifndef USER_AVG_FILTER
     
+    ANN_LOOP_BOUND(IMG_HEIGHT)
     for (i = 0; i < IMG_HEIGHT; i++){
+        ANN_LOOP_BOUND(IMG_WIDTH)
         for (j = 0; j < IMG_WIDTH; j++){
             mat_in[i][j]=random_get()*256;
         }
     }
     #endif
     /*kernel initialization*/
-    for (i = 0; i < KERNEL_SIZE; i++){
-        for (j = 0; j < KERNEL_SIZE; j++){
+    ANN_LOOP_BOUND(KERNEL_SIZE)
+    for (i = 0; i < KERNEL_SIZE; i++) {
+        ANN_LOOP_BOUND(KERNEL_SIZE)
+        for (j = 0; j < KERNEL_SIZE; j++) {
             kernel[i][j]=1/(KERNEL_SIZE*KERNEL_SIZE);
         }
     }

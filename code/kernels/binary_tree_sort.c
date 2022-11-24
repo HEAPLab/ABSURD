@@ -24,11 +24,11 @@ typedef struct{
     int right;
 } node;
 
-static double array[ARRAY_LENGTH];
-static double ordered[ARRAY_LENGTH];
+ANN_VAR_NOBOUNDS() static double array[ARRAY_LENGTH];
+ANN_VAR_NOBOUNDS() static double ordered[ARRAY_LENGTH];
 
-static node btree[ARRAY_LENGTH];
-static int last_used;
+ANN_VAR_NOBOUNDS() static node btree[ARRAY_LENGTH];
+ANN_VAR(0,ARRAY_LENGTH) static int last_used;
 
 /**
  * @brief It adds elements to the binary tree
@@ -36,6 +36,7 @@ static int last_used;
  * @param elem element to be inserted in the binary tree
  * @param curr index of the current node
  */
+ANN_RECURSION(ARRAY_LENGTH) 
 static void insert_node(double elem,int curr){
     if(elem < btree[curr].data){
         if(btree[curr].left == -1){
@@ -84,13 +85,14 @@ static void order_sweep(int node_idx){
  * 
  */
 static void binary_tree_sort_routine(){
-    int i;
+    ANN_VAR(1,ARRAY_LENGTH) int i;
 
     /*Insert first node*/
     btree[0].data=array[0];
     btree[0].left=-1;
     btree[0].right=-1;
     
+    ANN_LOOP_BOUND(ARRAY_LENGTH)
     for(i=1;i<ARRAY_LENGTH;i++){
         insert_node(array[i],0);
     }
@@ -107,7 +109,7 @@ static void binary_tree_sort_routine(){
  * @brief It performs binary tree sort on a random array . The execution time is measured through user defined MEASURE_START()/MEASURE_STOP() macros. 
  */
 void binary_tree_sort(){
-    int i;
+    ANN_VAR(0,ARRAY_LENGTH-1) int i;
     
     random_get_array(array,ARRAY_LENGTH);
 
@@ -117,6 +119,7 @@ void binary_tree_sort(){
     
     MEASURE_STOP();
 
+    ANN_LOOP_BOUND(ARRAY_LENGTH-1)
     for(i=0;i<ARRAY_LENGTH-1;i++){
         if(ordered[i]>ordered[i+1])
             break;

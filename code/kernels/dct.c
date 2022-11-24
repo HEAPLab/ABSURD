@@ -25,8 +25,8 @@
 MEASURE_GLOBAL_VARIABLES()
 
 
-static double array_in[ARRAY_LENGTH];
-static double array_out[ARRAY_LENGTH];
+ANN_VAR_NOBOUNDS() static double array_in[ARRAY_LENGTH];
+ANN_VAR_NOBOUNDS() static double array_out[ARRAY_LENGTH];
 
 
 /**
@@ -35,9 +35,13 @@ static double array_out[ARRAY_LENGTH];
  * @return Discrete cosine transformation of input array
  */
 static void dct_routine(){
-    int k,n;
+    ANN_VAR(0,ARRAY_LENGTH) int k;
+    ANN_VAR(0,ARRAY_LENGTH) int n;
+    
+    ANN_LOOP_BOUND(ARRAY_LENGTH)
     for(k=0;k<ARRAY_LENGTH;k++){
-       double sum=0;
+       ANN_VAR_NOBOUNDS() double sum=0;
+       ANN_LOOP_BOUND(ARRAY_LENGTH)
        for(n=0;n<ARRAY_LENGTH;n++){
            sum += (array_in[n] * cos((M_PI*(n+0.5)*k)/ARRAY_LENGTH));
        }
