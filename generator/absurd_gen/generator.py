@@ -1,7 +1,7 @@
 import random
 import csv
 
-DEFAULT_DATA_PATH = "../data/"
+DEFAULT_DATA_PATH = "../data/0.2"
 
 class ABSURD_gen:
     """
