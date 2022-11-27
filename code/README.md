@@ -38,7 +38,7 @@ Moreover, for benchmarks that work on images we offer the possibility to define 
 The user-defined images must be defined as you can see in the example files in [data](include/data) folder.
 
 ### Time measurement
-Time measurement macro functions are defined inside [user.h](include/user.h) file.
+Time measurement macro functions are defined inside [user.h](include/user.h) file and in the subfiles under `include/platforms` directory.
 By implementing the macros `MEASURE_GLOBAL_VARIABLES()`,`MEASURE_START()` and `MEASURE_STOP()` users are able to respectively: perform the setup needed for the measurement, start and stop the measure.
 For example:
 ```
