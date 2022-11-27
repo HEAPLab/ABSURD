@@ -1,7 +1,10 @@
 from absurd_gen.generator import ABSURD_gen
 
+# Put there the path to the data/version directory. Add a trailing /
+DATA_PATH="/path/to/data/0.2/"
+
 # Configure the generator
-acas_gen = ABSURD_gen("acas", platform="odroid-h2")
+acas_gen = ABSURD_gen("acas", platform="odroid-h2", data_path=DATA_PATH)
 
 # Set the seed (if necessary, otherwise skip it)
 acas_gen.set_seed(12345)
