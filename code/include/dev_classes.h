@@ -25,7 +25,7 @@
 #define IMG_HEIGHT 16
 #define IMG_WIDTH 16
 #define NR_PLANES 4 /* acas */
-#define PARALLEL_SORT_LENGTH 100
+#define PARALLEL_SORT_LENGTH 500
 #if USE_ITERATIONS_LOOP
     #define ITERATIONS 100
 #else
@@ -42,7 +42,7 @@
 #define IMG_HEIGHT 128
 #define IMG_WIDTH 128
 #define NR_PLANES 8 /* acas */
-#define PARALLEL_SORT_LENGTH 1000
+#define PARALLEL_SORT_LENGTH 5000
 #if USE_ITERATIONS_LOOP
     #define ITERATIONS 1000
 #else
@@ -59,7 +59,7 @@
 #define IMG_HEIGHT 256
 #define IMG_WIDTH 256
 #define NR_PLANES 16 /* acas */
-#define PARALLEL_SORT_LENGTH 10000
+#define PARALLEL_SORT_LENGTH 25000
 #if USE_ITERATIONS_LOOP
     #define ITERATIONS 10000
 #else
@@ -76,7 +76,7 @@
 #define IMG_HEIGHT 512
 #define IMG_WIDTH 512
 #define NR_PLANES 32 /* acas */
-#define PARALLEL_SORT_LENGTH 10000
+#define PARALLEL_SORT_LENGTH 50000
 #if USE_ITERATIONS_LOOP
     #define ITERATIONS 50000
 #else
