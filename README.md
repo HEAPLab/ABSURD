@@ -39,11 +39,17 @@ compile the benchmark suite.
 _\* With the exception of C++ multithread programs_
 
 ## Dataset & Reproducibility
-We acquired time measurements on real platforms and published the data under
-the `data` directory. In addition, to ensure reproducibility, a snapshot of
-the code and the dataset is periodically performed (via Github tags) and
-published on different platforms (such as zenodo.org). You can find the
-resulting datasets and other information in the `data` directory.
+We acquired time measurements on real platforms and published the data in the
+[ABSURD data repository](https://github.com/HEAPLab/ABSURD-data). In addition,
+to ensure reproducibility, a snapshot of the code and the dataset is periodically
+performed (via Github tags) and published on different platforms (such as zenodo.org).
+
+_Links to zenodo.org will appear here_
+
+## Source code annotations
+For most of the benchmarks, we provide an annotated version to run static analyses.
+We moved the annotated code into the `annotated` branch of this repository. Please
+be sure to change the relevant macros in the `user.h` file.
 
 ### Generator
 No need the actual data but just want some synthetic data for your simulation?
@@ -52,10 +58,13 @@ based on the real dataset. Check the `generator` directory for further
 information.
 
 ## License
-All the software and datasets are released under the Apache License. Please
-check the [LICENSE](LICENSE) file.
+All the software and datasets (with the exception described in the next paragraph)
+are released under the Apache License. Please check the [LICENSE](LICENSE) file.
+
+The source code of the benchmark `md5` has been taken from the RFC 1321. You may
+want to check the original license before use and redistribute the software.
 
 ## Contributors
 The software is mainly developed by [HEAP Lab - Politecnico di Milano](https://heaplab.deib.polimi.it).
-Current maintainer: federico.reghenzani ~snail~ polimi.it
+Current maintainer: federico.reghenzani ~at~ polimi.it
 Please check the Github authors' list for the individual contributors.
