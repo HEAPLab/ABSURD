@@ -91,3 +91,13 @@ Finally, to compile:
 ```
 make -j[number of jobs]
 ```
+
+## Annotations
+If you switch to `annotated` branch, you can find the same benchmarks but with annotated source code. 
+In order to properly run your WCET tool, you need to set the following macros:
+ - `#define ANN_LOOP_BOUND(iters)` - Maximum number of iterations of the following loop is `iters`
+ - `#define ANN_VAR(min,max)` - The next variable declaration has boundaries [`min`;`max`]
+ - `#define ANN_VAR_NOBOUNDS()` - The next variable declaration has no boundaries (bounded by variable itself)
+ - `#define ANN_RECURSION(rec_nr)` - The next function is recursive and can be called at most `rec_nr` times
+
+The entry point of each benchmark is not annotated but can be easily identified as the first non-static function. 
