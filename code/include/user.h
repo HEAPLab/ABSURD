@@ -37,72 +37,25 @@
 
 #define UINT32_T unsigned int
 
-/** User-needed libraries (e.g., for measurements) **/
-#include <assert.h>
-#include <stdio.h>
-#include <time.h>
-#ifdef NUCLEO_F746ZG
-#include "stm32f7xx_hal.h"
-#endif
-
 /** User-needed constants (e.g., for measurements) **/
 #define BILLION 1000000000L
 #define SEED 123U
 
-#ifndef WITH_ANSI
-#ifdef NUCLEO_F746ZG
-   #define MEASURE_GLOBAL_VARIABLES()  extern TIM_HandleTypeDef htim5;\
-                                       unsigned int result;
-   #define MEASURE_START()  do { \
-                              HAL_TIM_Base_Start(&htim5); \
-                           } while(0);
-
-   #define MEASURE_STOP() do { \
-                                 HAL_TIM_Base_Stop(&htim5); \
-                                  result=__HAL_TIM_GET_COUNTER(&htim5); \
-                                 __HAL_TIM_SET_COUNTER(&htim5,0); \
-                              } while(0);
+#ifdef PLATFORM_LINUX_NUCLEO_F746ZG
+    #include "platforms/nucleo_F746ZG.h"
+#elif defined(PLATFORM_LINUX)
+    #include "platforms/linux.h"
 #else
-/** Variables declared in the global scope to support measurements **/
-#define MEASURE_GLOBAL_VARIABLES()  static struct timespec start,stop; \
-                                    double result;
-
-/** The code to be executed when the time measurement starts **/
-#define MEASURE_START()  do { \
-                              result=0; \
-                              clock_gettime(CLOCK_MONOTONIC, &start); \
-                           } while(0);
-
-/** The code to be executed when the time measurement stops **/
-#define MEASURE_STOP() do { \
-                              clock_gettime(CLOCK_MONOTONIC, &stop); \
-                              result=(stop.tv_sec - start.tv_sec)*BILLION + (stop.tv_nsec - start.tv_nsec); \
-                           } while(0);
-
-#endif
-#define CHECK_RESULT(x) assert(x);
-#else
-   #ifdef NUCLEO_F746ZG
-   #define MEASURE_GLOBAL_VARIABLES()  extern TIM_HandleTypeDef htim5;\
-                                       long unsigned int result;
-   #define MEASURE_START()  do { \
-                              HAL_TIM_Base_Start(&htim5); \
-                           } while(0);
-
-   #define MEASURE_STOP() do { \
-                                 HAL_TIM_Base_Stop(&htim5); \
-                                  result=__HAL_TIM_GET_COUNTER(&htim5); \
-                                 __HAL_TIM_SET_COUNTER(&htim5,0); \
-
-                              } while(0);
-   #else
    #define MEASURE_GLOBAL_VARIABLES()
    #define MEASURE_START()
    #define MEASURE_STOP() 
-
+   #define CHECK_RESULT(x) while(!(x)){};
 #endif
 
-#define CHECK_RESULT(x) assert(x);
-#endif
+#define ANN_LOOP_BOUND(iters)
+#define ANN_VAR(min,max)
+#define ANN_VAR_NOBOUNDS()
+#define ANN_ARRAY(min,max)
+#define ANN_ARRAY_NOBOUNDS() 
 
 #endif
