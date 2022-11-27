@@ -155,7 +155,7 @@ extern "C" void zo_adamm(){
     zo_adamm_routine(x);
     
     MEASURE_STOP();
-    printf("%f\t%f\n",f(x),RESULT);
+
     CHECK_RESULT(std::abs(f(x)-RESULT)<CLASS_PRECISION);
 
 }
